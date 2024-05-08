@@ -1,0 +1,23 @@
+@font-face {
+  font-family: "dana-medium";
+  src: url("/fonts/dana-fanum-medium.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+
+}
+
+@font-face {
+  font-family: "dana-bold";
+  src: url("/fonts/dana-fanum-bold.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+
+}
+
+@font-face {
+  font-family: "dana-black";
+  src: url("/fonts/dana-black.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+
+}
