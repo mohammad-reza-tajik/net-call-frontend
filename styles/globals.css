@@ -7,7 +7,7 @@
 :root {
 
     --background: 220 58% 14%;
-    --foreground: 216 15% 81%;
+    --foreground: 0 0% 100%;
 
     --primary: 231, 63%, 56%;
     --primary-foreground: 210 40% 98%;
@@ -27,7 +27,7 @@
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 0 0% 20%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
     --radius: 0.5rem;
