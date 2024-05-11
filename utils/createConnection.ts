@@ -1,14 +1,22 @@
-async function createConnection() {
+import {peerActions} from "@/store/peerSlice";
+import {Peer} from "@/types";
+// @ts-ignore
+import {ThunkDispatch} from "redux-thunk";
 
-    const peerConfig = {iceServers: [{urls: ["stun:stun.l.google.com:19302", "stun:stun1,l.google.com:19302"]}]};
+async function createConnection({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
+
+    const peerConfig = { iceServers: [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }] }
     const peerConnection = new RTCPeerConnection(peerConfig);
 
-    peerConnection.addEventListener("icecandidate" ,(event) => {
-        console.log(event)
+    peerConnection.addEventListener("icecandidate", (event) => {
+        if (event.candidate) {
+            console.log(event.candidate);
+            dispatch(peerActions.addIceCandidate(event.candidate));
+        }
     });
 
-    peerConnection.addEventListener("signalingstatechange",(event)=>{
-        console.log(event);
+    peerConnection.addEventListener("signalingstatechange", (event) => {
+        console.log(peerConnection.signalingState);
     })
 
     return peerConnection;
