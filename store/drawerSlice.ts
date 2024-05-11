@@ -10,7 +10,6 @@ const drawerSlice = createSlice({
     reducers : {
         openDrawer(state) {
             state.isOpen = true;
-            console.log("open drawer");
         },
         closeDrawer(state) {
             state.isOpen = false
