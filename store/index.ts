@@ -6,8 +6,8 @@ import {peerActions} from "@/store/peerSlice";
 import {useDispatch, useSelector , type TypedUseSelectorHook} from "react-redux";
 
 
-type RootState = ReturnType<typeof store.getState>
-type AppDispatch = typeof store.dispatch
+type RootState = ReturnType<typeof store.getState>;
+type AppDispatch = typeof store.dispatch;
 
 const useAppDispatch: () => AppDispatch = useDispatch
 const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
@@ -23,9 +23,9 @@ const store = configureStore({
             serializableCheck: {
                 ignoredActions: ['your/action/type'],
                 // Ignore these field paths in all actions
-                ignoredActionPaths: ["payload.socket","payload.stream","payload.peerConnection","payload.videoRef.current","payload.iceCandidates"],
+                ignoredActionPaths: ["payload.socket","payload.stream","payload.peerConnection","payload.videoRef.current","payload.iceCandidates","payload"],
                 // Ignore these paths in the state
-                ignoredPaths: ["peer.peerConnection","peer.socket","peer.stream","peer.videoRef.current","peer.iceCandidates"],
+                ignoredPaths: ["peer.peerConnection","peer.socket","peer.stream","peer.videoRef.current","peer.iceCandidates","payload"],
             },
         }),
 })

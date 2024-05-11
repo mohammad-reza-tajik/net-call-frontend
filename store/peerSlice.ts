@@ -1,22 +1,9 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {type Socket} from "socket.io-client";
+import {Peer} from "@/types";
 // @ts-ignore
 import {WritableDraft} from "immer";
-import {MutableRefObject} from "react";
-import shareScreenSlice from "@/store/shareScreenSlice";
 
-export interface Peer {
-    status: "shareScreen" | "audioCall" | "video",
-    peerId: string,
-    iceCandidates:RTCIceCandidate[],
-    peerConnection: RTCPeerConnection,
-    socket: Socket,
-    offer: RTCSessionDescriptionInit,
-    stream: MediaStream,
-    videoRef :  MutableRefObject<HTMLVideoElement | null>
-}
-
-const initialState: Partial<Peer> = {
+const initialState: Peer = {
     status: undefined,
     peerId: undefined,
     iceCandidates:[],
@@ -31,25 +18,32 @@ const peerSlice = createSlice({
     name: "peer",
     initialState,
     reducers: {
-        setPeer: (state, action: PayloadAction<Partial<Peer>>) => {
-            Object.keys(action.payload).forEach(key => {
-                // @ts-ignore
-                state[key] = action.payload[key];
-            })
-        }
-        /*setStream(state, action: PayloadAction<MediaStream>) {
-            state.stream = action.payload;
+        setStatus: (state, action: PayloadAction<Peer["status"]>) => {
+            state.status = action.payload;
         },
-        setSocket(state, action: PayloadAction<Socket>) {
-            state.socket = action.payload as WritableDraft<Socket>;
+        setPeerId: (state, action: PayloadAction<Peer["peerId"]>) => {
+            state.peerId = action.payload;
         },
-        setPeerConnection(state, action: PayloadAction<RTCPeerConnection>) {
+        addIceCandidate: (state, action: PayloadAction<RTCIceCandidate>) => {
+            state.iceCandidates?.push(action.payload);
+        },
+        setPeerConnection: (state, action: PayloadAction<Peer["peerConnection"]>) => {
             state.peerConnection = action.payload;
         },
-        setPeerId()*/
-
-    }
-});
+        setSocket: (state, action: PayloadAction<Peer["socket"]>) => {
+            state.socket = action.payload as WritableDraft<Peer["socket"]>;
+        },
+        setOffer: (state, action: PayloadAction<Peer["offer"]>) => {
+            state.offer = action.payload;
+        },
+        setStream: (state, action: PayloadAction<Peer["stream"]>) => {
+            state.stream = action.payload;
+        },
+        setVideoRef: (state, action: PayloadAction<Peer["videoRef"]>) => {
+            state.videoRef = action.payload as WritableDraft<Peer["videoRef"]>;
+        },
+}}
+);
 
 export const peerActions = peerSlice.actions;
 
