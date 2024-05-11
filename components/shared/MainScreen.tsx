@@ -10,7 +10,7 @@ import {cn} from "@/lib/utils";
 function MainScreen() {
 
     const peer = useAppSelector(state => state.peer);
-    const { status } = peer;
+    const {peerId, status , offer, socket, iceCandidates} = peer;
     const dispatch = useAppDispatch();
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -29,6 +29,22 @@ function MainScreen() {
         })();
 
     }, []);
+
+    useEffect(() => {
+        let candidateTimeout: NodeJS.Timeout;
+
+        if (iceCandidates!.length > 0 && offer) {
+            clearTimeout(candidateTimeout);
+
+            candidateTimeout = setTimeout(() => {
+                socket?.emit("offerToServer", {iceCandidates,offer,peerId});
+            }, 1000)
+        }
+
+        return () => clearTimeout(candidateTimeout)
+
+    }, [iceCandidates]);
+
 
     return (
         <section className={"flex flex-1 items-center justify-around"}>
