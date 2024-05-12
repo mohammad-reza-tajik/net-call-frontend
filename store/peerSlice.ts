@@ -1,15 +1,17 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Peer} from "@/types";
+import {Peer, Request} from "@/types";
 // @ts-ignore
 import {WritableDraft} from "immer";
 
 const initialState: Peer = {
     status: undefined,
     peerId: undefined,
+    answer : undefined,
     iceCandidates:[],
     socket: undefined,
     peerConnection: undefined,
     offer: undefined,
+    requests : [],
     stream: undefined,
     videoRef: undefined,
 }
@@ -36,12 +38,21 @@ const peerSlice = createSlice({
         setOffer: (state, action: PayloadAction<Peer["offer"]>) => {
             state.offer = action.payload;
         },
+        setAnswer: (state, action: PayloadAction<Peer["answer"]>) => {
+            state.answer = action.payload;
+        },
         setStream: (state, action: PayloadAction<Peer["stream"]>) => {
             state.stream = action.payload;
         },
         setVideoRef: (state, action: PayloadAction<Peer["videoRef"]>) => {
             state.videoRef = action.payload as WritableDraft<Peer["videoRef"]>;
         },
+        addRequest(state,action :PayloadAction<Request> ) {
+            state.requests.push(action.payload);
+        },
+        removeRequest(state , action : PayloadAction<Request>) {
+            state.requests  = state.requests.filter(item => item.peerId !== action.payload.peerId);
+        }
 }}
 );
 

@@ -1,8 +1,6 @@
 import {configureStore} from "@reduxjs/toolkit";
-import drawerSlice from "@/store/drawerSlice";
-import peerSlice from "@/store/peerSlice";
-import {drawerActions} from "@/store/drawerSlice";
-import {peerActions} from "@/store/peerSlice";
+import peerSlice , {peerActions} from "@/store/peerSlice";
+import drawerSlice  ,{drawerActions} from "@/store/drawerSlice";
 import {useDispatch, useSelector , type TypedUseSelectorHook} from "react-redux";
 
 
