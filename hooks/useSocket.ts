@@ -2,6 +2,7 @@ import {useEffect} from "react";
 import {peerActions, useAppDispatch, useAppSelector} from "@/store";
 import {Socket} from "socket.io-client";
 import {Response , Request} from "@/types";
+import {toast} from "react-toastify";
 
 function useSocket(socket? : Socket) {
 
@@ -12,6 +13,7 @@ function useSocket(socket? : Socket) {
         socket?.on("requestToPeer", async (request : Request) => {
             dispatch(peerActions.addRequest(request));
             dispatch(peerActions.setSenderSocketId(request.socketId));
+            toast("یک درخواست دریافت شد");
         })
         socket?.on("responseToPeer", async (response : Response ) => {
             try {
