@@ -31,12 +31,13 @@ function useInitialize(peer : Peer) {
     useEffect(() => {
         let candidateTimeout: NodeJS.Timeout;
 
-        if (iceCandidates!.length > 0 && offer && status === "shareScreen") {
+        if (iceCandidates!.length > 0 && offer && status?.endsWith(":send")) {
             // @ts-ignore
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
                 socket?.emit("requestToServer", {iceCandidates, offer, peerId});
+                // todo send status with the requests to server
             }, 1000)
         }
 
@@ -47,7 +48,7 @@ function useInitialize(peer : Peer) {
     useEffect(() => {
         let candidateTimeout: NodeJS.Timeout;
 
-        if (iceCandidates!.length > 0 && answer && status === "receiveScreen" && senderSocketId) {
+        if (iceCandidates!.length > 0 && answer && status?.endsWith(":receive") && senderSocketId) {
             // @ts-ignore
             clearTimeout(candidateTimeout);
 

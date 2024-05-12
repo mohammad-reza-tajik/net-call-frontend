@@ -14,7 +14,7 @@ async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch
     })
     await peerConnection?.setLocalDescription(answer);
     dispatch(peerActions.setPeerConnection(peerConnection));
-    dispatch(peerActions.setStatus("receiveScreen"));
+    dispatch(peerActions.setStatus("screen:receive"));
     dispatch(peerActions.setAnswer(answer));
 
     return answer;

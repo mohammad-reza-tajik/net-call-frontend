@@ -5,9 +5,9 @@ import {Peer} from "@/types";
 
 export async function shareScreen({dispatch, peer} : {dispatch : ThunkDispatch , peer : Peer}) {
     try {
-        dispatch(peerActions.setStatus("shareScreen"));
         const {  videoRef ,peerConnection} = peer;
         const myScreen = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
+        dispatch(peerActions.setStatus("screen:send"));
         myScreen.getTracks().forEach(track => {
             peerConnection?.addTrack(track, myScreen);
         });
