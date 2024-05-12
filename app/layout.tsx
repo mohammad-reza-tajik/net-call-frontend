@@ -1,4 +1,5 @@
 import type {Metadata, Viewport} from "next";
+import "react-toastify/dist/ReactToastify.css";
 import "@/styles/globals.css";
 import Providers from "@/components/shared/Providers";
 
