@@ -11,13 +11,16 @@ function useSocket(socket? : Socket) {
 
     useEffect(() => {
         socket?.on("requestToPeer", async (request : Request) => {
-            dispatch(peerActions.addRequest(request));
-            dispatch(peerActions.setSenderSocketId(request.socketId));
-            toast("یک درخواست دریافت شد");
+            try {
+                dispatch(peerActions.addRequest(request));
+                dispatch(peerActions.setSenderSocketId(request.socketId));
+                toast("یک درخواست دریافت شد");
+            } catch (err) {
+                console.error(err);
+            }
         })
         socket?.on("responseToPeer", async (response : Response ) => {
             try {
-                console.log(response);
                 await peerConnection?.setRemoteDescription(response.answer);
                 response.iceCandidates.forEach(item => {
                     peerConnection?.addIceCandidate(item);
