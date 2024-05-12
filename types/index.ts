@@ -16,7 +16,7 @@ export interface Response {
 }
 
 export interface Peer {
-    status?: "shareScreen" | "audioCall" | "video" | "receiveScreen" | "loading";
+    status?: "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive" | "loading";
     peerId?: string;
     senderSocketId?: string;
     iceCandidates?:RTCIceCandidate[];
