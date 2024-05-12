@@ -7,7 +7,8 @@ import {Peer} from "@/types";
 
 function useInitialize(peer : Peer) {
 
-    const {peerId , answer, status, offer,requests, socket, iceCandidates} = peer;    const dispatch = useAppDispatch();
+    const {peerId , answer, status, offer,requests, socket, iceCandidates} = peer;
+    const dispatch = useAppDispatch();
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
 
@@ -43,6 +44,24 @@ function useInitialize(peer : Peer) {
 
     }, [iceCandidates]);
 
+    useEffect(() => {
+        let candidateTimeout: NodeJS.Timeout;
+
+        if (iceCandidates!.length > 0 && answer && status === "receiveScreen") {
+            // @ts-ignore
+            clearTimeout(candidateTimeout);
+
+            candidateTimeout = setTimeout(() => {
+                socket?.emit("answerToServer", {iceCandidates, answer, peerId});
+            }, 1000)
+        }
+
+        return () => clearTimeout(candidateTimeout)
+
+    }, [iceCandidates]);
+
+
+    return videoRef;
 
 }
 

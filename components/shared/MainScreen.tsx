@@ -8,14 +8,16 @@ import {useAppSelector} from "@/store";
 function MainScreen() {
 
     const peer = useAppSelector(state => state.peer);
-    const {socket , videoRef , status} = peer;
+    const {socket, status} = peer;
 
-    useInitialize(peer);
+    const videoRef = useInitialize(peer);
     useSocket(socket);
 
     return (
         <section className={"flex flex-1 items-center justify-around"}>
+
             <video ref={videoRef} controls autoPlay className={cn("size-full", {"hidden": !status})}/>
+
         </section>
     )
 }
