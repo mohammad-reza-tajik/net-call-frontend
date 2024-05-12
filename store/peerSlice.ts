@@ -4,6 +4,7 @@ import {Peer, Request} from "@/types";
 import {WritableDraft} from "immer";
 
 const initialState: Peer = {
+    senderSocketId : undefined,
     status: undefined,
     peerId: undefined,
     answer : undefined,
@@ -22,6 +23,9 @@ const peerSlice = createSlice({
     reducers: {
         setStatus: (state, action: PayloadAction<Peer["status"]>) => {
             state.status = action.payload;
+        },
+        setSenderSocketId: (state, action: PayloadAction<Peer["senderSocketId"]>) => {
+            state.senderSocketId = action.payload;
         },
         setPeerId: (state, action: PayloadAction<Peer["peerId"]>) => {
             state.peerId = action.payload;
