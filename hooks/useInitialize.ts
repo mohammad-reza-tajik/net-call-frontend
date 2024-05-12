@@ -7,7 +7,7 @@ import {Peer} from "@/types";
 
 function useInitialize(peer : Peer) {
 
-    const {peerId , answer, status, offer,requests, socket, iceCandidates} = peer;
+    const {peerId , answer, status , senderSocketId, offer,requests, socket, iceCandidates} = peer;
     const dispatch = useAppDispatch();
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -15,8 +15,8 @@ function useInitialize(peer : Peer) {
     useEffect(() => {
         (async () => {
             const peerId = createId();
-            const peerConnection = await createConnection({dispatch, peer});
 
+            const peerConnection = await createConnection({dispatch, videoRef});
             const socketConnection = io("http://localhost:3001").connect();
 
             dispatch(peerActions.setPeerConnection(peerConnection));
@@ -36,7 +36,7 @@ function useInitialize(peer : Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("offerToServer", {iceCandidates, offer, peerId});
+                socket?.emit("requestToServer", {iceCandidates, offer, peerId});
             }, 1000)
         }
 
@@ -47,12 +47,12 @@ function useInitialize(peer : Peer) {
     useEffect(() => {
         let candidateTimeout: NodeJS.Timeout;
 
-        if (iceCandidates!.length > 0 && answer && status === "receiveScreen") {
+        if (iceCandidates!.length > 0 && answer && status === "receiveScreen" && senderSocketId) {
             // @ts-ignore
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("answerToServer", {iceCandidates, answer, peerId});
+                socket?.emit("responseToServer", {iceCandidates, answer, peerId , socketId : senderSocketId});
             }, 1000)
         }
 

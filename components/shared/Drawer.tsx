@@ -15,7 +15,8 @@ function Drawer() {
 
     async function answerHandler(request: Request) {
         dispatch(peerActions.setStatus("receiveScreen"));
-        const answer = await createAnswer({dispatch, peer, request});
+        await createAnswer({dispatch, peer, request});
+
     }
 
     return (
