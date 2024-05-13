@@ -13,8 +13,10 @@ const initialState: Peer = {
     peerConnection: undefined,
     offer: undefined,
     requests : [],
-    stream: undefined,
-    videoRef: undefined,
+    localStream: undefined,
+    remoteStream: undefined,
+    localVideoRef: undefined,
+    remoteVideoRef: undefined
 }
 
 const peerSlice = createSlice({
@@ -45,11 +47,17 @@ const peerSlice = createSlice({
         setAnswer: (state, action: PayloadAction<Peer["answer"]>) => {
             state.answer = action.payload;
         },
-        setStream: (state, action: PayloadAction<Peer["stream"]>) => {
-            state.stream = action.payload;
+        setLocalStream: (state, action: PayloadAction<Peer["localStream"]>) => {
+            state.localStream = action.payload;
         },
-        setVideoRef: (state, action: PayloadAction<Peer["videoRef"]>) => {
-            state.videoRef = action.payload as WritableDraft<Peer["videoRef"]>;
+        setRemoteStream: (state, action: PayloadAction<Peer["remoteStream"]>) => {
+            state.remoteStream = action.payload;
+        },
+        setLocalVideoRef: (state, action: PayloadAction<Peer["localVideoRef"]>) => {
+            state.localVideoRef = action.payload as WritableDraft<Peer["localVideoRef"]>;
+        },
+        setRemoteVideoRef: (state, action: PayloadAction<Peer["remoteVideoRef"]>) => {
+            state.remoteVideoRef = action.payload as WritableDraft<Peer["remoteVideoRef"]>;
         },
         addRequest(state,action :PayloadAction<Request> ) {
             state.requests.push(action.payload);

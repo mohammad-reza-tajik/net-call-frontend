@@ -30,7 +30,10 @@ export interface Peer {
     socket?: Socket;
     offer?: RTCSessionDescriptionInit;
     answer?: RTCSessionDescriptionInit;
-    stream?: MediaStream;
-    videoRef?: MutableRefObject<HTMLVideoElement | null>;
+    localStream?: MediaStream;
+    remoteStream?: MediaStream;
+    localVideoRef?: MutableRefObject<HTMLVideoElement | null>;
+    remoteVideoRef?: MutableRefObject<HTMLVideoElement | null>;
+
 }
 
