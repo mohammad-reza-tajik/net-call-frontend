@@ -1,23 +1,31 @@
-// @ts-ignore
-import {ThunkDispatch} from "redux-thunk";
-import {peerActions} from "@/store";
-import {Peer, Request} from "@/types";
+import {Request} from "@/types";
 
-async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch, peer: Peer, request: Request }) {
+async function createAnswer({request , peerConnection}: { peerConnection : RTCPeerConnection, request: Request }) {
+    try {
+        let localStream : MediaStream | undefined ;
 
-    const {peerConnection} = peer
+        if (request.status === "audio:send" || request.status === "screen:send") {
+            localStream =  await navigator.mediaDevices.getUserMedia({ audio: true });
+        } else if (request.status === "video:send") {
+            localStream = (await navigator.mediaDevices.getUserMedia({ video: true, audio: true }));
+        }
 
-    await peerConnection?.setRemoteDescription(request.offer);
-    const answer = await peerConnection?.createAnswer();
-    request.iceCandidates.forEach(item => {
-        peerConnection?.addIceCandidate(item);
-    })
-    await peerConnection?.setLocalDescription(answer);
-    dispatch(peerActions.setPeerConnection(peerConnection));
-    dispatch(peerActions.setStatus("screen:receive"));
-    dispatch(peerActions.setAnswer(answer));
+        localStream?.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+        })
 
-    return answer;
+        await peerConnection?.setRemoteDescription(request.offer);
+        const answer = await peerConnection?.createAnswer();
+        request.iceCandidates.forEach(item => {
+            peerConnection?.addIceCandidate(item);
+        })
+        await peerConnection?.setLocalDescription(answer);
+
+        return {answer , localStream};
+
+    } catch (err) {
+        console.log(err);
+    }
 
 }
 
