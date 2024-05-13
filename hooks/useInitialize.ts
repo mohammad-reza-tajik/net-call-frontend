@@ -36,7 +36,7 @@ function useInitialize(peer : Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("requestToServer", {iceCandidates, offer, peerId});
+                socket?.emit("requestToServer", {iceCandidates, offer, peerId , status});
                 // todo send status with the requests to server
             }, 1000)
         }
@@ -53,7 +53,7 @@ function useInitialize(peer : Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("responseToServer", {iceCandidates, answer, peerId , socketId : senderSocketId});
+                socket?.emit("responseToServer", {iceCandidates, answer, peerId , socketId : senderSocketId , status});
             }, 1000)
         }
 

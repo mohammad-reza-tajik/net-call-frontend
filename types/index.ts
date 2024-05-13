@@ -1,7 +1,7 @@
 import type {Socket} from "socket.io-client";
 import {MutableRefObject} from "react";
 
-type Status = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive" | "loading";
+export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive" | "loading";
 
 export interface Request {
     offer: RTCSessionDescriptionInit;
