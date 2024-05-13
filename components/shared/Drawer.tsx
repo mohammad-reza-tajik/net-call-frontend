@@ -3,24 +3,17 @@ import {drawerActions, peerActions, useAppDispatch, useAppSelector} from "@/stor
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Close} from "@/components/shared/Icons";
-import createAnswer from "@/utils/createAnswer";
-import {Request} from "@/types";
+import RequestItem from "@/components/shared/RequestItem";
 
 function Drawer() {
 
     const dispatch = useAppDispatch();
     const drawerIsOpen = useAppSelector(state => state.drawer.isOpen);
     const peer = useAppSelector(state => state.peer);
-    const {requests} = peer
-
-    async function answerHandler(request: Request) {
-        dispatch(peerActions.setStatus("receiveScreen"));
-        await createAnswer({dispatch, peer, request});
-
-    }
+    const {requests} = peer;
 
     return (
-        <div className={"relative"}>
+        <div className={"relative overflow-y-auto"}>
             {drawerIsOpen && (
                 <div className={"fixed inset-0 bg-foreground opacity-50 z-50"}
                      onClick={() => dispatch(drawerActions.closeDrawer())}/>
@@ -32,14 +25,11 @@ function Drawer() {
                     <Close/>
                 </Button>
                 <h1 className={"my-5 bg-primary text-center p-3 rounded"}>
-                    دستگاه های قابل دسترس
+                    درخواست های دریافت شده
                 </h1>
-                {!requests || requests.length === 0 ? <p>هیچ دستگاهی وجود ندارد</p> :
-                    requests.map((request) => {
-                        return <Button variant={"ghost"} size={"sm"} key={request.peerId}
-                                       onClick={() => answerHandler(request)}>
-                            {request.peerId}
-                        </Button>
+                {!requests || requests.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :
+                    requests.map((request, index) => {
+                        return <RequestItem request={request} key={index} />
                     })
                 }
             </div>
