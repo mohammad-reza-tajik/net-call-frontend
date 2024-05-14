@@ -1,7 +1,7 @@
 "use client"
-import type {Request , Status} from "@/types";
+import type {Request} from "@/types";
 import {Button} from "@/components/ui/button";
-import {peerActions, useAppDispatch, useAppSelector} from "@/store";
+import {useAppDispatch, useAppSelector} from "@/store";
 import createAnswer from "@/utils/createAnswer";
 
 function RequestItem({request}: { request: Request }) {
@@ -9,21 +9,18 @@ function RequestItem({request}: { request: Request }) {
     const {peerId, status} = request;
     const dispatch = useAppDispatch();
     const peer = useAppSelector(state => state.peer);
-    let statusText : string | undefined;
+    let statusText: string | undefined;
 
-    if (status === "screen:send")  {
+    if (status === "screen:send") {
         statusText = "اشتراک گذاری صفحه"
-    } else if (status === "video:send")  {
+    } else if (status === "video:send") {
         statusText = "تماس تصویری"
-    } else if (status === "audio:send")  {
+    } else if (status === "audio:send") {
         statusText = "تماس صوتی"
     }
 
     async function answerHandler(request: Request) {
-        const answerStatus = request.status.split(":").at(0)!.concat(":receive") as Status;
-        dispatch(peerActions.setStatus(answerStatus));
-        await createAnswer({dispatch, peer, request});
-        dispatch(peerActions.removeRequest(request));
+        await createAnswer({request, peer, dispatch});
     }
 
     return (
@@ -34,7 +31,7 @@ function RequestItem({request}: { request: Request }) {
             <p className={"text-sm"}>
                 {peerId}
             </p>
-            <Button variant={"secondary"} className={"self-stretch"} onClick={() => answerHandler(request)}>
+            <Button variant={"secondary"} size={"lg"} onClick={() => answerHandler(request)}>
                 پذیرفتن
             </Button>
         </div>

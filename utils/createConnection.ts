@@ -3,7 +3,7 @@ import {peerActions} from "@/store/peerSlice";
 import {ThunkDispatch} from "redux-thunk";
 import {MutableRefObject} from "react";
 
-async function createConnection({dispatch, videoRef}: { dispatch: ThunkDispatch,  videoRef :MutableRefObject<HTMLVideoElement | null> }) {
+function createConnection({dispatch, remoteVideoRef}: { dispatch: ThunkDispatch,  remoteVideoRef :MutableRefObject<HTMLVideoElement | null> }) {
 
     const peerConfig = {iceServers: [{urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"]}]}
     const peerConnection = new RTCPeerConnection(peerConfig);
@@ -14,17 +14,17 @@ async function createConnection({dispatch, videoRef}: { dispatch: ThunkDispatch,
         }
     });
 
-    /*peerConnection.addEventListener("signalingstatechange", (event) => {
+    peerConnection.addEventListener("signalingstatechange", (event) => {
         console.log(peerConnection.signalingState);
-    })*/
+    })
 
     peerConnection.addEventListener("track", (event) => {
-        console.log("tracks received");
-        if (videoRef?.current) {
-            videoRef.current.srcObject = event.streams[0];
-
+        if (remoteVideoRef?.current) {
+            remoteVideoRef.current.srcObject = event.streams[0];
         }
     })
+
+    dispatch(peerActions.setPeerConnection(peerConnection));
 
     return peerConnection;
 }
