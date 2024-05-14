@@ -140,6 +140,13 @@ export function Devices(props: SVGProps<SVGSVGElement>) {
     )
 }
 
+
+export function Envelope(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="M6.615 16.77q-.69 0-1.152-.463T5 15.154v-9.77q0-.69.463-1.152t1.152-.463h13.77q.69 0 1.152.463T22 5.385v9.769q0 .69-.462 1.153t-1.153.462zm6.406-5.6L6 5.943v9.21q0 .27.173.442t.442.173h13.77q.269 0 .442-.173t.173-.442v-9.21l-7.021 5.225q-.217.162-.479.162t-.479-.162m.479-.857l7.308-5.427q-.058-.058-.125-.087T20.5 4.77h-14q-.096 0-.192.048t-.154.106zm-9.885 9.457q-.69 0-1.152-.462Q2 18.844 2 18.154v-9q0-.214.143-.357t.357-.143t.357.143t.143.357v9q0 .27.173.442t.442.173h14.27q.213 0 .356.144t.144.356t-.144.357t-.356.143zM21 5.927q0-.277-.067-.55t-.125-.492q-.058-.058-.125-.087T20.5 4.77h-14q-.096 0-.192.048t-.154.106q-.058.22-.106.483T6 5.926V4.77h15z"></path></svg>
+    )
+}
+
 export function People(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
@@ -235,6 +242,12 @@ export function Home(props: SVGProps<SVGSVGElement>) {
     )
 }
 
+
+export function Send(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="m17.646 12.752l-12.515 5.27q-.404.16-.768-.07Q4 17.724 4 17.289V6.712q0-.435.363-.665q.364-.23.768-.068l12.515 5.27q.49.216.49.751t-.49.752M5 17l11.85-5L5 7v3.885L9.846 12L5 13.115zm0 0V7z"></path></svg>
+    )
+}
 
 
 export function Attach(props: SVGProps<SVGSVGElement>) {
