@@ -1,30 +1,26 @@
 import {useEffect, useRef} from "react";
 import io from "socket.io-client";
 import {peerActions, useAppDispatch} from "@/store";
-import createConnection from "@/utils/createConnection";
 import createId from "@/utils/createId";
 import {Peer} from "@/types";
+import createConnection from "@/utils/createConnection";
 
-function useInitialize(peer : Peer) {
+function useInitialize(peer: Peer) {
 
-    const {peerId , answer, status , senderSocketId, offer,requests, socket, iceCandidates} = peer;
+    const {peerId, answer, status, senderSocketId, offer, requests, socket, iceCandidates} = peer;
     const dispatch = useAppDispatch();
-    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const localVideoRef = useRef<HTMLVideoElement | null>(null);
+    const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
 
 
     useEffect(() => {
-        (async () => {
-            const peerId = createId();
-
-            const peerConnection = await createConnection({dispatch, videoRef});
-            const socketConnection = io("http://localhost:3001").connect();
-
-            dispatch(peerActions.setPeerConnection(peerConnection));
-            dispatch(peerActions.setPeerId(peerId));
-            dispatch(peerActions.setSocket(socketConnection));
-            dispatch(peerActions.setVideoRef(videoRef));
-
-        })();
+        const peerId = createId();
+        const socketConnection = io("http://localhost:3001").connect();
+        createConnection({dispatch, remoteVideoRef});
+        dispatch(peerActions.setLocalVideoRef(localVideoRef));
+        dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
+        dispatch(peerActions.setPeerId(peerId));
+        dispatch(peerActions.setSocket(socketConnection));
 
     }, []);
 
@@ -36,16 +32,15 @@ function useInitialize(peer : Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("requestToServer", {iceCandidates, offer, peerId , status});
-                // todo send status with the requests to server
+                socket?.emit("requestToServer", {iceCandidates, offer, peerId, status});
             }, 1000)
         }
 
         return () => clearTimeout(candidateTimeout)
 
     }, [iceCandidates]);
-
     useEffect(() => {
+
         let candidateTimeout: NodeJS.Timeout;
 
         if (iceCandidates!.length > 0 && answer && status?.endsWith(":receive") && senderSocketId) {
@@ -53,7 +48,7 @@ function useInitialize(peer : Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("responseToServer", {iceCandidates, answer, peerId , socketId : senderSocketId , status});
+                socket?.emit("responseToServer", {iceCandidates, answer, peerId, socketId: senderSocketId, status});
             }, 1000)
         }
 
@@ -62,7 +57,7 @@ function useInitialize(peer : Peer) {
     }, [iceCandidates]);
 
 
-    return videoRef;
+    return {localVideoRef, remoteVideoRef};
 
 }
 

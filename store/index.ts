@@ -23,7 +23,7 @@ const store = configureStore({
                 // Ignore these field paths in all actions
                 ignoredActionPaths: ["payload.socket","payload.stream","payload.peerConnection","payload.videoRef.current","payload.iceCandidates","payload"],
                 // Ignore these paths in the state
-                ignoredPaths: ["peer.peerConnection","peer.socket","peer.stream","peer.videoRef.current","peer.iceCandidates","payload"],
+                ignoredPaths: ["peer.peerConnection","peer.localStream","peer.remoteStream","peer.socket","peer.stream","peer.localVideoRef.current","peer.remoteVideoRef.current","peer.iceCandidates","payload"],
             },
         }),
 })
