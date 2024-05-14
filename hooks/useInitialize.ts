@@ -15,7 +15,7 @@ function useInitialize(peer: Peer) {
 
     useEffect(() => {
         const peerId = createId();
-        const socketConnection = io("http://localhost:3001").connect();
+        const socketConnection = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
         createConnection({dispatch, remoteVideoRef});
         dispatch(peerActions.setLocalVideoRef(localVideoRef));
         dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
