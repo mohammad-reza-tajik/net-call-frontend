@@ -24,11 +24,11 @@ function RequestItem({request}: { request: Request }) {
     }
 
     return (
-        <div className={"flex flex-col justify-center items-center p-2 gap-5 border rounded"}>
-            <span className={"bg-primary p-1 rounded text-xs"}>
+        <div className={"flex flex-col justify-center items-center p-2 gap-5 border rounded text-xs"}>
+            <span className={"bg-primary p-1 rounded"}>
                 {statusText}
             </span>
-            <p className={"text-sm"}>
+            <p>
                 {peerId}
             </p>
             <Button variant={"secondary"} size={"lg"} onClick={() => answerHandler(request)}>

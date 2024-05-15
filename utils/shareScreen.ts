@@ -5,7 +5,7 @@ import {Peer} from "@/types";
 
 export async function shareScreen({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
     try {
-        const {peerConnection , localVideoRef , localStream} = peer;
+        const {peerConnection } = peer;
 
         const audioStream = await navigator.mediaDevices.getUserMedia({audio: true});
         const screenStream = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
@@ -28,9 +28,9 @@ export async function shareScreen({dispatch, peer}: { dispatch: ThunkDispatch, p
         dispatch(peerActions.setPeerConnection(peerConnection));
         dispatch(peerActions.setOffer(offer));
 
-        if (localVideoRef?.current && localStream) {
+        /*if (localVideoRef?.current && localStream) {
             localVideoRef.current.srcObject = localStream;
-        }
+        }*/
 
 
     } catch (err) {
