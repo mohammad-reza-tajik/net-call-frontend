@@ -3,6 +3,7 @@ import type {Request} from "@/types";
 import {Button} from "@/components/ui/button";
 import {useAppDispatch, useAppSelector} from "@/store";
 import createAnswer from "@/utils/createAnswer";
+import {Thumb} from "@/components/shared/Icons";
 
 function RequestItem({request}: { request: Request }) {
 
@@ -31,9 +32,17 @@ function RequestItem({request}: { request: Request }) {
             <p>
                 {peerId}
             </p>
-            <Button variant={"secondary"} size={"lg"} onClick={() => answerHandler(request)}>
+            <div className={"flex items-center justify-center gap-2"}>
+
+            <Button variant={"outline"} className={"gap-1"} onClick={() => answerHandler(request)}>
+                <Thumb className={" size-5"} />
                 پذیرفتن
             </Button>
+            <Button variant={"outline"} className={"gap-1"} onClick={() => console.log("rejected")}>
+                <Thumb className={"rotate-180 size-5"} />
+                رد کردن
+            </Button>
+            </div>
         </div>
     )
 }

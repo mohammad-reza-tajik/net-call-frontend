@@ -9,34 +9,29 @@ function PeerId() {
 
     const peerId = useAppSelector(state => state.peer.peerId);
 
-    async function copyIdHandler () {
+    async function copyIdHandler() {
         await navigator.clipboard.writeText(peerId!);
-        toast("آیدی کپی شد");
+        toast.info("آیدی کپی شد");
     }
 
     return (
         <TooltipProvider>
-
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <div className={"flex items-center justify-center gap-2 text-sm"}>
-                        آیدی شما :
-
+            <div className={"flex items-center justify-center gap-2 text-sm"}>
+                آیدی شما :
+                <Tooltip>
+                    <TooltipTrigger asChild>
                         {
                             peerId &&
                             <Button variant={"outline"} onClick={copyIdHandler}>
                                 {peerId}
                             </Button>
                         }
-
-                    </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>برای کپی کردن آیدی کلیک کنید</p>
-                </TooltipContent>
-            </Tooltip>
-
-
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>برای کپی کردن آیدی کلیک کنید</p>
+                    </TooltipContent>
+                </Tooltip>
+            </div>
         </TooltipProvider>
     )
 }
