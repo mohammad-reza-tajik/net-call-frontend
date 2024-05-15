@@ -236,6 +236,12 @@ export function Person(props: SVGProps<SVGSVGElement>) {
 }
 
 
+export function Thumb(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="M20.385 9q.627 0 1.12.494T22 10.615v1.231q0 .14-.03.3q-.032.16-.082.296l-2.731 6.476q-.205.459-.692.77q-.486.312-1.01.312H7.422V9l5.635-5.585q.22-.22.493-.274q.272-.053.516.082t.354.392t.042.54L13.435 9zm-11.962.427V19h9.039q.211 0 .432-.115t.337-.385L21 12v-1.385q0-.269-.173-.442T20.385 10h-8.193l1.158-5.462zM4.615 20q-.666 0-1.14-.475Q3 19.051 3 18.385v-7.77q0-.666.475-1.14Q3.949 9 4.615 9h2.808v1H4.615q-.269 0-.442.173T4 10.615v7.77q0 .269.173.442t.442.173h2.808v1zm3.808-1V9.427z"></path></svg>
+    )
+}
+
 export function Home(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="M6 19h3v-5q0-.425.288-.712T10 13h4q.425 0 .713.288T15 14v5h3v-9l-6-4.5L6 10zm-2 0v-9q0-.475.213-.9t.587-.7l6-4.5q.525-.4 1.2-.4t1.2.4l6 4.5q.375.275.588.7T20 10v9q0 .825-.588 1.413T18 21h-4q-.425 0-.712-.288T13 20v-5h-2v5q0 .425-.288.713T10 21H6q-.825 0-1.412-.587T4 19m8-6.75"></path></svg>

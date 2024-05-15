@@ -1,6 +1,6 @@
 import {peerActions} from "@/store/peerSlice";
 // @ts-ignore
-import {ThunkDispatch} from "redux-thunk";
+import {type ThunkDispatch} from "redux-thunk";
 import {MutableRefObject} from "react";
 import {toast} from "react-toastify";
 
@@ -23,20 +23,17 @@ function createConnection({dispatch, remoteVideoRef}: {
     })
 
     peerConnection.addEventListener("connectionstatechange", async (event) => {
+        console.log(peerConnection.connectionState);
+        let toastId: number | string;
 
-        peerConnection.addEventListener("connectionstatechange", async (event) => {
-            console.log(peerConnection.connectionState);
-            let toastId: number | string;
-
-            if (peerConnection.connectionState === "connecting") {
-                toastId = toast.loading("در حال اتصال ...");
-            } else if (peerConnection.connectionState === "connected") {
-                toast.dismiss(toastId!);
-                toast.success("متصل شدید")
-            } else if (peerConnection.connectionState === "disconnected") {
-                toast.error("ارتباط قطع شد");
-            }
-        });
+        if (peerConnection.connectionState === "connecting") {
+            toastId = toast.loading("در حال اتصال ...");
+        } else if (peerConnection.connectionState === "connected") {
+            toast.dismiss(toastId!);
+            toast.success("متصل شدید")
+        } else if (peerConnection.connectionState === "disconnected") {
+            toast.error("ارتباط قطع شد");
+        }
     })
 
     peerConnection.addEventListener("track", (event) => {
