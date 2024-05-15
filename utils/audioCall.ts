@@ -18,9 +18,9 @@ export default async function audioCall({dispatch, peer}: { dispatch: ThunkDispa
         dispatch(peerActions.setPeerConnection(peerConnection));
         dispatch(peerActions.setOffer(offer));
 
-        if (localVideoRef?.current && localStream) {
+        /*if (localVideoRef?.current && localStream) {
             localVideoRef.current.srcObject = localStream;
-        }
+        }*/
 
     } catch (err) {
         console.log(err);
