@@ -9,8 +9,6 @@ async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch
     const {peerConnection , localVideoRef} = peer;
     const answerStatus = request.status.split(":").at(0)!.concat(":receive") as Status;
 
-
-
     if (request.status === "audio:send" || request.status === "screen:send") {
         localStream = await navigator.mediaDevices.getUserMedia({audio: true});
     } else if (request.status === "video:send") {

@@ -10,21 +10,25 @@ function MainScreen() {
     const peer = useAppSelector(state => state.peer);
     const {socket, status} = peer;
 
-    const {localVideoRef , remoteVideoRef} = useInitialize(peer);
+    const {localVideoRef, remoteVideoRef} = useInitialize(peer);
     useSocket(socket);
 
     return (
-        <section className={"flex-1 flex"}>
+        <section className={"flex-1 flex overflow-hidden"}>
+            {
+                !status &&
+                <h1 className={"flex justify-center items-center text-xl flex-1"}>
+                    برای شروع یکی از گزینه های زیر را انتخاب کنید
+                </h1>
+            }
 
-            <h1 className={cn("text-xl",{"hidden":status})}>
-                برای شروع یکی از گزینه های زیر را انتخاب کنید
-            </h1>
-            <p className={cn("flex-1 flex justify-center items-center bg-primary",{"hidden":status !== "screen:send"})}>
-                صفحه شما به اشتراک گذاشته شده است
-            </p>
 
-            <video ref={localVideoRef} controls autoPlay className={cn("size-full", {"hidden": !status?.endsWith(":receive")})}/>
-            <video ref={remoteVideoRef} controls autoPlay className={cn("size-full", {"hidden": !status?.endsWith(":receive")})}/>
+            <video ref={localVideoRef} controls autoPlay
+                   className={cn("size-full", {"hidden": !status?.startsWith("video:")})}/>
+
+            <video ref={remoteVideoRef} controls autoPlay
+                   className={cn("size-full", {"hidden": !status?.endsWith(":receive")})}/>
+
 
         </section>
     )
