@@ -18,27 +18,30 @@ function createConnection({dispatch, remoteVideoRef}: {
         }
     });
 
-    peerConnection.addEventListener("signalingstatechange", (event) => {
+    peerConnection.addEventListener("signalingstatechange", () => {
         console.log(peerConnection.signalingState);
     })
 
-    peerConnection.addEventListener("connectionstatechange", async (event) => {
+    peerConnection.addEventListener("connectionstatechange", async () => {
         console.log(peerConnection.connectionState);
+        dispatch(peerActions.setConnectionState(peerConnection.connectionState));
         let toastId: number | string;
 
         if (peerConnection.connectionState === "connecting") {
             toastId = toast.loading("در حال اتصال ...");
         } else if (peerConnection.connectionState === "connected") {
             toast.dismiss(toastId!);
-            toast.success("متصل شدید")
+            toast.success("متصل شدید");
         } else if (peerConnection.connectionState === "disconnected") {
             toast.error("ارتباط قطع شد");
         }
     })
 
     peerConnection.addEventListener("track", (event) => {
-        if (remoteVideoRef?.current) {
-            remoteVideoRef.current.srcObject = event.streams[0];
+        const remoteStream = event.streams.at(0);
+        dispatch(peerActions.setRemoteStream(remoteStream));
+        if (remoteVideoRef?.current && remoteStream) {
+            remoteVideoRef.current.srcObject = remoteStream;
         }
     })
 

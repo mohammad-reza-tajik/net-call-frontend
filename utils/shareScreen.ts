@@ -7,7 +7,7 @@ export async function shareScreen({dispatch, peer}: { dispatch: ThunkDispatch, p
     try {
         const {peerConnection } = peer;
 
-        const audioStream = await navigator.mediaDevices.getUserMedia({audio: true});
+        const audioStream = await navigator.mediaDevices.getUserMedia({audio: true,video:true});
         const screenStream = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
         dispatch(peerActions.setStatus("screen:send"));
 

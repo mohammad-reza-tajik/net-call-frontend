@@ -6,7 +6,7 @@ import {Peer} from "@/types";
 export default async function audioCall({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
     try {
         const {peerConnection , localVideoRef , localStream} = peer;
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+        const stream = await navigator.mediaDevices.getUserMedia({audio: true,video:true});
         dispatch(peerActions.setStatus("audio:send"));
         stream.getTracks().forEach(track => {
             peerConnection?.addTrack(track, stream);
