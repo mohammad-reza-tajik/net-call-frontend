@@ -16,7 +16,9 @@ const initialState: Peer = {
     localStream: undefined,
     remoteStream: undefined,
     localVideoRef: undefined,
-    remoteVideoRef: undefined
+    remoteVideoRef: undefined,
+    signallingState: undefined,
+    connectionState: undefined,
 }
 
 const peerSlice = createSlice({
@@ -64,6 +66,12 @@ const peerSlice = createSlice({
         },
         removeRequest(state , action : PayloadAction<Request>) {
             state.requests  = state.requests.filter(item => item.peerId !== action.payload.peerId);
+        },
+        setConnectionState(state, action : PayloadAction<Peer["connectionState"]>) {
+            state.connectionState = action.payload;
+        },
+        setSignallingState(state, action : PayloadAction<Peer["signallingState"]>) {
+            state.signallingState = action.payload;
         }
 }}
 );

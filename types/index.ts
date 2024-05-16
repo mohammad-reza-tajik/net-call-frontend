@@ -32,6 +32,8 @@ export interface Peer {
     answer?: RTCSessionDescriptionInit;
     localStream?: MediaStream;
     remoteStream?: MediaStream;
+    signallingState? : RTCPeerConnection["signalingState"];
+    connectionState? : RTCPeerConnection["connectionState"];
     localVideoRef?: MutableRefObject<HTMLVideoElement | null>;
     remoteVideoRef?: MutableRefObject<HTMLVideoElement | null>;
 
