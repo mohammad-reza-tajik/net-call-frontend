@@ -14,14 +14,17 @@ function useInitialize(peer: Peer) {
 
 
     useEffect(() => {
-        const peerId = createId();
-        const socketConnection = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
-        createConnection({dispatch, remoteVideoRef});
-        dispatch(peerActions.setLocalVideoRef(localVideoRef));
-        dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
-        dispatch(peerActions.setPeerId(peerId));
-        dispatch(peerActions.setSocket(socketConnection));
-
+        (async () => {
+            const peerId = createId();
+            const socketConnection = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
+            const localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+            createConnection({dispatch, remoteVideoRef});
+            dispatch(peerActions.setLocalVideoRef(localVideoRef));
+            dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
+            dispatch(peerActions.setPeerId(peerId));
+            dispatch(peerActions.setLocalStream(localStream));
+            dispatch(peerActions.setSocket(socketConnection));
+        })();
     }, []);
 
     useEffect(() => {

@@ -5,22 +5,23 @@ import {peerActions} from "@/store";
 
 async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch, peer: Peer, request: Request }) {
 
-    let localStream: MediaStream | undefined = undefined;
-    const {peerConnection , localVideoRef} = peer;
+    const {peerConnection, localVideoRef , localStream} = peer;
     const answerStatus = request.status.split(":").at(0)!.concat(":receive") as Status;
 
-    if (request.status === "audio:send" || request.status === "screen:send") {
-        localStream = await navigator.mediaDevices.getUserMedia({audio: true});
-    } else if (request.status === "video:send") {
-        localStream = (await navigator.mediaDevices.getUserMedia({video: true, audio: true}));
-    }
-
-    if (!peerConnection || !localStream || !localVideoRef?.current) {
+    if (!peerConnection || !localStream) {
         return;
     }
-    localStream.getTracks().forEach(track => {
-        peerConnection.addTrack(track, localStream);
-    })
+
+    console.log("reached here")
+    if (request.status === "audio:send" || request.status === "screen:send") {
+        localStream.getAudioTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+        })
+    } else if (request.status === "video:send") {
+        localStream.getTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+        })
+    }
 
     await peerConnection?.setRemoteDescription(request.offer);
     const answer = await peerConnection?.createAnswer();
@@ -35,7 +36,9 @@ async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch
     dispatch(peerActions.setPeerConnection(peerConnection));
     dispatch(peerActions.setAnswer(answer));
 
-    localVideoRef.current.srcObject = localStream;
+    if (localVideoRef?.current && request.status === "video:send") {
+        localVideoRef.current.srcObject = localStream;
+    }
 
     return answer;
 

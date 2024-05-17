@@ -5,16 +5,20 @@ import {Peer} from "@/types";
 
 export default async function audioCall({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
     try {
-        const {peerConnection , localVideoRef , localStream} = peer;
-        const stream = await navigator.mediaDevices.getUserMedia({audio: true,video:true});
+        const {peerConnection , localStream  } = peer;
         dispatch(peerActions.setStatus("audio:send"));
-        stream.getTracks().forEach(track => {
-            peerConnection?.addTrack(track, stream);
-        });
-        const offer = await peerConnection?.createOffer();
-        await peerConnection?.setLocalDescription(offer);
 
-        dispatch(peerActions.setLocalStream(stream));
+        if (!localStream || !peerConnection){
+            return
+        }
+
+        localStream.getAudioTracks().forEach(track => {
+            peerConnection.addTrack(track, localStream);
+        });
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        dispatch(peerActions.setLocalStream(localStream));
         dispatch(peerActions.setPeerConnection(peerConnection));
         dispatch(peerActions.setOffer(offer));
 

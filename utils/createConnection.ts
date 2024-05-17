@@ -20,6 +20,7 @@ function createConnection({dispatch, remoteVideoRef}: {
 
     peerConnection.addEventListener("signalingstatechange", () => {
         console.log(peerConnection.signalingState);
+        dispatch(peerActions.setSignallingState(peerConnection.signalingState));
     })
 
     peerConnection.addEventListener("connectionstatechange", async () => {
