@@ -20,6 +20,13 @@ export function Video(props: SVGProps<SVGSVGElement>) {
     )
 }
 
+
+export function VideoMute(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="m20.577 15.77l-3.039-3.04v2.118l-1-1V6.615q0-.269-.173-.442T15.923 6H8.69l-1-1h8.233q.69 0 1.153.463t.462 1.152v4.654l3.039-3.038zm-1.18 5.195L2.418 3.988l.708-.707l16.977 16.977zM4.884 5.038L5.846 6h-.692q-.27 0-.442.173t-.174.442v10.77q0 .269.174.442t.442.173h10.77q.268 0 .441-.173t.173-.442v-.693l.962.962q-.096.575-.53.96T15.923 19H5.153q-.69 0-1.152-.462t-.463-1.153V6.615q0-.613.386-1.047t.96-.53"></path></svg>
+    )
+}
+
 export function Sun(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="M12 5q-.425 0-.712-.288T11 4V2q0-.425.288-.712T12 1q.425 0 .713.288T13 2v2q0 .425-.288.713T12 5m4.95 2.05q-.275-.275-.275-.687t.275-.713l1.4-1.425q.3-.3.712-.3t.713.3q.275.275.275.7t-.275.7L18.35 7.05q-.275.275-.7.275t-.7-.275M20 13q-.425 0-.713-.288T19 12q0-.425.288-.712T20 11h2q.425 0 .713.288T23 12q0 .425-.288.713T22 13zm-8 10q-.425 0-.712-.288T11 22v-2q0-.425.288-.712T12 19q.425 0 .713.288T13 20v2q0 .425-.288.713T12 23M5.65 7.05l-1.425-1.4q-.3-.3-.3-.725t.3-.7q.275-.275.7-.275t.7.275L7.05 5.65q.275.275.275.7t-.275.7q-.3.275-.7.275t-.7-.275m12.7 12.725l-1.4-1.425q-.275-.3-.275-.712t.275-.688q.275-.275.688-.275t.712.275l1.425 1.4q.3.275.288.7t-.288.725q-.3.3-.725.3t-.7-.3M2 13q-.425 0-.712-.288T1 12q0-.425.288-.712T2 11h2q.425 0 .713.288T5 12q0 .425-.288.713T4 13zm2.225 6.775q-.275-.275-.275-.7t.275-.7L5.65 16.95q.275-.275.687-.275t.713.275q.3.3.3.713t-.3.712l-1.4 1.4q-.3.3-.725.3t-.7-.3M12 18q-2.5 0-4.25-1.75T6 12q0-2.5 1.75-4.25T12 6q2.5 0 4.25 1.75T18 12q0 2.5-1.75 4.25T12 18m0-2q1.65 0 2.825-1.175T16 12q0-1.65-1.175-2.825T12 8q-1.65 0-2.825 1.175T8 12q0 1.65 1.175 2.825T12 16m0-4"></path></svg>
@@ -187,12 +194,45 @@ export function Search(props: SVGProps<SVGSVGElement>) {
     )
 }
 
+
+export function Stop(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path d="M7 15.385v-6.77q0-.67.472-1.143Q7.944 7 8.615 7h6.77q.67 0 1.143.472q.472.472.472 1.143v6.77q0 .67-.472 1.143q-.472.472-1.143.472h-6.77q-.67 0-1.143-.472Q7 16.056 7 15.385M8.615 16h6.77q.269 0 .442-.173t.173-.442v-6.77q0-.269-.173-.442T15.385 8h-6.77q-.269 0-.442.173T8 8.615v6.77q0 .269.173.442t.442.173M12 12"></path></svg>
+    )
+}
+
 export function Login(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path  d="M12 21v-2h7V5h-7V3h7q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm-2-4l-1.375-1.45l2.55-2.55H3v-2h8.175l-2.55-2.55L10 7l5 5z"></path></svg>
     )
 }
 
+
+export function Mic(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 36 36" {...props}><path fill="currentColor" d="M18 24c3.9 0 7-3.1 7-7V9c0-3.9-3.1-7-7-7s-7 3.1-7 7v8c0 3.9 3.1 7 7 7M13 9c0-2.8 2.2-5 5-5s5 2.2 5 5v8c0 2.8-2.2 5-5 5s-5-2.2-5-5z" className="clr-i-outline clr-i-outline-path-1"></path><path fill="currentColor" d="M30 17h-2c0 5.5-4.5 10-10 10S8 22.5 8 17H6c0 6.3 4.8 11.4 11 11.9V32h-3c-.6 0-1 .4-1 1s.4 1 1 1h8c.6 0 1-.4 1-1s-.4-1-1-1h-3v-3.1c6.2-.5 11-5.6 11-11.9" className="clr-i-outline clr-i-outline-path-2"></path><path fill="none" d="M0 0h36v36H0z"></path></svg>
+    )
+}
+
+export function MicMute(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" {...props}><path d="M13 8c0 .564-.094 1.107-.266 1.613l-.814-.814A4 4 0 0 0 12 8V7a.5.5 0 0 1 1 0zm-5 4c.818 0 1.578-.245 2.212-.667l.718.719a5 5 0 0 1-2.43.923V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 1 0v1a4 4 0 0 0 4 4m3-9v4.879l-1-1V3a2 2 0 0 0-3.997-.118l-.845-.845A3.001 3.001 0 0 1 11 3"></path><path d="m9.486 10.607l-.748-.748A2 2 0 0 1 6 8v-.878l-1-1V8a3 3 0 0 0 4.486 2.607m-7.84-9.253l12 12l.708-.708l-12-12z"></path></svg>
+    )
+}
+
+
+export function SoundMute(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" {...props}><path fillRule="evenodd" d="M1.5 5h2.79l3.86-3.83l.85.35v13l-.85.33L4.29 11H1.5l-.5-.5v-5zm3.35 5.17L8 13.31V2.73L4.85 5.85L4.5 6H2v4h2.5zm9.381-4.108l.707.707L13.207 8.5l1.731 1.732l-.707.707L12.5 9.207l-1.732 1.732l-.707-.707L11.793 8.5L10.06 6.77l.707-.707l1.733 1.73z" clipRule="evenodd"></path></svg>
+    )
+}
+
+
+export function SoundUnmute(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16" {...props}><path fill="currentColor" fillRule="evenodd" d="M1.5 4.83h2.79L8.15 1l.85.35v13l-.85.33l-3.86-3.85H1.5l-.5-.5v-5zM4.85 10L8 13.14V2.56L4.85 5.68l-.35.15H2v4h2.5zM15 7.83a6.97 6.97 0 0 1-1.578 4.428l-.712-.71A5.98 5.98 0 0 0 14 7.83c0-1.4-.48-2.689-1.284-3.71l.712-.71A6.97 6.97 0 0 1 15 7.83m-2 0a4.98 4.98 0 0 1-1.002 3.004l-.716-.716A4 4 0 0 0 12 7.83a4 4 0 0 0-.713-2.28l.716-.716c.626.835.997 1.872.997 2.996m-2 0c0 .574-.16 1.11-.44 1.566l-.739-.738a2 2 0 0 0 .005-1.647l.739-.739c.276.454.435.988.435 1.558" clipRule="evenodd"></path></svg>
+    )
+}
 
 export function Phone(props: SVGProps<SVGSVGElement>) {
     return (
