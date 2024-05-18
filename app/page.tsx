@@ -1,4 +1,4 @@
-import Toolbar from "@/components/shared/Toolbar";
+import ActionBar from "@/components/shared/ActionBar";
 import MainScreen from "@/components/shared/MainScreen";
 import Header from "@/components/shared/Header";
 import Drawer from "@/components/shared/Drawer";
@@ -9,7 +9,7 @@ export default function Home() {
         <Drawer />
         <Header />
         <MainScreen />
-        <Toolbar />
+        <ActionBar />
     </main>
   );
 }
