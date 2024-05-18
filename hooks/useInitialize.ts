@@ -15,7 +15,7 @@ function useInitialize(peer: Peer) {
 
     useEffect(() => {
         (async () => {
-            const localStream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const localStream = await navigator.mediaDevices.getUserMedia({audio: true,video : true});
             const peerId = createId();
             const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
             const {videoInputs , audioInputs , audioOutputs} = await getDevices();
