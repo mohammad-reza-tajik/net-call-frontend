@@ -1,7 +1,7 @@
 "use client"
 import type {Request} from "@/types";
 import {Button} from "@/components/ui/button";
-import {useAppDispatch, useAppSelector} from "@/store";
+import {peerActions, useAppDispatch, useAppSelector} from "@/store";
 import createAnswer from "@/utils/createAnswer";
 import {Thumb} from "@/components/shared/Icons";
 
@@ -21,6 +21,7 @@ function RequestItem({request}: { request: Request }) {
     }
 
     async function answerHandler(request: Request) {
+        dispatch(peerActions.setCurrentRequest(request));
         await createAnswer({request, peer, dispatch});
     }
 
