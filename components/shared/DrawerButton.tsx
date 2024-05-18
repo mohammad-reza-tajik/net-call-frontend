@@ -13,7 +13,7 @@ function DrawerButton() {
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Button size={"icon"} onClick={()=> dispatch(drawerActions.openDrawer())}>
-                        <Envelope className={"size-8"} />
+                        <Envelope className={"size-7"} />
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent>
