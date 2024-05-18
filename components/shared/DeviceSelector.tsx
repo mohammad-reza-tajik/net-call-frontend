@@ -3,17 +3,17 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useState} from "react";
 
 interface Props {
-    devices : MediaDeviceInfo[]
+    devices: MediaDeviceInfo[]
 }
 
 function DeviceSelector({devices}: Props) {
 
-    if(!devices) {
-        return
-    }
-
     const [device, setDevice] = useState("default");
 
+    if (!devices) {
+        return
+    }
+    
     const sortChangeHandler = (value: string) => {
         setDevice(value);
     }

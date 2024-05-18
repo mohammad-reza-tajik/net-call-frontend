@@ -4,9 +4,6 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/compon
 import {useAppDispatch, useAppSelector} from "@/store";
 import {cn} from "@/lib/utils";
 import features from "@/constants/features";
-import {Button} from "@/components/ui/button";
-import {shareScreen} from "@/utils/shareScreen";
-import {Screen} from "@/components/shared/Icons";
 import ActionButton from "@/components/shared/ActionButton";
 
 function Features() {
