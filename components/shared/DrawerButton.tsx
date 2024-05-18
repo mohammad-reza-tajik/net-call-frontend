@@ -1,8 +1,8 @@
 "use client"
-import {Button} from "@/components/ui/button";
 import {Envelope} from "@/components/shared/Icons";
 import {drawerActions, useAppDispatch} from "@/store";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {TooltipProvider} from "@/components/ui/tooltip";
+import ActionButton from "@/components/shared/ActionButton";
 
 function DrawerButton() {
 
@@ -10,16 +10,7 @@ function DrawerButton() {
 
     return (
         <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                    <Button size={"icon"} onClick={()=> dispatch(drawerActions.openDrawer())}>
-                        <Envelope className={"size-7"} />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>درخواست های دریافتی</p>
-                </TooltipContent>
-            </Tooltip>
+            <ActionButton icon={<Envelope className={"size-7"} />} tooltipContent={"درخواست های دریافت شده"} handler={()=> dispatch(drawerActions.openDrawer())} />
         </TooltipProvider>
     )
 }
