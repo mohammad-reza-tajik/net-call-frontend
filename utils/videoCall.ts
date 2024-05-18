@@ -13,7 +13,7 @@ export default async function videoCall({dispatch, peer} : {dispatch : ThunkDisp
         }
 
         localStream.getTracks().forEach(track => {
-            peerConnection?.addTrack(track, localStream);
+            peerConnection.addTrack(track, localStream);
         });
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);

@@ -12,7 +12,6 @@ async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch
         return;
     }
 
-    console.log("reached here")
     if (request.status === "audio:send" || request.status === "screen:send") {
         localStream.getAudioTracks().forEach(track => {
             peerConnection.addTrack(track, localStream);
@@ -23,12 +22,12 @@ async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch
         })
     }
 
-    await peerConnection?.setRemoteDescription(request.offer);
-    const answer = await peerConnection?.createAnswer();
+    await peerConnection.setRemoteDescription(request.offer);
+    const answer = await peerConnection.createAnswer();
     request.iceCandidates.forEach(item => {
-        peerConnection?.addIceCandidate(item);
+        peerConnection.addIceCandidate(item);
     })
-    await peerConnection?.setLocalDescription(answer);
+    await peerConnection.setLocalDescription(answer);
 
     dispatch(peerActions.setStatus(answerStatus));
     dispatch(peerActions.removeRequest(request));

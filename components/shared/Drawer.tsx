@@ -10,7 +10,7 @@ function Drawer() {
     const dispatch = useAppDispatch();
     const drawerIsOpen = useAppSelector(state => state.drawer.isOpen);
     const peer = useAppSelector(state => state.peer);
-    const {requests} = peer;
+    const {receivedRequests} = peer;
 
     return (
         <div className={"relative overflow-y-auto"}>
@@ -27,8 +27,8 @@ function Drawer() {
                 <h1 className={"my-5 bg-primary text-center p-3 rounded"}>
                     درخواست های دریافت شده
                 </h1>
-                {!requests || requests.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :
-                    requests.map((request, index) => {
+                {!receivedRequests || receivedRequests.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :
+                    receivedRequests.map((request, index) => {
                         return <RequestItem request={request} key={index} />
                     })
                 }

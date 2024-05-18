@@ -13,7 +13,6 @@ function useSocket(socket? : Socket) {
         socket?.on("requestToPeer", async (request : Request) => {
             try {
                 dispatch(peerActions.addRequest(request));
-                dispatch(peerActions.setSenderSocketId(request.socketId));
                 toast("یک درخواست دریافت شد");
             } catch (err) {
                 console.error(err);
@@ -21,6 +20,7 @@ function useSocket(socket? : Socket) {
         })
         socket?.on("responseToPeer", async (response : Response ) => {
             try {
+                dispatch(peerActions.setCurrentResponse(response));
                 await peerConnection?.setRemoteDescription(response.answer);
                 response.iceCandidates.forEach(item => {
                     peerConnection?.addIceCandidate(item);

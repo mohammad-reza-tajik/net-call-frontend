@@ -40,3 +40,12 @@ export interface Peer {
 
 }
 
+export interface Devices {
+    audioInputs? : MediaDeviceInfo[];
+    audioOutputs? : MediaDeviceInfo[];
+    videoInputs? : MediaDeviceInfo[];
+    currentVideoInput? : MediaDeviceInfo;
+    currentAudioInput? : MediaDeviceInfo;
+    currentAudioOutput? : MediaDeviceInfo;
+}
+

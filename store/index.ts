@@ -2,6 +2,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import peerSlice , {peerActions} from "@/store/peerSlice";
 import drawerSlice  ,{drawerActions} from "@/store/drawerSlice";
 import {useDispatch, useSelector , type TypedUseSelectorHook} from "react-redux";
+import devicesSlice , {devicesActions} from "@/store/devicesSlice";
 
 
 type RootState = ReturnType<typeof store.getState>;
@@ -15,6 +16,7 @@ const store = configureStore({
     reducer: {
         drawer: drawerSlice.reducer,
         peer : peerSlice.reducer,
+        devices : devicesSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
@@ -23,7 +25,7 @@ const store = configureStore({
                 // Ignore these field paths in all actions
                 ignoredActionPaths: ["payload.socket","payload.stream","payload.peerConnection","payload.videoRef.current","payload.iceCandidates","payload"],
                 // Ignore these paths in the state
-                ignoredPaths: ["peer.peerConnection","peer.localStream","peer.remoteStream","peer.socket","peer.stream","peer.localVideoRef.current","peer.remoteVideoRef.current","peer.iceCandidates","payload"],
+                ignoredPaths: ["peer.peerConnection","devices.videoInputs","devices.currentAudioInput","devices.audioInputs","devices.audioOutputs","peer.localStream","peer.remoteStream","peer.socket","peer.stream","peer.localVideoRef.current","peer.remoteVideoRef.current","peer.iceCandidates","payload"],
             },
         }),
 })
@@ -37,4 +39,4 @@ const store = configureStore({
 * */
 
 
-export { store , useAppDispatch , useAppSelector, drawerActions , peerActions }
+export { store , useAppDispatch , useAppSelector, drawerActions , peerActions , devicesActions }
