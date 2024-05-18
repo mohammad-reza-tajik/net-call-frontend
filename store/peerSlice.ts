@@ -4,7 +4,6 @@ import {Peer, Request} from "@/types";
 import {WritableDraft} from "immer";
 
 const initialState: Peer = {
-    senderSocketId : undefined,
     status: undefined,
     peerId: undefined,
     answer : undefined,
@@ -12,7 +11,9 @@ const initialState: Peer = {
     socket: undefined,
     peerConnection: undefined,
     offer: undefined,
-    requests : [],
+    receivedRequests : [],
+    currentRequest : undefined,
+    currentResponse: undefined,
     localStream: undefined,
     remoteStream: undefined,
     localVideoRef: undefined,
@@ -28,8 +29,11 @@ const peerSlice = createSlice({
         setStatus: (state, action: PayloadAction<Peer["status"]>) => {
             state.status = action.payload;
         },
-        setSenderSocketId: (state, action: PayloadAction<Peer["senderSocketId"]>) => {
-            state.senderSocketId = action.payload;
+        setCurrentRequest: (state, action: PayloadAction<Peer["currentRequest"]>) => {
+            state.currentRequest = action.payload;
+        },
+        setCurrentResponse: (state, action: PayloadAction<Peer["currentResponse"]>) => {
+            state.currentResponse = action.payload;
         },
         setPeerId: (state, action: PayloadAction<Peer["peerId"]>) => {
             state.peerId = action.payload;
@@ -62,10 +66,10 @@ const peerSlice = createSlice({
             state.remoteVideoRef = action.payload as WritableDraft<Peer["remoteVideoRef"]>;
         },
         addRequest(state,action :PayloadAction<Request> ) {
-            state.requests.push(action.payload);
+            state.receivedRequests.push(action.payload);
         },
         removeRequest(state , action : PayloadAction<Request>) {
-            state.requests  = state.requests.filter(item => item.peerId !== action.payload.peerId);
+            state.receivedRequests  = state.receivedRequests.filter(item => item.peerId !== action.payload.peerId);
         },
         setConnectionState(state, action : PayloadAction<Peer["connectionState"]>) {
             state.connectionState = action.payload;

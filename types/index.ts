@@ -22,11 +22,12 @@ export interface Response {
 export interface Peer {
     status?: Status;
     peerId?: string;
-    senderSocketId?: string;
     iceCandidates?: RTCIceCandidate[];
     peerConnection?: RTCPeerConnection;
-    requests: Request[];
+    receivedRequests: Request[];
     // response : Request[];
+    currentRequest? : Request;
+    currentResponse?: Response;
     socket?: Socket;
     offer?: RTCSessionDescriptionInit;
     answer?: RTCSessionDescriptionInit;
