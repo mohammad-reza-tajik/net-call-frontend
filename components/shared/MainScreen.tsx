@@ -34,11 +34,11 @@ function MainScreen() {
     }
 
     return (
-        <section className={"flex-1 flex overflow-hidden"}>
+        <section className={"flex-1 flex overflow-hidden relative"}>
             {renderScreen()}
 
             <video ref={localVideoRef} controls autoPlay
-                   className={cn("size-full", {"hidden": !status?.startsWith("video:")})}/>
+                   className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !status?.startsWith("video:")})}/>
 
             <video ref={remoteVideoRef} controls autoPlay
                    className={cn("size-full", {"hidden": !status?.startsWith("video:") && status !== "screen:receive"})}/>

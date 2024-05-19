@@ -1,6 +1,6 @@
 "use client"
 
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {TooltipProvider} from "@/components/ui/tooltip";
 import {useAppDispatch, useAppSelector} from "@/store";
 import {cn} from "@/lib/utils";
 import features from "@/constants/features";
