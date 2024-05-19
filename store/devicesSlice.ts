@@ -18,7 +18,7 @@ const devicesSlice = createSlice({
             state.audioInputs = action.payload;
         },
         setAudioOutputs(state , action: PayloadAction<Devices["audioOutputs"]>) {
-            state.audioInputs = action.payload;
+            state.audioOutputs = action.payload;
         },
         setVideoInputs(state , action: PayloadAction<Devices["videoInputs"]>) {
             state.videoInputs = action.payload;

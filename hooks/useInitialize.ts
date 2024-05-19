@@ -17,7 +17,7 @@ function useInitialize(peer: Peer) {
 
     useEffect(() => {
         (async () => {
-            const localStream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const localStream = await navigator.mediaDevices.getUserMedia({video : true ,audio: true});
             const peerId = createId();
             createConnection({dispatch});
             const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
@@ -88,6 +88,7 @@ function useInitialize(peer: Peer) {
         return () => clearTimeout(candidateTimeout)
 
     }, [iceCandidates]);
+
     useEffect(() => {
 
         let candidateTimeout: NodeJS.Timeout;
