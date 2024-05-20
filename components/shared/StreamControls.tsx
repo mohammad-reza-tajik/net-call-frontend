@@ -2,7 +2,7 @@
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {cn} from "@/lib/utils";
 import {useAppDispatch, useAppSelector} from "@/store";
-import {Microphone, MicrophoneOff, CameraOff , Camera, Stop} from "@/components/shared/Icons";
+import {Microphone, MicrophoneOff, CameraOff, Camera, Stop, Speaker, SpeakerOff} from "@/components/shared/Icons";
 import DeviceSelector from "@/components/shared/DeviceSelector";
 import ActionButton from "@/components/shared/ActionButton";
 import {useState} from "react";
@@ -10,40 +10,65 @@ import hangup from "@/utils/hangup";
 
 function StreamControls() {
 
-    const peer = useAppSelector(state => state.peer)
-    const {status} = peer;
+    const peer = useAppSelector(state => state.peer);
+    const {status, localStream , remoteStream} = peer;
     const dispatch = useAppDispatch();
-    const {audioInputs , videoInputs} = useAppSelector(state => state.devices);
+    const {audioInputs, videoInputs} = useAppSelector(state => state.devices);
 
     const [muteMic, setMuteMic] = useState(false);
     const [muteVideo, setMuteVideo] = useState(false);
+    const [muteSound, setMuteSound] = useState(false);
 
     function muteMicHandler() {
-        setMuteMic((prevState)=> !prevState);
+        setMuteMic((prevState) => !prevState);
+        localStream?.getAudioTracks().forEach(track => {
+            track.enabled = muteMic;
+        })
     }
 
     function muteVideoHandler() {
-        setMuteVideo((prevState)=> !prevState);
+        setMuteVideo((prevState) => !prevState);
+        localStream?.getVideoTracks().forEach(track => {
+            track.enabled = muteVideo;
+        })
     }
 
+    function muteSoundHandler() {
+        setMuteSound((prevState) => !prevState);
+        remoteStream?.getAudioTracks().forEach(track => {
+            track.enabled = muteSound;
+        })
+    }
 
     return (
         <div className={cn("flex justify-center items-center gap-5", {"hidden": !status})}>
             <TooltipProvider>
-              <ActionButton icon={<Stop className={"size-7"} />}
-                            tooltipContent={"توقف استریم"}
-                            handler={()=>{hangup({dispatch , peer})}} />
-              <ActionButton icon={!muteMic ? <Microphone className={"size-7"}  /> : <MicrophoneOff className={"size-7"} /> }
-                            tooltipContent={muteMic ? "وصل صدا" : "قطع صدا"}
-                            handler={muteMicHandler} />
-              <ActionButton icon={!muteVideo ? <Camera className={"size-7"} /> : <CameraOff className={"size-7"}  />}
-                            tooltipContent={muteVideo ? "وصل تصویر" : "قطع تصویر"}
-                            handler={muteVideoHandler} />
+                <ActionButton icon={<Stop className={"size-7"}/>}
+                              tooltipContent={"توقف استریم"}
+                              handler={() => {
+                                  hangup({dispatch, peer})
+                              }}/>
 
-                <DeviceSelector devices={audioInputs!}/>
+                <ActionButton
+                    icon={!muteMic ? <Microphone className={"size-7"}/> : <MicrophoneOff className={"size-7"}/>}
+                    tooltipContent={muteMic ? "وصل میکروفون" : "قطع میکروفون"}
+                    handler={muteMicHandler}/>
 
                 {
-                    status?.startsWith("video:") && <DeviceSelector devices={videoInputs!} />
+                    status?.startsWith("video") || status === "screen:send" &&
+                    <ActionButton icon={!muteVideo ? <Camera className={"size-7"}/> : <CameraOff className={"size-7"}/>}
+                                  tooltipContent={muteVideo ? "وصل تصویر" : "قطع تصویر"}
+                                  handler={muteVideoHandler}/>
+                }
+
+                <ActionButton icon={!muteSound ? <Speaker className={"size-7"}/> : <SpeakerOff className={"size-7"}/>}
+                              tooltipContent={muteSound ? "وصل صدا" :"قطع صدا"}
+                              handler={muteSoundHandler} />
+
+                <DeviceSelector devices={audioInputs!} text={"میکروفون :"}/>
+
+                {
+                    status?.startsWith("video:") && <DeviceSelector devices={videoInputs!} text={"وب کم :"}/>
                 }
 
             </TooltipProvider>

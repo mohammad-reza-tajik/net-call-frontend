@@ -3,10 +3,11 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useState} from "react";
 
 interface Props {
-    devices: MediaDeviceInfo[]
+    devices: MediaDeviceInfo[];
+    text?:string;
 }
 
-function DeviceSelector({devices}: Props) {
+function DeviceSelector({devices , text}: Props) {
 
     const [device, setDevice] = useState("default");
 
@@ -19,6 +20,9 @@ function DeviceSelector({devices}: Props) {
     }
 
     return (
+        <div className={"flex items-center gap-5"}>
+            <p className={"text-sm"}>{text}</p>
+
         <Select onValueChange={sortChangeHandler} defaultValue={device}>
             <SelectTrigger className={"w-36 md:w-44"}>
                 <SelectValue>
@@ -35,6 +39,7 @@ function DeviceSelector({devices}: Props) {
                 }
             </SelectContent>
         </Select>
+        </div>
     )
 }
 

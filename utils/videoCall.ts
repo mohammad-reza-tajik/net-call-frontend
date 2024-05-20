@@ -22,7 +22,7 @@ export default async function videoCall({dispatch, peer} : {dispatch : ThunkDisp
         dispatch(peerActions.setOffer(offer));
         dispatch(peerActions.setPeerConnection(peerConnection));
 
-        if (localVideoRef?.current && localStream) {
+        if (localVideoRef?.current) {
             localVideoRef.current.srcObject = localStream;
         }
 

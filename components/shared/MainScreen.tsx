@@ -25,7 +25,7 @@ function MainScreen() {
                 در انتظار پاسخ ...
             </p>
         } else if (status === "screen:send") {
-            return <ScreenSend peer={peer}/>
+            return <ScreenSend peer={peer} />
         } else if (status.startsWith("audio:") && connectionState === "connected") {
             return <AudioCall peer={peer} />
         } else if (status.startsWith("video:") || status === "screen:receive") {
