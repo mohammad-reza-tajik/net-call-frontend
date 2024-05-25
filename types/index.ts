@@ -11,7 +11,8 @@ export interface ConnectedPeer {
 
 export interface Request {
     offer: RTCSessionDescriptionInit;
-    peerId: string;
+    localPeerId: string;
+    remotePeerId: string;
     socketId: string;
     status: Status;
     iceCandidates: RTCIceCandidate[];
@@ -19,7 +20,8 @@ export interface Request {
 
 export interface Response {
     answer: RTCSessionDescriptionInit;
-    peerId: string;
+    localPeerId: string;
+    remotePeerId: string;
     socketId: string;
     status: Status;
     iceCandidates: RTCIceCandidate[];

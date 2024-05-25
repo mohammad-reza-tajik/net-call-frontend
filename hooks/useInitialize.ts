@@ -13,6 +13,7 @@ function useInitialize() {
     const peer = useAppSelector(state => state.peer);
     const {
         localPeerId,
+        remotePeerId,
         localVideoRef,
         remoteVideoRef,
         peerConnection,
@@ -33,7 +34,7 @@ function useInitialize() {
             const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
                     deviceType: getDeviceType(),
-                    peerId: localPeerId
+                    localPeerId
                 }
             }).connect();
             const {videoInputs, audioInputs, audioOutputs} = await getDevices();
@@ -94,7 +95,8 @@ function useInitialize() {
                 socket?.emit("requestToServer", {
                     iceCandidates,
                     offer,
-                    peerId: localPeerId,
+                    localPeerId,
+                    remotePeerId,
                     status,
                     socketId: socket.id
                 });
@@ -109,7 +111,7 @@ function useInitialize() {
 
         let candidateTimeout: NodeJS.Timeout;
 
-        if (iceCandidates!.length > 0 && answer && status?.endsWith(":receive") && currentRequest?.socketId) {
+        if (iceCandidates!.length > 0 && answer && status?.endsWith(":receive")) {
             // @ts-ignore
             clearTimeout(candidateTimeout);
 
@@ -117,9 +119,10 @@ function useInitialize() {
                 socket?.emit("responseToServer", {
                     iceCandidates,
                     answer,
-                    peerId: localPeerId,
-                    socketId: currentRequest.socketId,
-                    status
+                    localPeerId,
+                    remotePeerId,
+                    status,
+                    socketId:socket.id
                 });
             }, 1000)
         }

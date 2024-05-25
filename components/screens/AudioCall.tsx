@@ -13,7 +13,7 @@ function AudioCall({peer}: Props) {
                 <p className={"bg-primary p-2 rounded"}>فرستنده</p>
                 <Phone className={"size-20"}/>
                 <p>
-                    {peer.status === "audio:receive" ? peer.currentRequest?.peerId : peer.peerId}
+                    {peer.status === "audio:receive" ? peer.currentRequest?.peerId : peer.localPeerId}
                 </p>
             </div>
             <Exchange className={"size-10 self-center"} />
@@ -21,7 +21,7 @@ function AudioCall({peer}: Props) {
                 <p className={"bg-primary p-2 rounded"}>گیرنده</p>
                 <Phone className={"size-20"}/>
                 <p>
-                    {peer.status === "audio:receive" ? peer.peerId : peer.currentResponse?.peerId}
+                    {peer.status === "audio:receive" ? peer.localPeerId : peer.currentResponse?.peerId}
                 </p>
             </div>
         </div>

@@ -12,8 +12,8 @@ import {
     SpeakerOff,
     Phone
 } from "@/components/shared/Icons";
-import DeviceSelector from "@/components/shared/DeviceSelector";
-import ActionButton from "@/components/shared/ActionButton";
+import DeviceSelector from "@/components/connectPage/DeviceSelector";
+import ActionButton from "@/components/connectPage/ActionButton";
 import {useState} from "react";
 import hangup from "@/utils/hangup";
 

@@ -7,7 +7,7 @@ import {Thumb} from "@/components/shared/Icons";
 
 function RequestItem({request}: { request: Request }) {
 
-    const {peerId, status} = request;
+    const {localPeerId, status} = request;
     const dispatch = useAppDispatch();
     const peer = useAppSelector(state => state.peer);
     let statusText: string | undefined;
@@ -22,6 +22,7 @@ function RequestItem({request}: { request: Request }) {
 
     async function answerHandler(request: Request) {
         dispatch(peerActions.setCurrentRequest(request));
+        dispatch(peerActions.setRemotePeerId(localPeerId));
         await createAnswer({request, peer, dispatch});
     }
 
@@ -31,7 +32,7 @@ function RequestItem({request}: { request: Request }) {
                 {statusText}
             </span>
             <p>
-                {peerId}
+                {localPeerId}
             </p>
             <div className={"flex items-center justify-center gap-2"}>
 
