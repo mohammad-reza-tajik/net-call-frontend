@@ -2,6 +2,8 @@ import type {Metadata, Viewport} from "next";
 import "react-toastify/dist/ReactToastify.css";
 import "@/styles/globals.css";
 import Providers from "@/components/shared/Providers";
+import Drawer from "@/components/shared/Drawer";
+import Header from "@/components/shared/Header";
 
 
 export const metadata: Metadata = {
@@ -21,10 +23,17 @@ export const viewport: Viewport = {
 export default function RootLayout({children}: { children: React.ReactNode; }) {
     return (
         <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"} suppressHydrationWarning>
-        <body className={"bg-background text-foreground fill-foreground relative overflow-hidden w-screen h-screen"}>
-        <Providers>
-            {children}
-        </Providers>
+        <body
+            className={"bg-background text-foreground fill-foreground relative overflow-hidden w-screen h-screen"}>
+        <div className={"contained"}>
+            <Providers>
+                <Drawer/>
+                <Header/>
+                <main>
+                    {children}
+                </main>
+            </Providers>
+        </div>
         </body>
         </html>
     );

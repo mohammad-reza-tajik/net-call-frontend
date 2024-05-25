@@ -1,14 +1,13 @@
 import qs from "query-string";
 interface Config {
+    currentParams? : string;
     params?: Record<string, string | number>;
     hash?:string;
 }
 
 
-const formUrlQuery = (currentParams: string, config : Config = {} ) : string => {
+const formUrlQuery = ({params , currentParams} : Config = {} ) : string => {
     const query = qs.parse(currentParams);
-
-    const {params} = config
 
     if (params) {
         Object.keys(params).forEach(key => {
