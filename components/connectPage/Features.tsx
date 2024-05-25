@@ -2,9 +2,8 @@
 
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {useAppDispatch, useAppSelector} from "@/store";
-import {cn} from "@/lib/utils";
 import features from "@/constants/features";
-import ActionButton from "@/components/shared/ActionButton";
+import ActionButton from "@/components/connectPage/ActionButton";
 
 function Features() {
 
@@ -12,8 +11,12 @@ function Features() {
     const {status} = peer;
     const dispatch = useAppDispatch();
 
+    if (status){
+        return
+    }
+
     return (
-        <div className={cn("flex justify-center items-center gap-5", {"hidden": status})}>
+        <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
                 {
                     features({dispatch,peer}).map((item , index)=>{

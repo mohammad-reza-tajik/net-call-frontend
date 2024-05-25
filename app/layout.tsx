@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import Providers from "@/components/shared/Providers";
 import Drawer from "@/components/shared/Drawer";
 import Header from "@/components/shared/Header";
+import Initialize from "@/components/shared/Initialize";
 
 
 export const metadata: Metadata = {
@@ -27,11 +28,13 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
             className={"bg-background text-foreground fill-foreground relative overflow-hidden w-screen h-screen"}>
         <div className={"contained"}>
             <Providers>
+                <Initialize>
                 <Drawer/>
                 <Header/>
                 <main>
                     {children}
                 </main>
+                </Initialize>
             </Providers>
         </div>
         </body>

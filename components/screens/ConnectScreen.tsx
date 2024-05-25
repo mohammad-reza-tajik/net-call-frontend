@@ -6,20 +6,20 @@ import {useAppSelector} from "@/store";
 import AudioCall from "@/components/screens/AudioCall";
 import {cn} from "@/lib/utils";
 import ScreenSend from "@/components/screens/ScreenSend";
+import StartScreen from "@/components/screens/StartScreen";
+import {Peer} from "@/types";
+import PeerItem from "@/components/homePage/PeerItem";
 
-function MainScreen() {
+function ConnectScreen() {
 
     const peer = useAppSelector(state => state.peer);
-    const {socket, status, signallingState , connectionState} = peer;
+    const {localVideoRef , remoteVideoRef, status , connectedPeers, signallingState , connectionState} = peer;
 
-    const {localVideoRef, remoteVideoRef} = useInitialize(peer);
-    useSocket(socket);
+    console.log(connectedPeers);
 
     function renderScreen() {
         if (!status) {
-            return <p className={"flex justify-center items-center text-xl flex-1"}>
-                برای شروع یکی از گزینه های زیر را انتخاب کنید
-            </p>
+            return <StartScreen />
         } else if (signallingState === "have-local-offer") {
             return <p className={"flex justify-center items-center text-xl flex-1"}>
                 در انتظار پاسخ ...
@@ -36,7 +36,7 @@ function MainScreen() {
     return (
         <section className={"flex-1 flex overflow-hidden relative"}>
             {renderScreen()}
-
+            
             <video ref={localVideoRef} controls autoPlay
                    className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !status?.startsWith("video:")})}/>
 
@@ -46,4 +46,4 @@ function MainScreen() {
     )
 }
 
-export default MainScreen;
+export default ConnectScreen;

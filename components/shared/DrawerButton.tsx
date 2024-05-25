@@ -2,7 +2,7 @@
 import {Envelope} from "@/components/shared/Icons";
 import {drawerActions, useAppDispatch} from "@/store";
 import {TooltipProvider} from "@/components/ui/tooltip";
-import ActionButton from "@/components/shared/ActionButton";
+import ActionButton from "@/components/connectPage/ActionButton";
 
 function DrawerButton() {
 

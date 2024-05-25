@@ -1,5 +1,5 @@
-import Features from "@/components/shared/Features";
-import StreamControls from "@/components/shared/StreamControls";
+import Features from "@/components/connectPage/Features";
+import StreamControls from "@/components/connectPage/StreamControls";
 
 function ActionBar() {
 

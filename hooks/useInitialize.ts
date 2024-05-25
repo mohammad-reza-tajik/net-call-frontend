@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import {useEffect} from "react";
 import io from "socket.io-client";
 import {devicesActions, peerActions, useAppDispatch, useAppSelector} from "@/store";
 import createId from "@/utils/createId";
@@ -11,10 +11,19 @@ import getDeviceType from "@/utils/getDeviceType";
 function useInitialize() {
 
     const peer = useAppSelector(state => state.peer);
-    const {localPeerId, peerConnection, answer, status, offer, socket, iceCandidates, currentRequest} = peer;
+    const {
+        localPeerId,
+        localVideoRef,
+        remoteVideoRef,
+        peerConnection,
+        answer,
+        status,
+        offer,
+        socket,
+        iceCandidates,
+        currentRequest
+    } = peer;
     const dispatch = useAppDispatch();
-    const localVideoRef = useRef<HTMLVideoElement | null>(null);
-    const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
 
     useEffect(() => {
         (async () => {
@@ -23,14 +32,12 @@ function useInitialize() {
             createConnection({dispatch});
             const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
-                    deviceType : getDeviceType(),
-                    peerId : localPeerId
+                    deviceType: getDeviceType(),
+                    peerId: localPeerId
                 }
             }).connect();
             const {videoInputs, audioInputs, audioOutputs} = await getDevices();
             dispatch(peerActions.setSocket(socket));
-            dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
-            dispatch(peerActions.setLocalVideoRef(localVideoRef));
             dispatch(devicesActions.setAudioInputs(audioInputs));
             dispatch(devicesActions.setAudioOutputs(audioOutputs));
             dispatch(devicesActions.setVideoInputs(videoInputs));
@@ -84,7 +91,13 @@ function useInitialize() {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("requestToServer", {iceCandidates, offer, localPeerId, status, socketId: socket.id});
+                socket?.emit("requestToServer", {
+                    iceCandidates,
+                    offer,
+                    peerId: localPeerId,
+                    status,
+                    socketId: socket.id
+                });
             }, 1000)
         }
 
@@ -104,7 +117,7 @@ function useInitialize() {
                 socket?.emit("responseToServer", {
                     iceCandidates,
                     answer,
-                    localPeerId,
+                    peerId: localPeerId,
                     socketId: currentRequest.socketId,
                     status
                 });

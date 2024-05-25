@@ -1,4 +1,4 @@
-import PeerItem from "@/components/homepage/PeerItem";
+import PeerItem from "@/components/homePage/PeerItem";
 import {ConnectedPeer} from "@/types";
 
 function PeerList({connectedPeers}: {connectedPeers : ConnectedPeer[]}) {

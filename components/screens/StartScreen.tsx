@@ -1,17 +1,13 @@
 "use client"
 
 import { useAppSelector} from "@/store";
-import useInitialize from "@/hooks/useInitialize";
-import useSocket from "@/hooks/useSocket";
 import { Create, Devices} from "@/components/shared/Icons";
-import PeerList from "@/components/homepage/PeerList";
+import PeerList from "@/components/homePage/PeerList";
 import SectionHeading from "@/components/shared/SectionHeading";
-import PeerForm from "@/components/homepage/PeerForm";
+import PeerForm from "@/components/homePage/PeerForm";
 
 function StartScreen() {
 
-    useInitialize();
-    useSocket();
     const connectedPeers = useAppSelector(state => state.peer.connectedPeers);
 
     return (

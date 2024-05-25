@@ -2,7 +2,16 @@
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {cn} from "@/lib/utils";
 import {useAppDispatch, useAppSelector} from "@/store";
-import {Microphone, MicrophoneOff, CameraOff, Camera, Stop, Speaker, SpeakerOff} from "@/components/shared/Icons";
+import {
+    Microphone,
+    MicrophoneOff,
+    CameraOff,
+    Camera,
+    Stop,
+    Speaker,
+    SpeakerOff,
+    Phone
+} from "@/components/shared/Icons";
 import DeviceSelector from "@/components/shared/DeviceSelector";
 import ActionButton from "@/components/shared/ActionButton";
 import {useState} from "react";
@@ -11,13 +20,17 @@ import hangup from "@/utils/hangup";
 function StreamControls() {
 
     const peer = useAppSelector(state => state.peer);
-    const {status, localStream , remoteStream} = peer;
-    const dispatch = useAppDispatch();
+    const {status, localStream, remoteStream} = peer;
     const {audioInputs, videoInputs} = useAppSelector(state => state.devices);
 
     const [muteMic, setMuteMic] = useState(false);
     const [muteVideo, setMuteVideo] = useState(false);
     const [muteSound, setMuteSound] = useState(false);
+    const dispatch = useAppDispatch();
+
+    if (!status) {
+        return
+    }
 
     function muteMicHandler() {
         setMuteMic((prevState) => !prevState);
@@ -41,9 +54,9 @@ function StreamControls() {
     }
 
     return (
-        <div className={cn("flex justify-center items-center gap-5", {"hidden": !status})}>
+        <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
-                <ActionButton icon={<Stop className={"size-7"}/>}
+                <ActionButton className={"bg-destructive text-destructive-foreground"} icon={<Phone className={"size-7 rotate-[135deg]"}/>}
                               tooltipContent={"توقف استریم"}
                               handler={() => {
                                   hangup({dispatch, peer})
@@ -62,8 +75,8 @@ function StreamControls() {
                 }
 
                 <ActionButton icon={!muteSound ? <Speaker className={"size-7"}/> : <SpeakerOff className={"size-7"}/>}
-                              tooltipContent={muteSound ? "وصل صدا" :"قطع صدا"}
-                              handler={muteSoundHandler} />
+                              tooltipContent={muteSound ? "وصل صدا" : "قطع صدا"}
+                              handler={muteSoundHandler}/>
 
                 <DeviceSelector devices={audioInputs!} text={"میکروفون :"}/>
 
