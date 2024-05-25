@@ -5,7 +5,8 @@ import {WritableDraft} from "immer";
 
 const initialState: Peer = {
     status: undefined,
-    peerId: undefined,
+    localPeerId: undefined,
+    remotePeerId :undefined,
     answer : undefined,
     iceCandidates:[],
     socket: undefined,
@@ -26,43 +27,46 @@ const peerSlice = createSlice({
     name: "peer",
     initialState,
     reducers: {
-        setStatus: (state, action: PayloadAction<Peer["status"]>) => {
+        setStatus(state, action: PayloadAction<Peer["status"]>)  {
             state.status = action.payload;
         },
-        setCurrentRequest: (state, action: PayloadAction<Peer["currentRequest"]>) => {
+        setCurrentRequest (state, action: PayloadAction<Peer["currentRequest"]>)  {
             state.currentRequest = action.payload;
         },
-        setCurrentResponse: (state, action: PayloadAction<Peer["currentResponse"]>) => {
+        setCurrentResponse (state, action: PayloadAction<Peer["currentResponse"]>)  {
             state.currentResponse = action.payload;
         },
-        setPeerId: (state, action: PayloadAction<Peer["peerId"]>) => {
-            state.peerId = action.payload;
+        setRemotePeerId (state, action: PayloadAction<Peer["remotePeerId"]>)  {
+          state.remotePeerId = action.payload;
         },
-        addIceCandidate: (state, action: PayloadAction<RTCIceCandidate>) => {
+        setLocalPeerId (state, action: PayloadAction<Peer["localPeerId"]>)  {
+            state.localPeerId = action.payload;
+        },
+        addIceCandidate (state, action: PayloadAction<RTCIceCandidate>)  {
             state.iceCandidates?.push(action.payload);
         },
-        setPeerConnection: (state, action: PayloadAction<Peer["peerConnection"]>) => {
+        setPeerConnection (state, action: PayloadAction<Peer["peerConnection"]>)  {
             state.peerConnection = action.payload;
         },
-        setSocket: (state, action: PayloadAction<Peer["socket"]>) => {
+        setSocket (state, action: PayloadAction<Peer["socket"]>)  {
             state.socket = action.payload as WritableDraft<Peer["socket"]>;
         },
-        setOffer: (state, action: PayloadAction<Peer["offer"]>) => {
+        setOffer (state, action: PayloadAction<Peer["offer"]>)  {
             state.offer = action.payload;
         },
-        setAnswer: (state, action: PayloadAction<Peer["answer"]>) => {
+        setAnswer (state, action: PayloadAction<Peer["answer"]>)  {
             state.answer = action.payload;
         },
-        setLocalStream: (state, action: PayloadAction<Peer["localStream"]>) => {
+        setLocalStream (state, action: PayloadAction<Peer["localStream"]>)  {
             state.localStream = action.payload;
         },
-        setRemoteStream: (state, action: PayloadAction<Peer["remoteStream"]>) => {
+        setRemoteStream (state, action: PayloadAction<Peer["remoteStream"]>)  {
             state.remoteStream = action.payload;
         },
-        setLocalVideoRef: (state, action: PayloadAction<Peer["localVideoRef"]>) => {
+        setLocalVideoRef (state, action: PayloadAction<Peer["localVideoRef"]>)  {
             state.localVideoRef = action.payload as WritableDraft<Peer["localVideoRef"]>;
         },
-        setRemoteVideoRef: (state, action: PayloadAction<Peer["remoteVideoRef"]>) => {
+        setRemoteVideoRef (state, action: PayloadAction<Peer["remoteVideoRef"]>)  {
             state.remoteVideoRef = action.payload as WritableDraft<Peer["remoteVideoRef"]>;
         },
         addRequest(state,action :PayloadAction<Request> ) {

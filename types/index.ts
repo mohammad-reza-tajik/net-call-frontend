@@ -1,7 +1,7 @@
 import type {Socket} from "socket.io-client";
 import {MutableRefObject} from "react";
 
-export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive" | "loading";
+export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive";
 
 export interface Request {
     offer: RTCSessionDescriptionInit;
@@ -22,10 +22,11 @@ export interface Response {
 export interface Peer {
     status?: Status;
     peerId?: string;
+    localPeerId?: string;
+    remotePeerId?: string;
     iceCandidates?: RTCIceCandidate[];
     peerConnection?: RTCPeerConnection;
     receivedRequests: Request[];
-    // response : Request[];
     currentRequest? : Request;
     currentResponse?: Response;
     socket?: Socket;

@@ -7,10 +7,10 @@ import {toast} from "react-toastify";
 
 function PeerId() {
 
-    const peerId = useAppSelector(state => state.peer.peerId);
+    const localPeerId = useAppSelector(state => state.peer.localPeerId);
 
     async function copyIdHandler() {
-        await navigator.clipboard.writeText(peerId!);
+        await navigator.clipboard.writeText(localPeerId!);
         toast.info("آیدی کپی شد");
     }
 
@@ -21,9 +21,9 @@ function PeerId() {
                 <Tooltip>
                     <TooltipTrigger asChild>
                         {
-                            peerId &&
+                            localPeerId &&
                             <Button variant={"outline"} onClick={copyIdHandler}>
-                                {peerId}
+                                {localPeerId}
                             </Button>
                         }
                     </TooltipTrigger>
