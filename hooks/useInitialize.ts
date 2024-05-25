@@ -6,6 +6,7 @@ import createConnection from "@/utils/createConnection";
 import getDevices from "@/utils/getDevices";
 import {toast} from "react-toastify";
 import hangup from "@/utils/hangup";
+import getDeviceType from "@/utils/getDeviceType";
 
 function useInitialize() {
 
@@ -22,6 +23,7 @@ function useInitialize() {
             createConnection({dispatch});
             const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
+                    deviceType : getDeviceType(),
                     peerId : localPeerId
                 }
             }).connect();
