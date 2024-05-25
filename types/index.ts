@@ -6,6 +6,7 @@ export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:sen
 export interface ConnectedPeer {
     socketId : string;
     peerId : string;
+    deviceType: "desktop" | "mobile";
 }
 
 export interface Request {
@@ -27,6 +28,7 @@ export interface Response {
 export interface Peer {
     status?: Status;
     connectedPeers : ConnectedPeer[];
+    connectionMode? : "group" | "pair";
     localPeerId?: string;
     remotePeerId?: string;
     iceCandidates?: RTCIceCandidate[];
