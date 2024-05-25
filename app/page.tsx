@@ -1,15 +1,11 @@
-import ActionBar from "@/components/shared/ActionBar";
-import MainScreen from "@/components/shared/MainScreen";
-import Header from "@/components/shared/Header";
-import Drawer from "@/components/shared/Drawer";
+import StartScreen from "@/components/screens/StartScreen";
 
-export default function Home() {
+function Home() {
   return (
-    <main className={"flex flex-col w-screen h-screen"}>
-        <Drawer />
-        <Header />
-        <MainScreen />
-        <ActionBar />
-    </main>
+    <div className={"flex flex-col py-5"}>
+        <StartScreen />
+    </div>
   );
 }
+
+export default Home;
