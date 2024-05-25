@@ -1,9 +1,14 @@
+"use client"
 import {ConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
-import Link from "next/link";
 import formUrlQuery from "@/utils/formUrlQuery";
+import {useRouter} from "next/navigation";
+import {peerActions, useAppDispatch} from "@/store";
 
 function PeerItem({connectedPeer: {peerId, deviceType}}: { connectedPeer: ConnectedPeer }) {
+
+    const router = useRouter();
+    const dispatch = useAppDispatch();
 
     const peerURL = formUrlQuery({
         params: {
@@ -11,15 +16,20 @@ function PeerItem({connectedPeer: {peerId, deviceType}}: { connectedPeer: Connec
         }
     });
 
+    const peerClickHandler = () => {
+        dispatch(peerActions.setRemotePeerId(peerId));
+        router.push(`/connect${peerURL}`);
+    }
+
     return (
-        <Link href={`/connect${peerURL}`}
-              className={"flex flex-col gap-5 p-5 items-center justify-center border rounded relative hover:bg-gray-100/10 cursor-pointer"}>
+        <button
+              className={"flex flex-col gap-5 p-5 items-center border rounded relative hover:bg-gray-100/10"} onClick={peerClickHandler}>
             {
                 deviceType === "desktop" ? <Monitor className={"size-28"}/> : <Mobile className={"size-28"}/>
             }
             <span className={"absolute right-2 top-2 bg-green-400 size-3 rounded-full animate-pulse"}/>
             <p>{peerId}</p>
-        </Link>
+        </button>
     )
 }
 
