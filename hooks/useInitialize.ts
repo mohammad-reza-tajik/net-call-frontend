@@ -1,40 +1,43 @@
 import {useEffect, useRef} from "react";
 import io from "socket.io-client";
-import {devicesActions, peerActions, useAppDispatch} from "@/store";
+import {devicesActions, peerActions, useAppDispatch, useAppSelector} from "@/store";
 import createId from "@/utils/createId";
-import {Peer} from "@/types";
 import createConnection from "@/utils/createConnection";
 import getDevices from "@/utils/getDevices";
 import {toast} from "react-toastify";
 import hangup from "@/utils/hangup";
 
-function useInitialize(peer: Peer) {
+function useInitialize() {
 
-    const {peerId, peerConnection, answer, status, offer, socket, iceCandidates, currentRequest} = peer;
+    const peer = useAppSelector(state => state.peer);
+    const {localPeerId, peerConnection, answer, status, offer, socket, iceCandidates, currentRequest} = peer;
     const dispatch = useAppDispatch();
     const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
 
     useEffect(() => {
         (async () => {
-            const localStream = await navigator.mediaDevices.getUserMedia({video : true ,audio: true});
-            const peerId = createId();
+            const localStream = await navigator.mediaDevices.getUserMedia({audio: true});
+            const localPeerId = createId({dispatch});
             createConnection({dispatch});
-            const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!).connect();
+            const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+                query: {
+                    peerId : localPeerId
+                }
+            }).connect();
             const {videoInputs, audioInputs, audioOutputs} = await getDevices();
+            dispatch(peerActions.setSocket(socket));
             dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
             dispatch(peerActions.setLocalVideoRef(localVideoRef));
-            dispatch(peerActions.setPeerId(peerId));
             dispatch(devicesActions.setAudioInputs(audioInputs));
             dispatch(devicesActions.setAudioOutputs(audioOutputs));
             dispatch(devicesActions.setVideoInputs(videoInputs));
             dispatch(peerActions.setLocalStream(localStream));
-            dispatch(peerActions.setSocket(socket));
         })();
     }, []);
 
     useEffect(() => {
-        if (peerConnection && !status) {
+        if (peerConnection) {
             peerConnection.addEventListener("icecandidate", (event) => {
                 if (event.candidate) {
                     dispatch(peerActions.addIceCandidate(event.candidate));
@@ -42,12 +45,10 @@ function useInitialize(peer: Peer) {
             });
 
             peerConnection.addEventListener("signalingstatechange", () => {
-                console.log(peerConnection.signalingState);
                 dispatch(peerActions.setSignallingState(peerConnection.signalingState));
             })
 
-            peerConnection.addEventListener("connectionstatechange", async () => {
-                console.log(peerConnection.connectionState);
+            peerConnection.addEventListener("connectionstatechange", () => {
                 dispatch(peerActions.setConnectionState(peerConnection.connectionState));
                 let toastId: number | string;
 
@@ -81,7 +82,7 @@ function useInitialize(peer: Peer) {
             clearTimeout(candidateTimeout);
 
             candidateTimeout = setTimeout(() => {
-                socket?.emit("requestToServer", {iceCandidates, offer, peerId, status, socketId: socket.id});
+                socket?.emit("requestToServer", {iceCandidates, offer, localPeerId, status, socketId: socket.id});
             }, 1000)
         }
 
@@ -101,7 +102,7 @@ function useInitialize(peer: Peer) {
                 socket?.emit("responseToServer", {
                     iceCandidates,
                     answer,
-                    peerId,
+                    localPeerId,
                     socketId: currentRequest.socketId,
                     status
                 });

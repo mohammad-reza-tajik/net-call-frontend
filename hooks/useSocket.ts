@@ -1,13 +1,12 @@
 import {useEffect} from "react";
 import {peerActions, useAppDispatch, useAppSelector} from "@/store";
-import {Socket} from "socket.io-client";
-import {Response , Request} from "@/types";
+import {Response, Request, ConnectedPeer} from "@/types";
 import {toast} from "react-toastify";
 
-function useSocket(socket? : Socket) {
+function useSocket() {
 
     const dispatch = useAppDispatch();
-    const peerConnection = useAppSelector(state => state.peer.peerConnection);
+    const {peerConnection , socket} = useAppSelector(state => state.peer);
 
     useEffect(() => {
         socket?.on("requestToPeer", async (request : Request) => {
@@ -29,6 +28,9 @@ function useSocket(socket? : Socket) {
             } catch (err) {
                 console.error(err);
             }
+        })
+        socket?.on("connectedPeers", ({connectedPeers} : {connectedPeers : ConnectedPeer[]}) => {
+            dispatch(peerActions.setConnectedPeers(connectedPeers));
         })
     }, [socket]);
 
