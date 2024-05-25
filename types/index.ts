@@ -3,6 +3,11 @@ import {MutableRefObject} from "react";
 
 export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive";
 
+export interface ConnectedPeer {
+    socketId : string;
+    peerId : string;
+}
+
 export interface Request {
     offer: RTCSessionDescriptionInit;
     peerId: string;
@@ -21,7 +26,7 @@ export interface Response {
 
 export interface Peer {
     status?: Status;
-    peerId?: string;
+    connectedPeers : ConnectedPeer[];
     localPeerId?: string;
     remotePeerId?: string;
     iceCandidates?: RTCIceCandidate[];

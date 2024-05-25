@@ -8,6 +8,7 @@ function createConnection({dispatch}: {dispatch: ThunkDispatch}) {
     const peerConnection = new RTCPeerConnection(peerConfig);
 
     dispatch(peerActions.setPeerConnection(peerConnection));
+    return peerConnection;
 }
 
 export default createConnection;

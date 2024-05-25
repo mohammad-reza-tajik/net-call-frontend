@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Peer, Request} from "@/types";
+import {ConnectedPeer, Peer, Request} from "@/types";
 // @ts-ignore
 import {WritableDraft} from "immer";
 
@@ -9,6 +9,7 @@ const initialState: Peer = {
     remotePeerId :undefined,
     answer : undefined,
     iceCandidates:[],
+    connectedPeers:[],
     socket: undefined,
     peerConnection: undefined,
     offer: undefined,
@@ -27,6 +28,9 @@ const peerSlice = createSlice({
     name: "peer",
     initialState,
     reducers: {
+        setConnectedPeers(state, action : PayloadAction<ConnectedPeer[]>) {
+            state.connectedPeers = action.payload;
+        },
         setStatus(state, action: PayloadAction<Peer["status"]>)  {
             state.status = action.payload;
         },

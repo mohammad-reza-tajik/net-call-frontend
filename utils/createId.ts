@@ -11,6 +11,7 @@ function createId({dispatch} : {dispatch : ThunkDispatch}) {
         localStorage.setItem("peerId", peerId)
     }
     dispatch(peerActions.setLocalPeerId(peerId));
+    return peerId;
 }
 
 export default createId;
