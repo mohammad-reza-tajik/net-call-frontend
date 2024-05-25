@@ -23,17 +23,14 @@ export const viewport: Viewport = {
 
 export default function RootLayout({children}: { children: React.ReactNode; }) {
     return (
-        <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"} suppressHydrationWarning>
-        <body
-            className={"bg-background text-foreground fill-foreground relative overflow-hidden w-screen h-screen"}>
-        <div className={"contained"}>
+        <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"}>
+        <body className={"bg-background text-foreground fill-foreground relative"}>
+        <div className={"h-screen contained overflow-hidden flex flex-col"}>
             <Providers>
                 <Initialize>
-                <Drawer/>
-                <Header/>
-                <main>
+                    <Drawer/>
+                    <Header/>
                     {children}
-                </main>
                 </Initialize>
             </Providers>
         </div>
