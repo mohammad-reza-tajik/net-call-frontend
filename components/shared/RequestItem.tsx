@@ -4,6 +4,8 @@ import {Button} from "@/components/ui/button";
 import {peerActions, useAppDispatch, useAppSelector} from "@/store";
 import createAnswer from "@/utils/createAnswer";
 import {Thumb} from "@/components/shared/Icons";
+import {useRouter} from "next/navigation";
+import formUrlQuery from "@/utils/formUrlQuery";
 
 function RequestItem({request}: { request: Request }) {
 
@@ -11,6 +13,8 @@ function RequestItem({request}: { request: Request }) {
     const dispatch = useAppDispatch();
     const peer = useAppSelector(state => state.peer);
     let statusText: string | undefined;
+
+    const router = useRouter();
 
     if (status === "screen:send") {
         statusText = "اشتراک گذاری صفحه"
@@ -23,7 +27,13 @@ function RequestItem({request}: { request: Request }) {
     async function answerHandler(request: Request) {
         dispatch(peerActions.setCurrentRequest(request));
         dispatch(peerActions.setRemotePeerId(localPeerId));
+        const peerURL = formUrlQuery({
+            params: {
+                RemotePeerId : request.localPeerId
+            }
+        });
         await createAnswer({request, peer, dispatch});
+        router.push(`/connect${peerURL}`);
     }
 
     return (

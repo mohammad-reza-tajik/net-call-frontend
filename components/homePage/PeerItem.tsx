@@ -5,19 +5,19 @@ import formUrlQuery from "@/utils/formUrlQuery";
 import {useRouter} from "next/navigation";
 import {peerActions, useAppDispatch} from "@/store";
 
-function PeerItem({connectedPeer: {peerId, deviceType}}: { connectedPeer: ConnectedPeer }) {
+function PeerItem({connectedPeer: {localPeerId, deviceType}}: { connectedPeer: ConnectedPeer }) {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
 
     const peerURL = formUrlQuery({
         params: {
-            peerId
+            RemotePeerId : localPeerId
         }
     });
 
     const peerClickHandler = () => {
-        dispatch(peerActions.setRemotePeerId(peerId));
+        dispatch(peerActions.setRemotePeerId(localPeerId));
         router.push(`/connect${peerURL}`);
     }
 
@@ -28,7 +28,7 @@ function PeerItem({connectedPeer: {peerId, deviceType}}: { connectedPeer: Connec
                 deviceType === "desktop" ? <Monitor className={"size-28"}/> : <Mobile className={"size-28"}/>
             }
             <span className={"absolute right-2 top-2 bg-green-400 size-3 rounded-full animate-pulse"}/>
-            <p>{peerId}</p>
+            <p>{localPeerId}</p>
         </button>
     )
 }

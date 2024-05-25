@@ -5,7 +5,7 @@ export type Status = "screen:send" | "audio:send" | "audio:receive" | "video:sen
 
 export interface ConnectedPeer {
     socketId : string;
-    peerId : string;
+    localPeerId : string;
     deviceType: "desktop" | "mobile";
 }
 
