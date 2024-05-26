@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
 import {Request} from "@/types";
 
-const receivedRequests = signal<Request[]>([]);
+const receivedRequestsSignal = signal<Request[]>([]);
 
-export default receivedRequests;
+export default receivedRequestsSignal;
