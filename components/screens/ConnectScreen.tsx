@@ -6,11 +6,12 @@ import {cn} from "@/lib/utils";
 import ScreenSend from "@/components/screens/ScreenSend";
 import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";
+import createAnswer from "@/utils/createAnswer";
 
 function ConnectScreen() {
 
     const peer = useAppSelector(state => state.peer);
-    const {status, signallingState, connectionState} = peer;
+    const {status, signallingState, connectionState , currentRequest} = peer;
 
     const dispatch = useAppDispatch();
 
@@ -21,6 +22,14 @@ function ConnectScreen() {
         dispatch(peerActions.setRemoteVideoRef(remoteVideoRef));
         dispatch(peerActions.setLocalVideoRef(localVideoRef));
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            if (currentRequest && peer.localVideoRef) {
+                await createAnswer({request: currentRequest, peer, dispatch});
+            }
+        })();
+    }, [peer.localVideoRef]);
 
 
     function renderScreen() {
@@ -46,7 +55,7 @@ function ConnectScreen() {
 
             {renderScreen()}
 
-             <video ref={localVideoRef} controls autoPlay
+            <video ref={localVideoRef} controls autoPlay
                    className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !status?.startsWith("video:")})}/>
 
             <video ref={remoteVideoRef} controls autoPlay

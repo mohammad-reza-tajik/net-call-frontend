@@ -24,7 +24,7 @@ function PeerForm() {
 
         const peerURL = formUrlQuery({
             params: {
-                peerId:remotePeerIdRef.current.value
+                remotePeerId:remotePeerIdRef.current.value
             }
         });
 

@@ -47,7 +47,7 @@ function useInitialize() {
     }, []);
 
     useEffect(() => {
-        if (peerConnection) {
+        if (peerConnection && remoteVideoRef) {
             peerConnection.addEventListener("icecandidate", (event) => {
                 if (event.candidate) {
                     dispatch(peerActions.addIceCandidate(event.candidate));
@@ -81,7 +81,7 @@ function useInitialize() {
                 }
             })
         }
-    }, [peerConnection]);
+    }, [peerConnection , remoteVideoRef]);
 
 
     useEffect(() => {

@@ -2,7 +2,6 @@
 import type {Request} from "@/types";
 import {Button} from "@/components/ui/button";
 import {peerActions, useAppDispatch, useAppSelector} from "@/store";
-import createAnswer from "@/utils/createAnswer";
 import {Thumb} from "@/components/shared/Icons";
 import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
@@ -29,10 +28,9 @@ function RequestItem({request}: { request: Request }) {
         dispatch(peerActions.setRemotePeerId(localPeerId));
         const peerURL = formUrlQuery({
             params: {
-                RemotePeerId : request.localPeerId
+                remotePeerId : request.localPeerId
             }
         });
-        await createAnswer({request, peer, dispatch});
         router.push(`/connect${peerURL}`);
     }
 

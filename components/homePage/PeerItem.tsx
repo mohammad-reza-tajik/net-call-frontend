@@ -12,7 +12,7 @@ function PeerItem({connectedPeer: {localPeerId, deviceType}}: { connectedPeer: C
 
     const peerURL = formUrlQuery({
         params: {
-            RemotePeerId : localPeerId
+            remotePeerId : localPeerId
         }
     });
 

@@ -15,7 +15,7 @@ function ScreenSend({peer}: Props) {
             <div className={"text-lg text-center leading-loose"}>
                 صفحه شما برای
                 <p className={"border py-1 px-4 rounded bg-muted"}>
-                {peer.currentResponse?.peerId}
+                {peer.currentResponse?.localPeerId}
                 </p>
                 به اشتراک گذاشته شده است
             </div>
