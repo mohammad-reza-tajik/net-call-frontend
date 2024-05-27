@@ -1,6 +1,6 @@
 import statusSignal from "@/signals/peer/status";
 import localStreamSignal from "@/signals/localStream";
-import peerConnectionSignal from "@/signals/peer/peerConnection";
+import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 
 async function audioCall() {
     try {
@@ -12,10 +12,12 @@ async function audioCall() {
         }
 
         localStreamSignal.value.getAudioTracks().forEach(track => {
-            peerConnectionSignal.value.addTrack(track, localStreamSignal.value);
+            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         });
+
         const offer = await peerConnectionSignal.value.createOffer();
         await peerConnectionSignal.value.setLocalDescription(offer);
+        offerSignal.value = offer;
 
     } catch (err) {
         console.log(err);

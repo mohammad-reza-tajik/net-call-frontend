@@ -1,5 +1,5 @@
 import statusSignal from "@/signals/peer/status";
-import peerConnectionSignal from "@/signals/peer/peerConnection";
+import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 
 async function shareScreen() {
@@ -20,11 +20,13 @@ async function shareScreen() {
         }
 
         screenStream.getTracks().forEach(track => {
-            peerConnectionSignal.value.addTrack(track, screenStream);
+            peerConnectionSignal.value!.addTrack(track, screenStream);
         });
 
         const offer = await peerConnectionSignal.value.createOffer();
         await peerConnectionSignal.value.setLocalDescription(offer);
+
+        offerSignal.value = offer;
 
         localStreamSignal.value = screenStream;
 

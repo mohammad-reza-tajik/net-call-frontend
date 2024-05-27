@@ -1,5 +1,5 @@
 import {Request, type Status} from "@/types";
-import peerConnectionSignal from "@/signals/peer/peerConnection";
+import {answerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 import statusSignal from "@/signals/peer/status";
 import receivedRequestsSignal from "@/signals/receivedRequests";
@@ -15,22 +15,23 @@ async function createAnswer({request}: {request: Request}) {
 
     if (request.status === "audio:send" || request.status === "screen:send") {
         localStreamSignal.value.getAudioTracks().forEach(track => {
-            peerConnectionSignal.value.addTrack(track, localStreamSignal.value!);
+            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         })
     } else if (request.status === "video:send") {
         localStreamSignal.value.getTracks().forEach(track => {
-            peerConnectionSignal.value.addTrack(track, localStreamSignal.value!);
+            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         })
     }
 
     await peerConnectionSignal.value.setRemoteDescription(request.offer);
     const answer = await peerConnectionSignal.value.createAnswer();
     request.iceCandidates.forEach(item => {
-        peerConnectionSignal.value.addIceCandidate(item);
+        peerConnectionSignal.value!.addIceCandidate(item);
     })
     await peerConnectionSignal.value.setLocalDescription(answer);
 
     statusSignal.value = answerStatus;
+    answerSignal.value=answer;
     receivedRequestsSignal.value = receivedRequestsSignal.value.filter(item => item.localPeerId !== request.localPeerId);
 
     if (localVideoRefSignal.value?.current && request.status === "video:send") {
