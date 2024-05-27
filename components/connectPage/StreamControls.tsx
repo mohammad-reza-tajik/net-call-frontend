@@ -1,13 +1,11 @@
 "use client"
 import {TooltipProvider} from "@/components/ui/tooltip";
-import {cn} from "@/lib/utils";
 import {useAppDispatch, useAppSelector} from "@/store";
 import {
     Microphone,
     MicrophoneOff,
     CameraOff,
     Camera,
-    Stop,
     Speaker,
     SpeakerOff,
     Phone
@@ -16,11 +14,13 @@ import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
 import {useState} from "react";
 import hangup from "@/utils/hangup";
+import localStreamSignal from "@/signals/localStream";
+import remoteStreamSignal from "@/signals/remoteStream";
+import statusSignal from "@/signals/peer/status";
 
 function StreamControls() {
 
     const peer = useAppSelector(state => state.peer);
-    const {status, localStream, remoteStream} = peer;
     const {audioInputs, videoInputs} = useAppSelector(state => state.devices);
 
     const [muteMic, setMuteMic] = useState(false);
@@ -28,27 +28,27 @@ function StreamControls() {
     const [muteSound, setMuteSound] = useState(false);
     const dispatch = useAppDispatch();
 
-    if (!status) {
+    if (!statusSignal.value) {
         return
     }
 
     function muteMicHandler() {
         setMuteMic((prevState) => !prevState);
-        localStream?.getAudioTracks().forEach(track => {
+        localStreamSignal.value?.getAudioTracks().forEach(track => {
             track.enabled = muteMic;
         })
     }
 
     function muteVideoHandler() {
         setMuteVideo((prevState) => !prevState);
-        localStream?.getVideoTracks().forEach(track => {
+        localStreamSignal.value?.getVideoTracks().forEach(track => {
             track.enabled = muteVideo;
         })
     }
 
     function muteSoundHandler() {
         setMuteSound((prevState) => !prevState);
-        remoteStream?.getAudioTracks().forEach(track => {
+        remoteStreamSignal.value?.getAudioTracks().forEach(track => {
             track.enabled = muteSound;
         })
     }
@@ -56,7 +56,8 @@ function StreamControls() {
     return (
         <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
-                <ActionButton className={"bg-destructive text-destructive-foreground"} icon={<Phone className={"size-7 rotate-[135deg]"}/>}
+                <ActionButton className={"bg-destructive text-destructive-foreground"}
+                              icon={<Phone className={"size-7 rotate-[135deg]"}/>}
                               tooltipContent={"توقف استریم"}
                               handler={() => {
                                   hangup({dispatch, peer})
@@ -68,7 +69,7 @@ function StreamControls() {
                     handler={muteMicHandler}/>
 
                 {
-                    status?.startsWith("video") || status === "screen:send" &&
+                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" &&
                     <ActionButton icon={!muteVideo ? <Camera className={"size-7"}/> : <CameraOff className={"size-7"}/>}
                                   tooltipContent={muteVideo ? "وصل تصویر" : "قطع تصویر"}
                                   handler={muteVideoHandler}/>
@@ -81,7 +82,8 @@ function StreamControls() {
                 <DeviceSelector devices={audioInputs!} text={"میکروفون :"}/>
 
                 {
-                    status?.startsWith("video:") && <DeviceSelector devices={videoInputs!} text={"وب کم :"}/>
+                    statusSignal.value?.startsWith("video:") &&
+                    <DeviceSelector devices={videoInputs!} text={"وب کم :"}/>
                 }
 
             </TooltipProvider>

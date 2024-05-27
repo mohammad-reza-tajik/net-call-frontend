@@ -1,42 +1,41 @@
-import {Peer, Request, type Status} from "@/types";
-// @ts-ignore
-import {ThunkDispatch} from "redux-thunk";
-import {peerActions} from "@/store";
+import {Request, type Status} from "@/types";
+import peerConnectionSignal from "@/signals/peer/peerConnection";
+import localStreamSignal from "@/signals/localStream";
+import statusSignal from "@/signals/peer/status";
+import receivedRequestsSignal from "@/signals/receivedRequests";
+import localVideoRefSignal from "@/signals/localVideoRef";
 
-async function createAnswer({dispatch, peer, request}: { dispatch: ThunkDispatch, peer: Peer, request: Request }) {
+async function createAnswer({request}: {request: Request}) {
 
-    const {peerConnection, localVideoRef , localStream} = peer;
     const answerStatus = request.status.split(":").at(0)!.concat(":receive") as Status;
 
-    if (!peerConnection || !localStream) {
+    if (!peerConnectionSignal.value || !localStreamSignal.value) {
         return;
     }
 
     if (request.status === "audio:send" || request.status === "screen:send") {
-        localStream.getAudioTracks().forEach(track => {
-            peerConnection.addTrack(track, localStream);
+        localStreamSignal.value.getAudioTracks().forEach(track => {
+            peerConnectionSignal.value.addTrack(track, localStreamSignal.value!);
         })
     } else if (request.status === "video:send") {
-        localStream.getTracks().forEach(track => {
-            peerConnection.addTrack(track, localStream);
+        localStreamSignal.value.getTracks().forEach(track => {
+            peerConnectionSignal.value.addTrack(track, localStreamSignal.value!);
         })
     }
 
-    await peerConnection.setRemoteDescription(request.offer);
-    const answer = await peerConnection.createAnswer();
+    await peerConnectionSignal.value.setRemoteDescription(request.offer);
+    const answer = await peerConnectionSignal.value.createAnswer();
     request.iceCandidates.forEach(item => {
-        peerConnection.addIceCandidate(item);
+        peerConnectionSignal.value.addIceCandidate(item);
     })
-    await peerConnection.setLocalDescription(answer);
+    await peerConnectionSignal.value.setLocalDescription(answer);
 
-    dispatch(peerActions.setStatus(answerStatus));
-    dispatch(peerActions.removeRequest(request));
-    dispatch(peerActions.setLocalStream(localStream));
-    dispatch(peerActions.setPeerConnection(peerConnection));
-    dispatch(peerActions.setAnswer(answer));
+    statusSignal.value = answerStatus;
+    receivedRequestsSignal.value = receivedRequestsSignal.value.filter(item => item.localPeerId !== request.localPeerId);
 
-    if (localVideoRef?.current && request.status === "video:send") {
-        localVideoRef.current.srcObject = localStream;
+    if (localVideoRefSignal.value?.current && request.status === "video:send") {
+        console.log("video is here")
+        localVideoRefSignal.value.current.srcObject = localStreamSignal.value;
     }
 
     return answer;
