@@ -1,11 +1,10 @@
 import {Exchange, Phone} from "@/components/shared/Icons";
-import {Peer} from "@/types";
+import statusSignal from "@/signals/peer/status";
+import currentResponseSignal from "@/signals/currentResponse";
+import localPeerId from "@/signals/peer/localPeerId";
+import currentRequestSignal from "@/signals/currentRequest";
 
-interface Props{
-    peer: Peer;
-}
-
-function AudioCall({peer}: Props) {
+function AudioCall() {
 
     return (
         <div className={"flex flex-1 justify-center items-center gap-5"}>
@@ -13,7 +12,7 @@ function AudioCall({peer}: Props) {
                 <p className={"bg-primary p-2 rounded"}>فرستنده</p>
                 <Phone className={"size-20"}/>
                 <p>
-                    {peer.status === "audio:receive" ? peer.currentRequest?.localPeerId : peer.localPeerId}
+                    {statusSignal.value === "audio:receive" ? currentRequestSignal.value?.localPeerId : localPeerId.value}
                 </p>
             </div>
             <Exchange className={"size-10 self-center"} />
@@ -21,7 +20,7 @@ function AudioCall({peer}: Props) {
                 <p className={"bg-primary p-2 rounded"}>گیرنده</p>
                 <Phone className={"size-20"}/>
                 <p>
-                    {peer.status === "audio:receive" ? peer.localPeerId : peer.currentResponse?.localPeerId}
+                    {statusSignal.value === "audio:receive" ? localPeerId.value : currentResponseSignal.value?.localPeerId}
                 </p>
             </div>
         </div>

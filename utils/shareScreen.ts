@@ -1,39 +1,32 @@
-import {peerActions} from "@/store";
-// @ts-ignore
-import {type ThunkDispatch} from "redux-thunk";
-import {Peer} from "@/types";
+import statusSignal from "@/signals/peer/status";
+import peerConnectionSignal from "@/signals/peer/peerConnection";
+import localStreamSignal from "@/signals/localStream";
 
-export async function shareScreen({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
+async function shareScreen() {
     try {
-        const {peerConnection ,localStream } = peer;
 
         const screenStream = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
-        dispatch(peerActions.setStatus("screen:send"));
 
-        if (!localStream || !peerConnection) {
+        statusSignal.value = "screen:send";
+
+        if (!localStreamSignal.value || !peerConnectionSignal.value) {
             return
         }
 
-        const audioTrack = localStream.getAudioTracks().at(0);
+        const audioTrack = localStreamSignal.value.getAudioTracks().at(0);
 
         if (audioTrack) {
             screenStream.addTrack(audioTrack);
         }
 
         screenStream.getTracks().forEach(track => {
-            peerConnection.addTrack(track, screenStream);
+            peerConnectionSignal.value.addTrack(track, screenStream);
         });
 
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
+        const offer = await peerConnectionSignal.value.createOffer();
+        await peerConnectionSignal.value.setLocalDescription(offer);
 
-        dispatch(peerActions.setLocalStream(screenStream));
-        dispatch(peerActions.setPeerConnection(peerConnection));
-        dispatch(peerActions.setOffer(offer));
-
-        /*if (localVideoRef?.current && localStream) {
-            localVideoRef.current.srcObject = localStream;
-        }*/
+        localStreamSignal.value = screenStream;
 
 
     } catch (err) {
@@ -41,3 +34,5 @@ export async function shareScreen({dispatch, peer}: { dispatch: ThunkDispatch, p
     }
 
 }
+
+export default shareScreen

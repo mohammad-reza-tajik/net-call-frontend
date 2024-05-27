@@ -1,16 +1,15 @@
 "use client"
 import type {Request} from "@/types";
 import {Button} from "@/components/ui/button";
-import {peerActions, useAppDispatch, useAppSelector} from "@/store";
 import {Thumb} from "@/components/shared/Icons";
 import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
+import currentRequestSignal from "@/signals/currentRequest";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function RequestItem({request}: { request: Request }) {
 
     const {localPeerId, status} = request;
-    const dispatch = useAppDispatch();
-    const peer = useAppSelector(state => state.peer);
     let statusText: string | undefined;
 
     const router = useRouter();
@@ -24,8 +23,8 @@ function RequestItem({request}: { request: Request }) {
     }
 
     async function answerHandler(request: Request) {
-        dispatch(peerActions.setCurrentRequest(request));
-        dispatch(peerActions.setRemotePeerId(localPeerId));
+        currentRequestSignal.value = request;
+        remotePeerIdSignal.value = localPeerId;
         const peerURL = formUrlQuery({
             params: {
                 remotePeerId : request.localPeerId

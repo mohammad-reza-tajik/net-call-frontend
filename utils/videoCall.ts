@@ -1,33 +1,26 @@
-import {peerActions} from "@/store";
-// @ts-ignore
-import {type ThunkDispatch} from "redux-thunk";
-import {Peer} from "@/types";
+import statusSignal from "@/signals/peer/status";
+import localStreamSignal from "@/signals/localStream";
+import peerConnectionSignal from "@/signals/peer/peerConnection";
 
-export default async function videoCall({dispatch, peer} : {dispatch : ThunkDispatch , peer : Peer}) {
+async function videoCall() {
     try {
-        const { peerConnection , localStream , localVideoRef} = peer;
-        dispatch(peerActions.setStatus("video:send"));
+        statusSignal.value = "video:send";
 
-        if (!localStream || !peerConnection) {
+        if (!localStreamSignal.value || !peerConnectionSignal.value) {
             return
         }
 
-        localStream.getTracks().forEach(track => {
-            peerConnection.addTrack(track, localStream);
+        localStreamSignal.value.getTracks().forEach(track => {
+            peerConnectionSignal.value.addTrack(track, localStreamSignal.value);
         });
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
 
-        dispatch(peerActions.setLocalStream(localStream));
-        dispatch(peerActions.setOffer(offer));
-        dispatch(peerActions.setPeerConnection(peerConnection));
-
-        if (localVideoRef?.current) {
-            localVideoRef.current.srcObject = localStream;
-        }
+        const offer = await peerConnectionSignal.value.createOffer();
+        await peerConnectionSignal.value.setLocalDescription(offer);
 
     } catch (err) {
         console.log(err);
     }
 
 }
+
+export default videoCall;

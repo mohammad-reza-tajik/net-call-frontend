@@ -1,17 +1,13 @@
 "use client"
 
 import {TooltipProvider} from "@/components/ui/tooltip";
-import {useAppDispatch, useAppSelector} from "@/store";
 import features from "@/constants/features";
 import ActionButton from "@/components/connectPage/ActionButton";
+import statusSignal from "@/signals/peer/status";
 
 function Features() {
 
-    const peer = useAppSelector(state => state.peer);
-    const {status} = peer;
-    const dispatch = useAppDispatch();
-
-    if (status){
+    if (statusSignal.value){
         return
     }
 
@@ -19,7 +15,7 @@ function Features() {
         <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
                 {
-                    features({dispatch,peer}).map((item , index)=>{
+                    features().map((item , index)=>{
                         return (
                             <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />
                         )

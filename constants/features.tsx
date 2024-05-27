@@ -1,27 +1,24 @@
 import {File, Chat, Phone, Monitor, Camera} from "@/components/shared/Icons";
-import {Peer} from "@/types";
-import {shareScreen} from "@/utils/shareScreen";
+import shareScreen from "@/utils/shareScreen";
 import videoCall from "@/utils/videoCall";
 import audioCall from "@/utils/audioCall";
-// @ts-ignore
-import {ThunkDispatch} from "redux-thunk";
 
-function features({dispatch, peer}: { dispatch: ThunkDispatch, peer: Peer }) {
+function features() {
     return [
         {
             icon: <Monitor className={"size-7"}/>,
             tooltipContent: "به اشتراک گذاری صفحه",
-            handler: () => shareScreen({dispatch, peer})
+            handler: () => shareScreen()
         },
         {
             icon: <Camera className={"size-7"}/>,
             tooltipContent: "تماس تصویری",
-            handler: () => videoCall({dispatch, peer})
+            handler: () => videoCall()
         },
         {
             icon: <Phone className={"size-7"}/>,
             tooltipContent: "تماس صوتی",
-            handler: () => audioCall({dispatch, peer})
+            handler: () => audioCall()
         },
         {
             icon: <Chat className={"size-7"}/>,

@@ -1,13 +1,7 @@
 import {Monitor} from "@/components/shared/Icons";
-import {Peer} from "@/types";
+import currentResponseSignal from "@/signals/currentResponse";
 
-
-
-interface Props{
-    peer: Peer;
-}
-
-function ScreenSend({peer}: Props) {
+function ScreenSend() {
 
     return (
         <div className={"flex flex-1 justify-center items-center flex-col gap-7"}>
@@ -15,7 +9,7 @@ function ScreenSend({peer}: Props) {
             <div className={"text-lg text-center leading-loose"}>
                 صفحه شما برای
                 <p className={"border py-1 px-4 rounded bg-muted"}>
-                {peer.currentResponse?.localPeerId}
+                {currentResponseSignal.value?.localPeerId}
                 </p>
                 به اشتراک گذاشته شده است
             </div>

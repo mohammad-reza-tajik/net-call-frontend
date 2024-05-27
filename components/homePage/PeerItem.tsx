@@ -3,12 +3,11 @@ import {ConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
 import formUrlQuery from "@/utils/formUrlQuery";
 import {useRouter} from "next/navigation";
-import {peerActions, useAppDispatch} from "@/store";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function PeerItem({connectedPeer: {localPeerId, deviceType}}: { connectedPeer: ConnectedPeer }) {
 
     const router = useRouter();
-    const dispatch = useAppDispatch();
 
     const peerURL = formUrlQuery({
         params: {
@@ -17,7 +16,7 @@ function PeerItem({connectedPeer: {localPeerId, deviceType}}: { connectedPeer: C
     });
 
     const peerClickHandler = () => {
-        dispatch(peerActions.setRemotePeerId(localPeerId));
+        remotePeerIdSignal.value = localPeerId;
         router.push(`/connect${peerURL}`);
     }
 

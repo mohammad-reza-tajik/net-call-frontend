@@ -1,5 +1,4 @@
 "use client"
-import {peerActions, useAppDispatch} from "@/store";
 import {validate} from "uuid";
 import {toast} from "react-toastify";
 import {Input} from "@/components/ui/input";
@@ -8,7 +7,7 @@ import {useRef} from "react";
 import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
 import {useSignals} from "@preact/signals-react/runtime";
-import {remotePeerId} from "@/signals";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function PeerForm() {
 
@@ -31,7 +30,7 @@ function PeerForm() {
             }
         });
 
-        remotePeerId.value = remotePeerIdRef.current.value;
+        remotePeerIdSignal.value = remotePeerIdRef.current.value;
         remotePeerIdRef.current.value = "";
         router.push(`/connect${peerURL}`);
     }
