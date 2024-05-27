@@ -1,16 +1,6 @@
 import {signal} from "@preact/signals-react";
-import io from "socket.io-client";
-import getDeviceType from "@/utils/getDeviceType";
-import localPeerId from "@/signals/peer/localPeerId";
+import {Socket} from "socket.io-client";
 
-const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
-    query: {
-        deviceType: getDeviceType(),
-        localPeerId
-    }
-}).connect();
-
-const socketSignal = signal(socket);
-
+const socketSignal = signal<Socket | undefined>(undefined);
 
 export default socketSignal

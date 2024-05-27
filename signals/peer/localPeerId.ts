@@ -1,6 +1,5 @@
 import {signal} from "@preact/signals-react";
-import createId from "@/utils/createId";
 
-const localPeerIdSignal = signal(createId());
+const localPeerIdSignal = signal("");
 
 export default localPeerIdSignal;
