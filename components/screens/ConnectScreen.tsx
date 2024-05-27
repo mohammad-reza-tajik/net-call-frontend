@@ -53,7 +53,7 @@ function ConnectScreen() {
     }
 
     return (
-        <section className={"flex-1 flex flex-col relative"}>
+        <section className={"flex-1 flex flex-col relative overflow-hidden"}>
 
             {renderScreen()}
 
