@@ -1,7 +1,5 @@
 "use client"
-import {Provider} from "react-redux";
 import {ToastContainer} from "react-toastify";
-import {store} from "@/store";
 import {Button} from "@/components/ui/button";
 import {Close} from "@/components/shared/Icons";
 
@@ -9,7 +7,7 @@ import {Close} from "@/components/shared/Icons";
 function Providers({children}: { children: React.ReactNode }) {
 
     return (
-        <Provider store={store}>
+        <>
             <ToastContainer
                 position={"bottom-left"}
                 autoClose={3000}
@@ -27,7 +25,7 @@ function Providers({children}: { children: React.ReactNode }) {
                 }
             />
             {children}
-        </Provider>
+        </>
     )
 }
 
