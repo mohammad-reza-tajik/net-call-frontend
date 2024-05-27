@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
 import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
-import currentRequestSignal from "@/signals/currentRequest";
+import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function RequestItem({request}: { request: Request }) {

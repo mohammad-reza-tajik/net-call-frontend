@@ -16,12 +16,12 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 function peerConnectionListeners() {
 
     if (!peerConnectionSignal.value) return;
-    const iceCandidates : RTCIceCandidate[] = [];
+    const iceCandidates: RTCIceCandidate[] = [];
 
+    let candidateTimeout: NodeJS.Timeout | undefined;
     peerConnectionSignal.value.addEventListener("icecandidate", (event) => {
         if (event.candidate) {
             iceCandidates.push(event.candidate);
-            let candidateTimeout: NodeJS.Timeout | undefined;
 
             if (iceCandidates.length > 0 && offerSignal.value && statusSignal.value?.endsWith(":send")) {
 

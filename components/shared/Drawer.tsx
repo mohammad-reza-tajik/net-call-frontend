@@ -5,7 +5,7 @@ import {Close} from "@/components/shared/Icons";
 import RequestItem from "@/components/shared/RequestItem";
 import {useSignals} from "@preact/signals-react/runtime";
 import isDrawerOpenSignal from "@/signals/drawer";
-import receivedRequestsSignal from "@/signals/receivedRequests";
+import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 
 function Drawer() {
 

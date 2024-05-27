@@ -1,8 +1,8 @@
 import {Exchange, Phone} from "@/components/shared/Icons";
 import statusSignal from "@/signals/peer/status";
-import currentResponseSignal from "@/signals/currentResponse";
+import currentResponseSignal from "@/signals/peer/currentResponse";
 import localPeerId from "@/signals/peer/localPeerId";
-import currentRequestSignal from "@/signals/currentRequest";
+import currentRequestSignal from "@/signals/peer/currentRequest";
 
 function AudioCall() {
 

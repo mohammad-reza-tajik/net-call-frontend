@@ -8,7 +8,7 @@ import {useEffect, useRef} from "react";
 import createAnswer from "@/utils/createAnswer";
 import statusSignal from "@/signals/peer/status";
 import {signalingStateSignal , connectionStateSignal} from "@/signals/peer/peerConnection";
-import currentRequestSignal from "@/signals/currentRequest";
+import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignals} from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import localVideoRefSignal from "@/signals/localVideoRef";

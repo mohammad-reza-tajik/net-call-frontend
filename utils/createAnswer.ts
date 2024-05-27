@@ -2,7 +2,7 @@ import {Request, type Status} from "@/types";
 import {answerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 import statusSignal from "@/signals/peer/status";
-import receivedRequestsSignal from "@/signals/receivedRequests";
+import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import localVideoRefSignal from "@/signals/localVideoRef";
 
 async function createAnswer({request}: {request: Request}) {

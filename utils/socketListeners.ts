@@ -1,8 +1,8 @@
 import socketSignal from "@/signals/socket";
 import {ConnectedPeer, Request, Response} from "@/types";
-import receivedRequestsSignal from "@/signals/receivedRequests";
+import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import {toast} from "react-toastify";
-import currentResponseSignal from "@/signals/currentResponse";
+import currentResponseSignal from "@/signals/peer/currentResponse";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 

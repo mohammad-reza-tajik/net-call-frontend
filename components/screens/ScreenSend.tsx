@@ -1,5 +1,5 @@
 import {Monitor} from "@/components/shared/Icons";
-import currentResponseSignal from "@/signals/currentResponse";
+import currentResponseSignal from "@/signals/peer/currentResponse";
 
 function ScreenSend() {
 
