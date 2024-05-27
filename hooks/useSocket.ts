@@ -1,38 +1,38 @@
 import {useEffect} from "react";
-import {peerActions, useAppDispatch, useAppSelector} from "@/store";
 import {Response, Request, ConnectedPeer} from "@/types";
 import {toast} from "react-toastify";
+import receivedRequestsSignal from "@/signals/receivedRequests";
+import socketSignal from "@/signals/socket";
+import connectedPeersSignal from "@/signals/peer/connectedPeers";
+import currentResponseSignal from "@/signals/currentResponse";
+import peerConnectionSignal from "@/signals/peer/peerConnection";
 
 function useSocket() {
 
-    const dispatch = useAppDispatch();
-    const {peerConnection , socket} = useAppSelector(state => state.peer);
-
     useEffect(() => {
-        socket?.on("requestToPeer", async (request : Request) => {
-            try {
-                dispatch(peerActions.addRequest(request));
+        socketSignal.value.on("requestToPeer", (request : Request) => {
+                receivedRequestsSignal.value = [
+                    ...receivedRequestsSignal.value,
+                    request
+                ]
                 toast("یک درخواست دریافت شد");
-            } catch (err) {
-                console.error(err);
-            }
         })
-        socket?.on("responseToPeer", async (response : Response ) => {
+        socketSignal.value.on("responseToPeer", async (response : Response ) => {
             try {
-                dispatch(peerActions.setCurrentResponse(response));
-                await peerConnection?.setRemoteDescription(response.answer);
+                currentResponseSignal.value = response;
+                await peerConnectionSignal.value.setRemoteDescription(response.answer);
                 response.iceCandidates.forEach(item => {
-                    peerConnection?.addIceCandidate(item);
+                    peerConnectionSignal.value.addIceCandidate(item);
                 })
 
             } catch (err) {
                 console.error(err);
             }
         })
-        socket?.on("connectedPeers", ({connectedPeers} : {connectedPeers : ConnectedPeer[]}) => {
-            dispatch(peerActions.setConnectedPeers(connectedPeers));
+        socketSignal.value.on("connectedPeers", ({connectedPeers} : {connectedPeers : ConnectedPeer[]}) => {
+            connectedPeersSignal.value = connectedPeers;
         })
-    }, [socket]);
+    }, []);
 
 }
 

@@ -7,11 +7,12 @@ import ScreenSend from "@/components/screens/ScreenSend";
 import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";
 import createAnswer from "@/utils/createAnswer";
+import statusSignal from "@/signals/peer/status";
 
 function ConnectScreen() {
 
     const peer = useAppSelector(state => state.peer);
-    const {status, signallingState, connectionState , currentRequest} = peer;
+    const { signallingState, connectionState , currentRequest} = peer;
 
     const dispatch = useAppDispatch();
 
@@ -33,7 +34,7 @@ function ConnectScreen() {
 
 
     function renderScreen() {
-        if (!status) {
+        if (!statusSignal.value) {
             return <p className={"flex justify-center items-center text-xl flex-1"}>
                 برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
             </p>
@@ -41,11 +42,11 @@ function ConnectScreen() {
             return <p className={"flex justify-center items-center text-xl flex-1"}>
                 در انتظار پاسخ ...
             </p>
-        } else if (status === "screen:send") {
+        } else if (statusSignal.value === "screen:send") {
             return <ScreenSend peer={peer}/>
-        } else if (status.startsWith("audio:") && connectionState === "connected") {
+        } else if (statusSignal.value.startsWith("audio:") && connectionState === "connected") {
             return <AudioCall peer={peer}/>
-        } else if (status.startsWith("video:") || status === "screen:receive") {
+        } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
             return
         }
     }
@@ -56,10 +57,10 @@ function ConnectScreen() {
             {renderScreen()}
 
             <video ref={localVideoRef} controls autoPlay
-                   className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !status?.startsWith("video:")})}/>
+                   className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !statusSignal.value?.startsWith("video:")})}/>
 
             <video ref={remoteVideoRef} controls autoPlay
-                   className={cn("size-full", {"hidden": !status?.startsWith("video:") && status !== "screen:receive"})}/>
+                   className={cn("size-full", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive"})}/>
             <ActionBar/>
         </section>
     )
