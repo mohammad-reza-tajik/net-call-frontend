@@ -1,6 +1,10 @@
 import {signal} from "@preact/signals-react";
-import createConnection from "@/utils/createConnection";
 
-const peerConnectionSignal = signal(createConnection());
+const peerConnectionSignal = signal<RTCPeerConnection | undefined>(undefined);
+const signalingStateSignal = signal<RTCSignalingState | undefined>(undefined);
+const connectionStateSignal = signal<RTCPeerConnectionState | undefined>(undefined);
+const offerSignal = signal<RTCSessionDescriptionInit | undefined>(undefined);
+const answerSignal = signal<RTCSessionDescriptionInit | undefined>(undefined);
 
-export default peerConnectionSignal;
+
+export {peerConnectionSignal ,signalingStateSignal,connectionStateSignal, offerSignal , answerSignal};
