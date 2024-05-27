@@ -1,16 +1,14 @@
 "use client"
 
-import {useAppSelector} from "@/store";
 import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import {toast} from "react-toastify";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
 
 function PeerId() {
 
-    const localPeerId = useAppSelector(state => state.peer.localPeerId);
-
     async function copyIdHandler() {
-        await navigator.clipboard.writeText(localPeerId!);
+        await navigator.clipboard.writeText(localPeerIdSignal.value);
         toast.info("آیدی کپی شد");
     }
 
@@ -21,9 +19,8 @@ function PeerId() {
                 <Tooltip>
                     <TooltipTrigger asChild>
                         {
-                            localPeerId &&
                             <Button variant={"outline"} onClick={copyIdHandler}>
-                                {localPeerId}
+                                {localPeerIdSignal.value}
                             </Button>
                         }
                     </TooltipTrigger>
