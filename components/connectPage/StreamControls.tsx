@@ -1,6 +1,5 @@
 "use client"
 import {TooltipProvider} from "@/components/ui/tooltip";
-import {useAppDispatch, useAppSelector} from "@/store";
 import {
     Microphone,
     MicrophoneOff,
@@ -17,16 +16,13 @@ import hangup from "@/utils/hangup";
 import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
+import devicesSignal from "@/signals/devices";
 
 function StreamControls() {
-
-    const peer = useAppSelector(state => state.peer);
-    const {audioInputs, videoInputs} = useAppSelector(state => state.devices);
 
     const [muteMic, setMuteMic] = useState(false);
     const [muteVideo, setMuteVideo] = useState(false);
     const [muteSound, setMuteSound] = useState(false);
-    const dispatch = useAppDispatch();
 
     if (!statusSignal.value) {
         return
@@ -59,9 +55,7 @@ function StreamControls() {
                 <ActionButton className={"bg-destructive text-destructive-foreground"}
                               icon={<Phone className={"size-7 rotate-[135deg]"}/>}
                               tooltipContent={"توقف استریم"}
-                              handler={() => {
-                                  hangup({dispatch, peer})
-                              }}/>
+                              handler={hangup}/>
 
                 <ActionButton
                     icon={!muteMic ? <Microphone className={"size-7"}/> : <MicrophoneOff className={"size-7"}/>}
@@ -79,11 +73,11 @@ function StreamControls() {
                               tooltipContent={muteSound ? "وصل صدا" : "قطع صدا"}
                               handler={muteSoundHandler}/>
 
-                <DeviceSelector devices={audioInputs!} text={"میکروفون :"}/>
+                <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 
                 {
                     statusSignal.value?.startsWith("video:") &&
-                    <DeviceSelector devices={videoInputs!} text={"وب کم :"}/>
+                    <DeviceSelector devices={devicesSignal.value?.videoInputs} text={"وب کم :"}/>
                 }
 
             </TooltipProvider>

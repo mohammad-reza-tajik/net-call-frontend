@@ -7,7 +7,7 @@ interface Config {
 
 
 const formUrlQuery = ({params , currentParams} : Config = {} ) : string => {
-    const query = qs.parse(currentParams);
+    const query = qs.parse(currentParams || "");
 
     if (params) {
         Object.keys(params).forEach(key => {

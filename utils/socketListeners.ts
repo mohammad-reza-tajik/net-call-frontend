@@ -3,13 +3,10 @@ import {ConnectedPeer, Request, Response} from "@/types";
 import receivedRequestsSignal from "@/signals/receivedRequests";
 import {toast} from "react-toastify";
 import currentResponseSignal from "@/signals/currentResponse";
-import peerConnectionSignal from "@/signals/peer/peerConnection";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 
 function socketListeners() {
-
-    console.log(socketSignal.value)
-    socketSignal.value?.on("jimbo",()=>console.log("salam jimbo"))
 
     socketSignal.value?.on("requestToPeer", (request : Request) => {
         receivedRequestsSignal.value = [
@@ -21,9 +18,9 @@ function socketListeners() {
     socketSignal.value?.on("responseToPeer", async (response : Response ) => {
         try {
             currentResponseSignal.value = response;
-            await peerConnectionSignal.value.setRemoteDescription(response.answer);
+            await peerConnectionSignal.value?.setRemoteDescription(response.answer);
             response.iceCandidates.forEach(item => {
-                peerConnectionSignal.value.addIceCandidate(item);
+                peerConnectionSignal.value?.addIceCandidate(item);
             })
 
         } catch (err) {

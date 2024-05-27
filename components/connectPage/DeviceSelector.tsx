@@ -3,7 +3,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useState} from "react";
 
 interface Props {
-    devices: MediaDeviceInfo[];
+    devices?: MediaDeviceInfo[];
     text?:string;
 }
 

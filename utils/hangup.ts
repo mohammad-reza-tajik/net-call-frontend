@@ -1,30 +1,28 @@
-import {Peer} from "@/types";
-// @ts-ignore
-import {ThunkDispatch} from "redux-thunk";
-import {peerActions} from "@/store";
+import statusSignal from "@/signals/peer/status";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 
-function hangup({dispatch , peer}: {peer : Peer , dispatch: ThunkDispatch}) {
+function hangup() {
 
-   const {peerConnection} = peer;
 
-   if (!peerConnection) {
-       return
+   if (!peerConnectionSignal.value) {
+      return
    }
 
-   peerConnection.close();
+   peerConnectionSignal.value.close();
 
-   dispatch(peerActions.setStatus(undefined));
-   dispatch(peerActions.setCurrentRequest(undefined));
-   dispatch(peerActions.setCurrentResponse(undefined));
-   dispatch(peerActions.setPeerConnection(undefined));
-   dispatch(peerActions.setOffer(undefined));
-   dispatch(peerActions.setAnswer(undefined));
-   dispatch(peerActions.setLocalStream(undefined));
-   dispatch(peerActions.setRemoteStream(undefined));
-   dispatch(peerActions.setLocalVideoRef(undefined));
-   dispatch(peerActions.setRemoteVideoRef(undefined));
-   dispatch(peerActions.setConnectionState(undefined));
-   dispatch(peerActions.setSignallingState(undefined));
+   statusSignal.value = undefined;
+   // remote.value = undefined;
+   // dispatch(peerActions.setRemoteStream(undefined));
+   // dispatch(peerActions.setCurrentRequest(undefined));
+   // dispatch(peerActions.setCurrentResponse(undefined));
+   // dispatch(peerActions.setPeerConnection(undefined));
+   // dispatch(peerActions.setOffer(undefined));
+   // dispatch(peerActions.setAnswer(undefined));
+   // dispatch(peerActions.setLocalStream(undefined));
+   // dispatch(peerActions.setLocalVideoRef(undefined));
+   // dispatch(peerActions.setRemoteVideoRef(undefined));
+   // dispatch(peerActions.setConnectionState(undefined));
+   // dispatch(peerActions.setSignallingState(undefined));
 }
 
 export default hangup
