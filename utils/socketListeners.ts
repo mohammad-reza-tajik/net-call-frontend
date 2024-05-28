@@ -14,7 +14,7 @@ function socketListeners() {
             ...receivedRequestsSignal.value,
             request
         ]
-        toast("یک درخواست دریافت شد");
+        toast.info("یک درخواست دریافت شد");
     })
     socketSignal.value?.on("responseToPeer", async (response : Response ) => {
         try {

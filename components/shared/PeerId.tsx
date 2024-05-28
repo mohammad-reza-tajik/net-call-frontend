@@ -12,7 +12,7 @@ function PeerId() {
 
     async function copyIdHandler() {
         await navigator.clipboard.writeText(localPeerIdSignal.value);
-        toast.info("آیدی کپی شد");
+        toast.success("آیدی کپی شد");
     }
 
     return (

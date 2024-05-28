@@ -1,8 +1,7 @@
 "use client"
 import {ToastContainer} from "react-toastify";
 import {Button} from "@/components/ui/button";
-import {Close} from "@/components/shared/Icons";
-
+import {Check, Close, Info, Warning} from "@/components/shared/Icons";
 
 function Providers({children}: { children: React.ReactNode }) {
 
@@ -13,6 +12,16 @@ function Providers({children}: { children: React.ReactNode }) {
                 autoClose={3000}
                 hideProgressBar
                 newestOnTop={false}
+                icon={({type}) => {
+                    if (type === "info"){
+                        return <Info />
+                    } else if (type === "success") {
+                        return <Check />
+                    } else if (type === "error"){
+                        return <Warning className={"fill-destructive"} />
+                    }
+                    return false
+                }}
                 closeOnClick={false}
                 rtl
                 pauseOnFocusLoss
@@ -21,8 +30,7 @@ function Providers({children}: { children: React.ReactNode }) {
                     <Button size={"icon"} variant={"ghost"} onClick={closeToast}>
                         <Close className={"size-5"}/>
                     </Button>
-                )
-                }
+                )}
             />
             {children}
         </>
