@@ -9,9 +9,11 @@ import createAnswer from "@/utils/createAnswer";
 import statusSignal from "@/signals/peer/status";
 import {signalingStateSignal , connectionStateSignal} from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
-import {useSignals} from "@preact/signals-react/runtime";
+import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import localVideoRefSignal from "@/signals/localVideoRef";
+import {useSearchParams} from "next/navigation";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function ConnectScreen() {
 
@@ -20,18 +22,24 @@ function ConnectScreen() {
     const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
 
+    const remotePeerIdQuery = useSearchParams().get("remotePeerId");
+
     useEffect(() => {
+        if (!remotePeerIdSignal.value && remotePeerIdQuery) {
+            remotePeerIdSignal.value = remotePeerIdQuery;
+        }
         remoteVideoRefSignal.value = remoteVideoRef;
         localVideoRefSignal.value = localVideoRef;
     }, []);
 
-    useEffect(() => {
+
+    useSignalEffect(()=>{
         (async () => {
             if (currentRequestSignal.value) {
                 await createAnswer({request: currentRequestSignal.value});
             }
         })();
-    }, []);
+    })
 
 
     function renderScreen() {
