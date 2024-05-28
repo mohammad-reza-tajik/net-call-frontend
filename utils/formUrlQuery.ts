@@ -15,7 +15,7 @@ const formUrlQuery = ({params , currentParams} : Config = {} ) : string => {
         });
     }
     return qs.stringifyUrl({
-        url: window.location.pathname,
+        url: "",
         query: query
     }, {skipNull: true})
 
