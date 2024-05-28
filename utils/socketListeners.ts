@@ -5,6 +5,7 @@ import {toast} from "react-toastify";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
 
 function socketListeners() {
 
@@ -28,7 +29,7 @@ function socketListeners() {
         }
     })
     socketSignal.value?.on("connectedPeers", ({connectedPeers} : {connectedPeers : ConnectedPeer[]}) => {
-        connectedPeersSignal.value = connectedPeers;
+        connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
     })
 }
 
