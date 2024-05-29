@@ -1,5 +1,6 @@
 import {signal} from "@preact/signals-react";
 
-const isDrawerOpenSignal = signal<boolean>(false);
+const isRequestsDrawerOpenSignal = signal<boolean>(false);
+const isChatDrawerOpenSignal = signal<boolean>(false);
 
-export default isDrawerOpenSignal
+export {isChatDrawerOpenSignal , isRequestsDrawerOpenSignal}

@@ -2,10 +2,8 @@ import type {Metadata, Viewport} from "next";
 import "react-toastify/dist/ReactToastify.css";
 import "@/styles/globals.css";
 import Providers from "@/components/shared/Providers";
-import Drawer from "@/components/shared/Drawer";
 import Header from "@/components/shared/Header";
 import Initialize from "@/components/shared/Initialize";
-
 
 export const metadata: Metadata = {
     title: "lanland",
@@ -21,14 +19,13 @@ export const viewport: Viewport = {
     initialScale: 1
 }
 
-export default function RootLayout({children}: { children: React.ReactNode; }) {
+function RootLayout({children}: { children: React.ReactNode; }) {
     return (
         <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"}>
         <body className={"bg-background text-foreground fill-foreground relative"}>
         <div className={"h-screen contained overflow-hidden flex flex-col"}>
             <Providers>
                 <Initialize>
-                    <Drawer/>
                     <Header/>
                     {children}
                 </Initialize>
@@ -38,3 +35,5 @@ export default function RootLayout({children}: { children: React.ReactNode; }) {
         </html>
     );
 }
+
+export default RootLayout
