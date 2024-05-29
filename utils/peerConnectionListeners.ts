@@ -1,9 +1,8 @@
 import {
-    peerConnectionSignal,
     connectionStateSignal,
     offerSignal,
     signalingStateSignal,
-    answerSignal
+    answerSignal, localDataChannelSignal, peerConnectionSignal
 } from "@/signals/peer/peerConnection";
 import {toast} from "react-toastify";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -13,13 +12,13 @@ import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
-function peerConnectionListeners() {
+function peerConnectionListeners(peerConnection : RTCPeerConnection) {
 
-    if (!peerConnectionSignal.value) return;
     const iceCandidates: RTCIceCandidate[] = [];
 
     let candidateTimeout: NodeJS.Timeout | undefined;
-    peerConnectionSignal.value.addEventListener("icecandidate", (event) => {
+
+    peerConnection.addEventListener("icecandidate", (event) => {
         if (event.candidate) {
             iceCandidates.push(event.candidate);
 
@@ -62,30 +61,40 @@ function peerConnectionListeners() {
         }
     });
 
-    peerConnectionSignal.value.addEventListener("signalingstatechange", () => {
-        signalingStateSignal.value = peerConnectionSignal.value?.signalingState;
+    peerConnection.addEventListener("signalingstatechange", () => {
+        signalingStateSignal.value = peerConnection.signalingState;
     })
 
-    peerConnectionSignal.value.addEventListener("connectionstatechange", () => {
-        connectionStateSignal.value = peerConnectionSignal.value?.connectionState;
+    peerConnection.addEventListener("connectionstatechange", () => {
+        connectionStateSignal.value = peerConnection.connectionState;
         let toastId: number | string;
 
-        if (peerConnectionSignal.value!.connectionState === "connecting") {
+        if (peerConnection.connectionState === "connecting") {
             toastId = toast.loading("در حال اتصال ...");
-        } else if (peerConnectionSignal.value!.connectionState === "connected") {
+        } else if (peerConnection.connectionState === "connected") {
             toast.dismiss(toastId!);
             toast.success("متصل شدید");
-        } else if (peerConnectionSignal.value!.connectionState === "disconnected") {
+        } else if (peerConnection.connectionState === "disconnected") {
             toast.error("ارتباط قطع شد");
         }
     })
 
-    peerConnectionSignal.value.addEventListener("track", (event) => {
+    peerConnection.addEventListener("track", (event) => {
         remoteStreamSignal.value = event.streams.at(0);
         if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
             remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
         }
     })
+
+    peerConnection.addEventListener("datachannel", ({channel : remoteDataChannel}) => {
+        localDataChannelSignal.value = remoteDataChannel;
+        remoteDataChannel.addEventListener("message", (event) => {
+            console.log(event.data)
+        })
+
+    })
+
+    peerConnectionSignal.value = peerConnection;
 }
 
 export default peerConnectionListeners;

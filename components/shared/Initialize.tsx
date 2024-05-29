@@ -12,16 +12,15 @@ import io from "socket.io-client";
 import getDeviceType from "@/utils/getDeviceType";
 import localPeerId from "@/signals/peer/localPeerId";
 import socketListeners from "@/utils/socketListeners";
-import peerConnectionListeners from "@/utils/peerConnectionListeners";
 
 function Initialize({children}: {children: React.ReactNode}) {
 
     useEffect(() => {
         (async () => {
             localPeerIdSignal.value = createId();
-            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true,video:true});
+            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true});
             devicesSignal.value = await getDevices();
-            peerConnectionSignal.value = createConnection();
+            createConnection();
             socketSignal.value =io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
                     deviceType: getDeviceType(),
@@ -29,7 +28,6 @@ function Initialize({children}: {children: React.ReactNode}) {
                 }
             }).connect();
             socketListeners();
-            peerConnectionListeners();
         })();
     }, []);
 
