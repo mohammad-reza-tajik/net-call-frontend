@@ -23,9 +23,6 @@ function Drawer() {
                         aria-label={"بستن منو"}>
                     <Close/>
                 </Button>
-                <h1 className={"my-5 bg-primary text-center p-3 rounded"}>
-                    درخواست های دریافت شده
-                </h1>
                 {receivedRequestsSignal.value.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :
                     receivedRequestsSignal.value.map((request, index) => {
                         return <RequestItem request={request} key={index} />
