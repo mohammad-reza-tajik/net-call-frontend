@@ -44,6 +44,19 @@
     @apply border-border;
 }
 
+::-webkit-scrollbar {
+    @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-primary cursor-pointer ;
+}
+
+
 a, a:visited, a:active {
     @apply fill-foreground;
 }
