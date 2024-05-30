@@ -1,8 +1,5 @@
 import {
-    connectionStateSignal,
-    offerSignal,
-    signalingStateSignal,
-    answerSignal, localDataChannelSignal, peerConnectionSignal
+    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal,peerConnectionSignal
 } from "@/signals/peer/peerConnection";
 import {toast} from "react-toastify";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -11,8 +8,9 @@ import statusSignal from "@/signals/peer/status";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import dataChannelListeners from "@/utils/dataChannelListeners";
 
-function peerConnectionListeners(peerConnection : RTCPeerConnection) {
+function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     const iceCandidates: RTCIceCandidate[] = [];
 
@@ -86,12 +84,8 @@ function peerConnectionListeners(peerConnection : RTCPeerConnection) {
         }
     })
 
-    peerConnection.addEventListener("datachannel", ({channel : remoteDataChannel}) => {
-        localDataChannelSignal.value = remoteDataChannel;
-        remoteDataChannel.addEventListener("message", (event) => {
-            console.log(event.data)
-        })
-
+    peerConnection.addEventListener("datachannel", ({channel}) => {
+        dataChannelListeners(channel);
     })
 
     peerConnectionSignal.value = peerConnection;

@@ -59,3 +59,15 @@ export interface Devices {
     currentAudioOutput? : MediaDeviceInfo;
 }
 
+export interface TextMessage {
+    type: "text";
+    text : string;
+    localPeerId: string;
+}
+
+export interface FileMessage {
+    type: "file";
+    localPeerId: string;
+    file : ArrayBuffer;
+}
+
