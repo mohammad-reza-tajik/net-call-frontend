@@ -5,7 +5,8 @@ const signalingStateSignal = signal<RTCSignalingState | undefined>(undefined);
 const connectionStateSignal = signal<RTCPeerConnectionState | undefined>(undefined);
 const offerSignal = signal<RTCSessionDescriptionInit | undefined>(undefined);
 const answerSignal = signal<RTCSessionDescriptionInit | undefined>(undefined);
-const localDataChannelSignal = signal<RTCDataChannel | undefined>(undefined);
+const chatChannelSignal = signal<RTCDataChannel | undefined>(undefined);
+const fileChannelSignal = signal<RTCDataChannel | undefined>(undefined);
 
 
-export {peerConnectionSignal ,signalingStateSignal,connectionStateSignal, offerSignal , answerSignal , localDataChannelSignal};
+export {peerConnectionSignal ,signalingStateSignal,connectionStateSignal, offerSignal , answerSignal , chatChannelSignal , fileChannelSignal};
