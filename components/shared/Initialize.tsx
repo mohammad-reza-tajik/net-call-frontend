@@ -5,13 +5,16 @@ import createId from "@/utils/createId";
 import localStreamSignal from "@/signals/localStream";
 import devicesSignal from "@/signals/devices";
 import getDevices from "@/utils/getDevices";
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import createConnection from "@/utils/createConnection";
 import socketSignal from "@/signals/socket";
 import io from "socket.io-client";
 import getDeviceType from "@/utils/getDeviceType";
 import localPeerId from "@/signals/peer/localPeerId";
 import socketListeners from "@/utils/socketListeners";
+import {useSignalEffect} from "@preact/signals-react/runtime";
+import statusSignal from "@/signals/peer/status";
+import dataChannelListeners from "@/utils/dataChannelListeners";
+import {chatChannelSignal, fileChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 
 function Initialize({children}: {children: React.ReactNode}) {
 
@@ -30,6 +33,15 @@ function Initialize({children}: {children: React.ReactNode}) {
             socketListeners();
         })();
     }, []);
+
+    useSignalEffect(()=>{
+        if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value && !fileChannelSignal.value ){
+            const chatChannel = peerConnectionSignal.value?.createDataChannel("chat");
+            const fileChannel = peerConnectionSignal.value?.createDataChannel("file");
+            dataChannelListeners(chatChannel!);
+            dataChannelListeners(fileChannel!);
+        }
+    })
 
     return (
         <>
