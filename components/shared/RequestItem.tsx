@@ -1,13 +1,18 @@
 "use client"
-import type {Request} from "@/types";
+import type {IRequest} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
 import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 
-function RequestItem({request}: { request: Request }) {
+interface IRequestItemProps {
+    request: IRequest
+}
+
+function RequestItem({request}: IRequestItemProps) {
 
     const {localPeerId, status} = request;
     let statusText: string | undefined;
@@ -22,15 +27,21 @@ function RequestItem({request}: { request: Request }) {
         statusText = "تماس صوتی"
     }
 
-    async function answerHandler(request: Request) {
+    const answerRequestHandler = () => {
         currentRequestSignal.value = request;
         remotePeerIdSignal.value = localPeerId;
         const peerURL = formUrlQuery({
             params: {
-                remotePeerId : request.localPeerId
+                remotePeerId: request.localPeerId
             }
         });
         router.push(`/connect${peerURL}`);
+    }
+
+    const rejectRequestHandler = () => {
+        receivedRequestsSignal.value = receivedRequestsSignal.value.filter((item) => {
+            return item.localPeerId !== request.localPeerId && item.status !== request.status;
+        })
     }
 
     return (
@@ -42,15 +53,14 @@ function RequestItem({request}: { request: Request }) {
                 {localPeerId}
             </p>
             <div className={"flex items-center justify-center gap-2"}>
-
-            <Button variant={"outline"} className={"gap-1"} onClick={() => answerHandler(request)}>
-                <Thumb className={" size-5"} />
-                پذیرفتن
-            </Button>
-            <Button variant={"outline"} className={"gap-1"} onClick={() => console.log("rejected")}>
-                <Thumb className={"rotate-180 size-5"} />
-                رد کردن
-            </Button>
+                <Button variant={"outline"} className={"gap-1"} onClick={answerRequestHandler}>
+                    <Thumb className={" size-5"}/>
+                    پذیرفتن
+                </Button>
+                <Button variant={"outline"} className={"gap-1"} onClick={rejectRequestHandler}>
+                    <Thumb className={"rotate-180 size-5"}/>
+                    رد کردن
+                </Button>
             </div>
         </div>
     )
