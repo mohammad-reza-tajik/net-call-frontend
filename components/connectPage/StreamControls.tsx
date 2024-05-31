@@ -7,7 +7,7 @@ import {
     Camera,
     Speaker,
     SpeakerOff,
-    Phone
+    Phone, Chat
 } from "@/components/shared/Icons";
 import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
@@ -17,6 +17,7 @@ import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
 import devicesSignal from "@/signals/devices";
+import {isChatDrawerOpenSignal} from "@/signals/drawer";
 
 function StreamControls() {
 
@@ -72,6 +73,10 @@ function StreamControls() {
                 <ActionButton icon={!muteSound ? <Speaker className={"size-7"}/> : <SpeakerOff className={"size-7"}/>}
                               tooltipContent={muteSound ? "وصل صدا" : "قطع صدا"}
                               handler={muteSoundHandler}/>
+
+                <ActionButton icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={()=>{
+                    isChatDrawerOpenSignal.value = true
+                }} />
 
                 <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 

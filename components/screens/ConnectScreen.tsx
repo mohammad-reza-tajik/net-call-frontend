@@ -7,13 +7,16 @@ import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";
 import createAnswer from "@/utils/createAnswer";
 import statusSignal from "@/signals/peer/status";
-import {signalingStateSignal , connectionStateSignal} from "@/signals/peer/peerConnection";
+import {signalingStateSignal, connectionStateSignal} from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import localVideoRefSignal from "@/signals/localVideoRef";
 import {useSearchParams} from "next/navigation";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import Chat from "@/components/screens/Chat";
+import Drawer from "@/components/shared/Drawer";
+import {isChatDrawerOpenSignal} from "@/signals/drawer";
 
 function ConnectScreen() {
 
@@ -28,12 +31,15 @@ function ConnectScreen() {
         if (!remotePeerIdSignal.value && remotePeerIdQuery) {
             remotePeerIdSignal.value = remotePeerIdQuery;
         }
+    }, [remotePeerIdQuery]);
+
+    useEffect(() => {
         remoteVideoRefSignal.value = remoteVideoRef;
         localVideoRefSignal.value = localVideoRef;
     }, []);
 
 
-    useSignalEffect(()=>{
+    useSignalEffect(() => {
         (async () => {
             if (currentRequestSignal.value) {
                 await createAnswer({request: currentRequestSignal.value});
@@ -52,16 +58,20 @@ function ConnectScreen() {
                 در انتظار پاسخ ...
             </p>
         } else if (statusSignal.value === "screen:send") {
-            return <ScreenSend />
+            return <ScreenSend/>
         } else if (statusSignal.value.startsWith("audio:") && connectionStateSignal.value === "connected") {
-            return <AudioCall />
+            return <AudioCall/>
         } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
             return
         }
     }
 
     return (
-        <section className={"flex-1 flex flex-col relative overflow-hidden"}>
+        <section className={"flex-1 flex flex-col relative overflow-hidden items-center"}>
+
+            <Drawer openSignal={isChatDrawerOpenSignal} className={"sm:w-1/2"}>
+                <Chat />
+            </Drawer>
 
             {renderScreen()}
 

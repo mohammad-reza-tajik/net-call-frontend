@@ -31,6 +31,10 @@ function socketListeners() {
     socketSignal.value?.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
     })
+
+    socketSignal.value?.on("hangupToPeer", () => {
+        toast.info("ارتباط پایان یافت")
+    })
 }
 
 export default socketListeners;

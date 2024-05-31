@@ -1,5 +1,8 @@
 import statusSignal from "@/signals/peer/status";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
+import socketSignal from "@/signals/socket";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
 function hangup() {
 
@@ -8,7 +11,8 @@ function hangup() {
       return
    }
 
-   peerConnectionSignal.value.close();
+   socketSignal.value?.emit("hangupToServer", {localPeerId : localPeerIdSignal.value , remotePeerId : remotePeerIdSignal.value});
+   // peerConnectionSignal.value.close();
 
    statusSignal.value = undefined;
    // remote.value = undefined;
