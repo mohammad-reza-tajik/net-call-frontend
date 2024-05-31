@@ -3,6 +3,7 @@ import {Download, File} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
+import makeHumanReadable from "@/utils/makeHumanReadable";
 
 interface IFileMessageProps {
     message: IFileMessage
@@ -32,6 +33,9 @@ function FileMessage({message}: IFileMessageProps) {
             <File className={"size-7"}/>
             <p className={"text-xs"}>
                 {message.file.name}
+            </p>
+            <p className={"text-xs"}>
+                {makeHumanReadable(message.file.size)}
             </p>
             <Button variant={"outline"} onClick={() => saveFile(message.file)} className={"gap-2"}>
                 <Download className={"size-5"}/>

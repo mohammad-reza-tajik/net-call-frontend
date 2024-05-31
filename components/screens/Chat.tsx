@@ -1,6 +1,6 @@
 "use client"
 import {Button} from "@/components/ui/button";
-import {Paperclip, PaperPlane} from "@/components/shared/Icons";
+import {Close, Paperclip, PaperPlane} from "@/components/shared/Icons";
 import {useRef, useState} from "react";
 import {Textarea} from "@/components/ui/textarea";
 import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnection";
@@ -10,6 +10,7 @@ import {useSignals} from "@preact/signals-react/runtime";
 import type {IFileMessage, ITextMessage} from "@/types";
 import FileMessage from "@/components/connectPage/FileMessage";
 import TextMessage from "@/components/connectPage/TextMessage";
+import {cn} from "@/lib/utils";
 
 function Chat() {
 
@@ -24,18 +25,18 @@ function Chat() {
         if (file && fileBuffer) {
             // send file data first
             const fileData = {
-                name : file.name,
-                mimeType : file.type,
+                name: file.name,
+                mimeType: file.type,
             }
-            console.log("file buffer")
-            fileChannelSignal.value?.send(fileBuffer);
             console.log("file Data")
             fileChannelSignal.value?.send(JSON.stringify(fileData));
+            console.log("file buffer")
+            fileChannelSignal.value?.send(fileBuffer);
 
-            const fileMessage : IFileMessage = {
+            const fileMessage: IFileMessage = {
                 file,
-                type : "file",
-                localPeerId : localPeerIdSignal.value,
+                type: "file",
+                localPeerId: localPeerIdSignal.value,
             }
 
             messagesSignal.value = [...messagesSignal.value, fileMessage];
@@ -89,9 +90,9 @@ function Chat() {
                 {
                     messagesSignal.value.map((message, index) => {
                         if (message.type === "text") {
-                            return <TextMessage key={index} message={message} />
+                            return <TextMessage key={index} message={message}/>
                         }
-                        return <FileMessage key={index} message={message} />
+                        return <FileMessage key={index} message={message}/>
                     })
                 }
             </div>
@@ -100,9 +101,18 @@ function Chat() {
                     <PaperPlane className={"size-7"}/>
                 </Button>
                 {
-                    !file && <Textarea ref={textMessageRef} className={"flex-1"}/>
+                    !file ? <Textarea ref={textMessageRef} className={"flex-1"}/> :
+                        <div className={"flex items-center justify-between p-3 flex-1 border rounded"}>
+                            <p className={"text-sm"}>
+                                فایل انتخابی :
+                                {file.name.slice(8)}
+                            </p>
+                            <Button size={"icon"} variant={"outline"} onClick={() => setFile(undefined)}>
+                                <Close className={"size-4"}/>
+                            </Button>
+                        </div>
                 }
-                <Button size={"icon"} onClick={filePickerHandler}>
+                <Button size={"icon"} onClick={filePickerHandler} className={cn({"hidden": file})}>
                     <Paperclip className={"size-7"}/>
                 </Button>
             </div>
