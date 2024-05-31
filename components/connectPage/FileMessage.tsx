@@ -37,10 +37,13 @@ function FileMessage({message}: IFileMessageProps) {
             <p className={"text-xs"}>
                 {makeHumanReadable(message.file.size)}
             </p>
-            <Button variant={"outline"} onClick={() => saveFile(message.file)} className={"gap-2"}>
-                <Download className={"size-5"}/>
-                دریافت
-            </Button>
+            {
+                localPeerIdSignal.value !== message.localPeerId ?
+                    <Button variant={"outline"} onClick={() => saveFile(message.file)} className={"gap-2"}>
+                        <Download className={"size-5"}/>
+                        دریافت
+                    </Button> : null
+            }
         </div>
 
 
