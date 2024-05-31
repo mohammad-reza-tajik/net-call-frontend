@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
-import {Status} from "@/types";
+import type {TStatus} from "@/types";
 
-const statusSignal = signal<Status | undefined>(undefined);
+const statusSignal = signal<TStatus | undefined>(undefined);
 
 export default statusSignal;

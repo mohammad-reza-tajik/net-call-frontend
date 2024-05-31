@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
-import {Response} from "@/types";
+import type {IResponse} from "@/types";
 
-const currentResponseSignal = signal<Response | undefined>(undefined);
+const currentResponseSignal = signal<IResponse | undefined>(undefined);
 
 export default currentResponseSignal;

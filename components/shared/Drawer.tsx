@@ -3,9 +3,15 @@ import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Close} from "@/components/shared/Icons";
 import {useSignals} from "@preact/signals-react/runtime";
-import {Signal} from "@preact/signals-react";
+import type {Signal} from "@preact/signals-react";
 
-function Drawer({children , openSignal , className}: {children: React.ReactNode , openSignal : Signal<boolean> , className?: string}) {
+interface IDrawerProps {
+    children: React.ReactNode;
+    openSignal : Signal<boolean>;
+    className?: string;
+}
+
+function Drawer({children , openSignal , className}: IDrawerProps) {
 
     useSignals();
 

@@ -1,5 +1,5 @@
 import socketSignal from "@/signals/socket";
-import {ConnectedPeer, Request, Response} from "@/types";
+import type {IConnectedPeer, IRequest, IResponse} from "@/types";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import {toast} from "react-toastify";
 import currentResponseSignal from "@/signals/peer/currentResponse";
@@ -9,14 +9,14 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 
 function socketListeners() {
 
-    socketSignal.value?.on("requestToPeer", (request : Request) => {
+    socketSignal.value?.on("requestToPeer", (request : IRequest) => {
         receivedRequestsSignal.value = [
             ...receivedRequestsSignal.value,
             request
         ]
         toast.info("یک درخواست دریافت شد");
     })
-    socketSignal.value?.on("responseToPeer", async (response : Response ) => {
+    socketSignal.value?.on("responseToPeer", async (response : IResponse ) => {
         try {
             currentResponseSignal.value = response;
             await peerConnectionSignal.value?.setRemoteDescription(response.answer);
@@ -28,7 +28,7 @@ function socketListeners() {
             console.error(err);
         }
     })
-    socketSignal.value?.on("connectedPeers", ({connectedPeers} : {connectedPeers : ConnectedPeer[]}) => {
+    socketSignal.value?.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
     })
 }

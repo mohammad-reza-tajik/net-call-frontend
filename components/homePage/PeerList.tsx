@@ -1,7 +1,11 @@
 import PeerItem from "@/components/homePage/PeerItem";
-import {ConnectedPeer} from "@/types";
+import type {IConnectedPeer} from "@/types";
 
-function PeerList({connectedPeers}: {connectedPeers : ConnectedPeer[]}) {
+interface IPeerListProps {
+    connectedPeers : IConnectedPeer[]
+}
+
+function PeerList({connectedPeers}: IPeerListProps) {
 
     return (
         <div className={"grid grid-cols-3 gap-4"}>

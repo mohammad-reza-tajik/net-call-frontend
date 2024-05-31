@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
-import {FileMessage, TextMessage} from "@/types";
+import type {IFileMessage, ITextMessage} from "@/types";
 
-const messagesSignal = signal<(TextMessage | FileMessage)[]>([]);
+const messagesSignal = signal<(ITextMessage | IFileMessage)[]>([]);
 
 export default messagesSignal;

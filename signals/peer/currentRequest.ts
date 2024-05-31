@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
-import {Request} from "@/types";
+import type {IRequest} from "@/types";
 
-const currentRequestSignal = signal<Request | undefined>(undefined);
+const currentRequestSignal = signal<IRequest | undefined>(undefined);
 
 export default currentRequestSignal;

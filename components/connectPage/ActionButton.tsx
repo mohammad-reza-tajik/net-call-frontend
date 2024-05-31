@@ -1,14 +1,14 @@
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {Button} from "@/components/ui/button";
 
-interface IProps {
+interface IActionButtonProps {
     icon: React.ReactNode;
     tooltipContent: string;
     handler: () => void;
     className?: string;
 }
 
-function ActionButton({ icon, tooltipContent, handler, className }: IProps) {
+function ActionButton({ icon, tooltipContent, handler, className }: IActionButtonProps) {
     return (
             <Tooltip>
                 <TooltipTrigger asChild>

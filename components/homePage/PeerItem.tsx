@@ -1,11 +1,15 @@
 "use client"
-import {ConnectedPeer} from "@/types";
+import type {IConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
 import formUrlQuery from "@/utils/formUrlQuery";
 import {useRouter} from "next/navigation";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 
-function PeerItem({connectedPeer: {localPeerId, deviceType}}: { connectedPeer: ConnectedPeer }) {
+interface IPeerItemProps {
+    connectedPeer: IConnectedPeer
+}
+
+function PeerItem({connectedPeer: {localPeerId, deviceType}}: IPeerItemProps) {
 
     const router = useRouter();
 
