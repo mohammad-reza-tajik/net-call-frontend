@@ -1,5 +1,5 @@
 
-export type TStatus = "screen:send" | "audio:send" | "audio:receive" | "video:send" | "video:receive" | "screen:receive";
+export type TStatus = `${"screen" | "video" | "audio"}:${"send"|"receive"}`;
 
 export interface IConnectedPeer {
     socketId : string;
