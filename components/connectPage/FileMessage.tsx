@@ -1,15 +1,21 @@
+"use client"
 import type {IFileMessage} from "@/types";
 import {Download, File} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import makeHumanReadable from "@/utils/makeHumanReadable";
+import MakeHumanReadable from "@/utils/makeHumanReadable";
+import {useSignals} from "@preact/signals-react/runtime";
+import transferredAmount from "@/signals/transferredAmount";
 
 interface IFileMessageProps {
     message: IFileMessage
 }
 
 function FileMessage({message}: IFileMessageProps) {
+
+    useSignals();
 
     const saveFile = async (file: File) => {
         // create a new handle
@@ -25,6 +31,7 @@ function FileMessage({message}: IFileMessageProps) {
         await writableStream.close();
     }
 
+
     return (
         <div
             className={cn("flex flex-col gap-3 border rounded w-max items-center justify-center py-3 px-5",
@@ -35,7 +42,7 @@ function FileMessage({message}: IFileMessageProps) {
                 {message.file.name}
             </p>
             <p className={"text-xs"}>
-                {makeHumanReadable(message.file.size)}
+                {message.file.size === transferredAmount.value ? makeHumanReadable(message.file.size) : `${MakeHumanReadable(transferredAmount.value)}/${MakeHumanReadable(message.file.size)}`}
             </p>
             {
                 localPeerIdSignal.value !== message.localPeerId ?

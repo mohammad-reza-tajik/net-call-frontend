@@ -7,10 +7,11 @@ import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnectio
 import messagesSignal from "@/signals/peer/messages";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import {useSignals} from "@preact/signals-react/runtime";
-import type {IFileMessage, ITextMessage} from "@/types";
+import type {IFileData, IFileMessage, ITextMessage} from "@/types";
 import FileMessage from "@/components/connectPage/FileMessage";
 import TextMessage from "@/components/connectPage/TextMessage";
 import {cn} from "@/lib/utils";
+import sendInChunks from "@/utils/sendInChunks";
 
 function Chat() {
 
@@ -24,14 +25,15 @@ function Chat() {
 
         if (file && fileBuffer) {
             // send file data first
-            const fileData = {
+            const fileData : IFileData = {
                 name: file.name,
                 mimeType: file.type,
+                size : file.size
             }
-            console.log("file Data")
+            console.log("file Data sent")
             fileChannelSignal.value?.send(JSON.stringify(fileData));
-            console.log("file buffer")
-            fileChannelSignal.value?.send(fileBuffer);
+
+            sendInChunks(fileBuffer);
 
             const fileMessage: IFileMessage = {
                 file,
@@ -59,8 +61,6 @@ function Chat() {
 
             textMessageRef.current.value = "";
         }
-
-
     }
 
     const filePickerHandler = async () => {
@@ -68,7 +68,6 @@ function Chat() {
             const reader = new FileReader();
             const [fileHandle] = await window.showOpenFilePicker({multiple: false});
             const chosenFile = await fileHandle.getFile();
-            // console.log(fileData)
             if (!chosenFile) return
             setFile(chosenFile);
             reader.addEventListener("load", (event) => {
@@ -76,7 +75,6 @@ function Chat() {
                 setFileBuffer(event.target.result);
             })
             reader.readAsArrayBuffer(chosenFile);
-
 
         } catch (err) {
             console.log("user didn't pick any files");
