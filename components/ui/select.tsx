@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import {Arrow} from "@/components/shared/Icons";
+import {Caret} from "@/components/shared/Icons";
 
 import { cn } from "@/lib/utils"
 
@@ -26,7 +26,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <Arrow className="size-4 opacity-50 -rotate-90" />
+      <Caret className="size-4 opacity-50 rotate-90" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ))
@@ -44,7 +44,7 @@ const SelectScrollUpButton = React.forwardRef<
     )}
     {...props}
   >
-    <Arrow className="size-4 rotate-45" />
+    <Caret className="size-4 rotate-45" />
   </SelectPrimitive.ScrollUpButton>
 ))
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
@@ -61,7 +61,7 @@ const SelectScrollDownButton = React.forwardRef<
     )}
     {...props}
   >
-    <Arrow className="size-4 rotate-45" />
+    <Caret className="size-4 rotate-45" />
   </SelectPrimitive.ScrollDownButton>
 ))
 SelectScrollDownButton.displayName =

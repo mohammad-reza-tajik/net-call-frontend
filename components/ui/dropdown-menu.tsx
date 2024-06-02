@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import {Arrow , Circle} from "@/components/shared/Icons";
+import {Caret , Circle} from "@/components/shared/Icons";
 
 import { cn } from "@/lib/utils"
 
@@ -34,7 +34,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
     {...props}
   >
     {children}
-    <Arrow className="ml-auto size-4 rotate-180" />
+    <Caret className="ml-auto size-4 rotate-180" />
   </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName =
