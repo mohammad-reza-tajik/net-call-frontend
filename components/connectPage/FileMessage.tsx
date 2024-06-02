@@ -1,21 +1,17 @@
 "use client"
 import type {IFileMessage} from "@/types";
-import {Download, File} from "@/components/shared/Icons";
+import {Download, File as FileIcon} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import makeHumanReadable from "@/utils/makeHumanReadable";
 import MakeHumanReadable from "@/utils/makeHumanReadable";
-import {useSignals} from "@preact/signals-react/runtime";
-import transferredAmount from "@/signals/transferredAmount";
 
 interface IFileMessageProps {
     message: IFileMessage
 }
 
-function FileMessage({message}: IFileMessageProps) {
-
-    useSignals();
+function FileMessage({message : {file , transferredAmount , localPeerId}}: IFileMessageProps) {
 
     const saveFile = async (file: File) => {
         // create a new handle
@@ -31,22 +27,21 @@ function FileMessage({message}: IFileMessageProps) {
         await writableStream.close();
     }
 
-
     return (
         <div
             className={cn("flex flex-col gap-3 border rounded w-max items-center justify-center py-3 px-5",
-                {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
-                {"self-end": message.localPeerId !== localPeerIdSignal.value})}>
-            <File className={"size-7"}/>
+                {"bg-primary text-primary-foreground": localPeerId === localPeerIdSignal.value},
+                {"self-end": localPeerId !== localPeerIdSignal.value})}>
+            <FileIcon className={"size-7"}/>
             <p className={"text-xs"}>
-                {message.file.name}
+                {file.name}
             </p>
             <p className={"text-xs"}>
-                {message.file.size === transferredAmount.value ? makeHumanReadable(message.file.size) : `${MakeHumanReadable(transferredAmount.value)}/${MakeHumanReadable(message.file.size)}`}
+                {transferredAmount < file.size ? `${MakeHumanReadable(transferredAmount)}/${MakeHumanReadable(file.size)}`: makeHumanReadable(file.size) }
             </p>
             {
-                localPeerIdSignal.value !== message.localPeerId ?
-                    <Button variant={"outline"} onClick={() => saveFile(message.file)} className={"gap-2"}>
+                localPeerIdSignal.value !== localPeerId && transferredAmount >= file.size ?
+                    <Button variant={"outline"} onClick={() => saveFile(file as File)} className={"gap-2"}>
                         <Download className={"size-5"}/>
                         دریافت
                     </Button> : null

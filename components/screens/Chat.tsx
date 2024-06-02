@@ -21,7 +21,7 @@ function Chat() {
     const [file, setFile] = useState<File | undefined>(undefined);
     const [fileBuffer, setFileBuffer] = useState<ArrayBuffer | undefined>(undefined);
 
-    const sendMessageHandler = () => {
+    const sendMessageHandler = async () => {
 
         if (file && fileBuffer) {
             // send file data first
@@ -33,15 +33,7 @@ function Chat() {
             console.log("file Data sent")
             fileChannelSignal.value?.send(JSON.stringify(fileData));
 
-            sendInChunks(fileBuffer);
-
-            const fileMessage: IFileMessage = {
-                file,
-                type: "file",
-                localPeerId: localPeerIdSignal.value,
-            }
-
-            messagesSignal.value = [...messagesSignal.value, fileMessage];
+            await sendInChunks({fileBuffer,fileData});
 
             setFile(undefined);
             setFileBuffer(undefined);

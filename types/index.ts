@@ -33,12 +33,14 @@ export interface ITextMessage {
 
 export interface IFileData {
     name : string;
-    mimeType : MIMEType;
+    mimeType : string;
+    size : number;
 }
 
 export interface IFileMessage {
-    file : File;
+    file: File | IFileData;
     type: "file";
     localPeerId: string;
+    transferredAmount : number;
 }
 

@@ -3,8 +3,9 @@ import messagesSignal from "@/signals/peer/messages";
 import type {IFileData, IFileMessage} from "@/types";
 import remotePeerId from "@/signals/peer/remotePeerId";
 import transferredAmount from "@/signals/transferredAmount";
+import FileMessage from "@/components/connectPage/FileMessage";
 
-const CHUNK_SIZE = 1024 * 64;
+const CHUNK_SIZE = 1024 * 256;
 
 function dataChannelListeners(dataChannel: RTCDataChannel) {
     dataChannel.addEventListener("open", () => {
@@ -39,9 +40,27 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
 
             if (!fileData) return;
 
-            transferredAmount.value = receivedChunks.length * CHUNK_SIZE;
+            const tempFileMessage: IFileMessage = {
+                file: fileData,
+                type: "file",
+                localPeerId: remotePeerId.value,
+                transferredAmount: receivedChunks.length * CHUNK_SIZE
+            }
+
+            /**
+             show a temporary message that indicates that a file is being received
+             and with every chunk received it updates the transferredAmount
+             */
+            const lastMessage = messagesSignal.value.at(-1);
+
+            if (lastMessage && "file" in lastMessage && lastMessage.file.name === fileData.name) {
+                messagesSignal.value = [...messagesSignal.value.slice(0,-1), tempFileMessage];
+            } else {
+                messagesSignal.value = [...messagesSignal.value, tempFileMessage];
+            }
 
             if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
+
                 console.log("file received");
 
                 const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
@@ -50,9 +69,10 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
                     file,
                     type: "file",
                     localPeerId: remotePeerId.value,
+                    transferredAmount: file.size
                 }
 
-                messagesSignal.value = [...messagesSignal.value, fileMessage];
+                messagesSignal.value = [...messagesSignal.value.slice(0,-1), fileMessage];
 
                 fileData = undefined;
                 receivedChunks = [];
