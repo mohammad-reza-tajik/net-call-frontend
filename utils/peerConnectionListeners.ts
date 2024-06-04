@@ -65,12 +65,8 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("connectionstatechange", () => {
         connectionStateSignal.value = peerConnection.connectionState;
-        let toastId: number | string;
 
-        if (peerConnection.connectionState === "connecting") {
-            toastId = toast.loading("در حال اتصال ...");
-        } else if (peerConnection.connectionState === "connected") {
-            toast.dismiss(toastId!);
+       if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
         } else if (peerConnection.connectionState === "disconnected") {
             toast.error("ارتباط قطع شد");
