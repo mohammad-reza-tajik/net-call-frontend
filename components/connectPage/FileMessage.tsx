@@ -25,7 +25,7 @@ function FileMessage({message : {file , transferredAmount , localPeerId}}: IFile
 
         // close the file and write the contents to disk.
         await writableStream.close();
-        
+
         toast.success("دانلود انجام شد");
     }
 

@@ -7,9 +7,8 @@ const CHUNK_SIZE = 1024 * 256;
 
 async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, fileData: IFileData }) {
     let offset = 0;
-    const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}`);
+    const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}-${localPeerIdSignal.value}-${Date.now()}`);
 
-    // Start sending chunks
     dataChannel.addEventListener("open", async () => {
         dataChannel.send(JSON.stringify(fileData));
         while (offset < fileBuffer.byteLength) {
