@@ -30,8 +30,6 @@ function Chat() {
                 mimeType: file.type,
                 size : file.size
             }
-            console.log("file Data sent")
-            fileChannelSignal.value?.send(JSON.stringify(fileData));
 
             await sendInChunks({fileBuffer,fileData});
 

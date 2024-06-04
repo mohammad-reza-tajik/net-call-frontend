@@ -1,20 +1,21 @@
-import { fileChannelSignal } from "@/signals/peer/peerConnection";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import type {IFileData, IFileMessage} from "@/types";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import messagesSignal from "@/signals/peer/messages";
 
 const CHUNK_SIZE = 1024 * 256;
 
-async function sendInChunks({fileBuffer , fileData} : { fileBuffer : ArrayBuffer , fileData : IFileData }) {
+async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, fileData: IFileData }) {
     let offset = 0;
-    const channel = fileChannelSignal.value!;
+    const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}`);
 
-    // Function to send a chunk of data
-    async function sendChunk() {
+    // Start sending chunks
+    dataChannel.addEventListener("open", async () => {
+        dataChannel.send(JSON.stringify(fileData));
         while (offset < fileBuffer.byteLength) {
-            if (channel.bufferedAmount <= CHUNK_SIZE) {
+            if (dataChannel.bufferedAmount <= CHUNK_SIZE) {
                 const chunk = fileBuffer.slice(offset, Math.min(offset + CHUNK_SIZE, fileBuffer.byteLength));
-                channel.send(chunk);
+                dataChannel.send(chunk);
                 offset += CHUNK_SIZE;
 
                 /**
@@ -23,10 +24,10 @@ async function sendInChunks({fileBuffer , fileData} : { fileBuffer : ArrayBuffer
                  */
 
                 const tempFileMessage: IFileMessage = {
-                    file : fileData,
+                    file: fileData,
                     type: "file",
                     localPeerId: localPeerIdSignal.value,
-                    transferredAmount : offset
+                    transferredAmount: offset
                 }
 
                 const lastMessage = messagesSignal.value.at(-1);
@@ -42,17 +43,14 @@ async function sendInChunks({fileBuffer , fileData} : { fileBuffer : ArrayBuffer
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
         }
-        const fileMessage: IFileMessage = {
-            file : fileData,
-            type: "file",
-            localPeerId: localPeerIdSignal.value,
-            transferredAmount : fileData.size
-        }
-        messagesSignal.value = [...messagesSignal.value.slice(0,-1), fileMessage];
-    }
-
-    // Start sending chunks
-    await sendChunk();
+            const fileMessage: IFileMessage = {
+                file: fileData,
+                type: "file",
+                localPeerId: localPeerIdSignal.value,
+                transferredAmount: fileData.size
+            }
+            messagesSignal.value = [...messagesSignal.value.slice(0, -1), fileMessage];
+    })
 }
 
 export default sendInChunks;

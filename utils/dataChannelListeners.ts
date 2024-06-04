@@ -2,8 +2,6 @@ import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnectio
 import messagesSignal from "@/signals/peer/messages";
 import type {IFileData, IFileMessage} from "@/types";
 import remotePeerId from "@/signals/peer/remotePeerId";
-import transferredAmount from "@/signals/transferredAmount";
-import FileMessage from "@/components/connectPage/FileMessage";
 
 const CHUNK_SIZE = 1024 * 256;
 
@@ -54,7 +52,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
             const lastMessage = messagesSignal.value.at(-1);
 
             if (lastMessage && "file" in lastMessage && lastMessage.file.name === fileData.name) {
-                messagesSignal.value = [...messagesSignal.value.slice(0,-1), tempFileMessage];
+                messagesSignal.value = [...messagesSignal.value.slice(0, -1), tempFileMessage];
             } else {
                 messagesSignal.value = [...messagesSignal.value, tempFileMessage];
             }
@@ -62,6 +60,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
             if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
 
                 console.log("file received");
+                dataChannel.close();
 
                 const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
 
@@ -72,7 +71,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
                     transferredAmount: file.size
                 }
 
-                messagesSignal.value = [...messagesSignal.value.slice(0,-1), fileMessage];
+                messagesSignal.value = [...messagesSignal.value.slice(0, -1), fileMessage];
 
                 fileData = undefined;
                 receivedChunks = [];

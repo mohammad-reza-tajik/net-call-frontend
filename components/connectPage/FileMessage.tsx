@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import makeHumanReadable from "@/utils/makeHumanReadable";
-import MakeHumanReadable from "@/utils/makeHumanReadable";
+import {toast} from "react-toastify";
 
 interface IFileMessageProps {
     message: IFileMessage
@@ -25,6 +25,8 @@ function FileMessage({message : {file , transferredAmount , localPeerId}}: IFile
 
         // close the file and write the contents to disk.
         await writableStream.close();
+        
+        toast.success("دانلود انجام شد");
     }
 
     return (
@@ -37,7 +39,7 @@ function FileMessage({message : {file , transferredAmount , localPeerId}}: IFile
                 {file.name}
             </p>
             <p className={"text-xs"}>
-                {transferredAmount < file.size ? `${MakeHumanReadable(transferredAmount)}/${MakeHumanReadable(file.size)}`: makeHumanReadable(file.size) }
+                {transferredAmount < file.size ? `${makeHumanReadable(transferredAmount)}/${makeHumanReadable(file.size)}`: makeHumanReadable(file.size) }
             </p>
             {
                 localPeerIdSignal.value !== localPeerId && transferredAmount >= file.size ?
@@ -47,8 +49,6 @@ function FileMessage({message : {file , transferredAmount , localPeerId}}: IFile
                     </Button> : null
             }
         </div>
-
-
     )
 }
 
