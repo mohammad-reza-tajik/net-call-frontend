@@ -9,6 +9,8 @@ import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import dataChannelListeners from "@/utils/dataChannelListeners";
+import chatChannelListeners from "@/utils/chatChannelListeners";
+import fileChannelListeners from "@/utils/fileChannelListeners";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
@@ -82,6 +84,11 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("datachannel", ({channel}) => {
         dataChannelListeners(channel);
+        if (channel.label === "chat"){
+            chatChannelListeners(channel);
+        } else {
+            fileChannelListeners(channel);
+        }
     })
 
     peerConnectionSignal.value = peerConnection;

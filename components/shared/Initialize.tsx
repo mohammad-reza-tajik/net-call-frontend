@@ -14,6 +14,7 @@ import socketListeners from "@/utils/socketListeners";
 import {useSignalEffect} from "@preact/signals-react/runtime";
 import statusSignal from "@/signals/peer/status";
 import dataChannelListeners from "@/utils/dataChannelListeners";
+import chatChannelListeners from "@/utils/chatChannelListeners";
 import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 
 function Initialize({children}: {children: React.ReactNode}) {
@@ -38,6 +39,7 @@ function Initialize({children}: {children: React.ReactNode}) {
         if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value ){
             const chatChannel = peerConnectionSignal.value?.createDataChannel("chat");
             dataChannelListeners(chatChannel!);
+            chatChannelListeners(chatChannel!);
         }
     })
 
