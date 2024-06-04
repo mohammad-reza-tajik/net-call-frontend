@@ -8,6 +8,12 @@ const CHUNK_SIZE = 1024 * 256;
 async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, fileData: IFileData }) {
     let offset = 0;
     const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}-${localPeerIdSignal.value}-${Date.now()}`);
+    /**
+     transferringFileMessageIndex variable is the index of the file-message we're going to send . we know that
+     it's going to be placed after the last element in the array so the index will be
+     the last-index + 1 and it's equal to array.length
+     */
+    const transferringFileMessageIndex = messagesSignal.value.length;
 
     dataChannel.addEventListener("open", async () => {
         dataChannel.send(JSON.stringify(fileData));
@@ -29,13 +35,9 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                     transferredAmount: offset
                 }
 
-                const lastMessage = messagesSignal.value.at(-1);
 
-                if (lastMessage && "file" in lastMessage && lastMessage.file.name === fileData.name) {
-                    messagesSignal.value = [...messagesSignal.value.slice(0,-1), tempFileMessage];
-                } else {
-                    messagesSignal.value = [...messagesSignal.value, tempFileMessage];
-                }
+                messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
+
 
             } else {
                 // Wait for the buffered amount to decrease before sending the next chunk
@@ -46,9 +48,10 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                 file: fileData,
                 type: "file",
                 localPeerId: localPeerIdSignal.value,
-                transferredAmount: fileData.size
+                transferredAmount: fileData.size,
             }
-            messagesSignal.value = [...messagesSignal.value.slice(0, -1), fileMessage];
+        messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
+
     })
 }
 

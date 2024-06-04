@@ -5,10 +5,17 @@ import {fileChannelSignal} from "@/signals/peer/peerConnection";
 
 const CHUNK_SIZE = 1024 * 256;
 
-function fileChannelListeners(dataChannel : RTCDataChannel) {
+function fileChannelListeners(dataChannel: RTCDataChannel) {
 
     let fileData: IFileData | undefined = undefined;
     let receivedChunks: ArrayBuffer[] = [];
+
+    /**
+     transferringFileMessageIndex variable is the index of the file-message we're going to send . we know that
+     it's going to be placed after the last element in the array so the index will be
+     the last-index + 1 and it's equal to array.length
+     */
+    const transferringFileMessageIndex = messagesSignal.value.length;
 
     dataChannel.bufferedAmountLowThreshold = CHUNK_SIZE;
 
@@ -22,29 +29,19 @@ function fileChannelListeners(dataChannel : RTCDataChannel) {
 
         if (!fileData) return;
 
+        /**
+         show a temporary message that indicates that a file is being received
+         and with every chunk received it updates the transferredAmount
+         */
+
         const tempFileMessage: IFileMessage = {
-            id: dataChannel.label,
             file: fileData,
             type: "file",
             localPeerId: remotePeerId.value,
             transferredAmount: receivedChunks.length * CHUNK_SIZE
         }
 
-        /**
-         show a temporary message that indicates that a file is being received
-         and with every chunk received it updates the transferredAmount
-         */
-
-        const transferringFileMessage = messagesSignal.value.findLastIndex((message)=> message.id === dataChannel.label);
-        console.log(transferringFileMessage , messagesSignal.value);
-
-        const lastMessage = messagesSignal.value.at(-1);
-
-        if (lastMessage && "file" in lastMessage && lastMessage.file.name === fileData.name) {
-            messagesSignal.value = [...messagesSignal.value.slice(0, -1), tempFileMessage];
-        } else {
-            messagesSignal.value = [...messagesSignal.value, tempFileMessage];
-        }
+        messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
 
         if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
 
@@ -54,14 +51,13 @@ function fileChannelListeners(dataChannel : RTCDataChannel) {
             const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
 
             const fileMessage: IFileMessage = {
-                id: dataChannel.label,
                 file,
                 type: "file",
                 localPeerId: remotePeerId.value,
                 transferredAmount: file.size
             }
 
-            messagesSignal.value = [...messagesSignal.value.slice(0, -1), fileMessage];
+            messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
 
             fileData = undefined;
             receivedChunks = [];
