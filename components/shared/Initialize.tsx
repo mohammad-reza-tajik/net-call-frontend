@@ -17,7 +17,7 @@ import dataChannelListeners from "@/utils/dataChannelListeners";
 import chatChannelListeners from "@/utils/chatChannelListeners";
 import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import {useRouter} from "next/navigation";
-import routerSignal from "@/signals/routerSignal";
+import routerSignal from "@/signals/router";
 
 function Initialize({children}: {children: React.ReactNode}) {
 

@@ -2,7 +2,7 @@ import messagesSignal from "@/signals/peer/messages";
 import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import statusSignal from "@/signals/peer/status";
 import {toast} from "react-toastify";
-import routerSignal from "@/signals/routerSignal";
+import routerSignal from "@/signals/router";
 
 function chatChannelListeners(dataChannel: RTCDataChannel) {
 
