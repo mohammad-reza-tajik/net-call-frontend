@@ -28,7 +28,6 @@ function Initialize({children}: {children: React.ReactNode}) {
             localPeerIdSignal.value = createId();
             localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true});
             // devicesSignal.value = await getDevices();
-            createConnection();
             socketSignal.value =io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
                     deviceType: getDeviceType(),
@@ -38,6 +37,12 @@ function Initialize({children}: {children: React.ReactNode}) {
             socketListeners();
         })();
     }, []);
+
+    useSignalEffect(()=>{
+        if (!peerConnectionSignal.value){
+            createConnection();
+        }
+    })
 
     useSignalEffect(()=>{
         if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value ){

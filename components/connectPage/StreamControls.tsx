@@ -17,10 +17,10 @@ import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
 // import devicesSignal from "@/signals/devices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
-import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import routerSignal from "@/signals/routerSignal";
+import hangup from "@/utils/hangup";
 
 function StreamControls() {
 
@@ -56,9 +56,7 @@ function StreamControls() {
     const hangupHandler = () => {
         socketSignal.value?.emit("hangupToServer", {localPeerId : localPeerIdSignal.value});
         chatChannelSignal.value?.send("hangup");
-        peerConnectionSignal.value?.close();
-        statusSignal.value = undefined;
-        routerSignal.value?.push("/");
+        hangup();
     }
 
     return (
