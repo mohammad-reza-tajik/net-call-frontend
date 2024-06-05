@@ -70,7 +70,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
        if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
-        } else if (peerConnection.connectionState === "disconnected") {
+        } else if (peerConnection.connectionState === "disconnected" && statusSignal.value) {
             toast.error("ارتباط قطع شد");
         }
     })

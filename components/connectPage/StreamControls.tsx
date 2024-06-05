@@ -9,15 +9,18 @@ import {
     SpeakerOff,
     Phone, Chat
 } from "@/components/shared/Icons";
-import DeviceSelector from "@/components/connectPage/DeviceSelector";
+// import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
 import {useState} from "react";
-import hangup from "@/utils/hangup";
 import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
-import devicesSignal from "@/signals/devices";
+// import devicesSignal from "@/signals/devices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
+import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import socketSignal from "@/signals/socket";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
+import routerSignal from "@/signals/routerSignal";
 
 function StreamControls() {
 
@@ -29,25 +32,33 @@ function StreamControls() {
         return
     }
 
-    function muteMicHandler() {
+    const muteMicHandler = () => {
         setMuteMic((prevState) => !prevState);
         localStreamSignal.value?.getAudioTracks().forEach(track => {
             track.enabled = muteMic;
         })
     }
 
-    function muteVideoHandler() {
+    const muteVideoHandler = () => {
         setMuteVideo((prevState) => !prevState);
         localStreamSignal.value?.getVideoTracks().forEach(track => {
             track.enabled = muteVideo;
         })
     }
 
-    function muteSoundHandler() {
+    const muteSoundHandler = () =>  {
         setMuteSound((prevState) => !prevState);
         remoteStreamSignal.value?.getAudioTracks().forEach(track => {
             track.enabled = muteSound;
         })
+    }
+
+    const hangupHandler = () => {
+        socketSignal.value?.emit("hangupToServer", {localPeerId : localPeerIdSignal.value});
+        chatChannelSignal.value?.send("hangup");
+        peerConnectionSignal.value?.close();
+        statusSignal.value = undefined;
+        routerSignal.value?.push("/");
     }
 
     return (
@@ -55,8 +66,8 @@ function StreamControls() {
             <TooltipProvider>
                 <ActionButton className={"bg-destructive text-destructive-foreground"}
                               icon={<Phone className={"size-7 rotate-[135deg]"}/>}
-                              tooltipContent={"توقف استریم"}
-                              handler={hangup}/>
+                              tooltipContent={"قطع تماس"}
+                              handler={hangupHandler}/>
 
                 <ActionButton
                     icon={!muteMic ? <Microphone className={"size-7"}/> : <MicrophoneOff className={"size-7"}/>}
@@ -78,12 +89,12 @@ function StreamControls() {
                     isChatDrawerOpenSignal.value = true
                 }} />
 
-                <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
+                {/*<DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 
                 {
                     statusSignal.value?.startsWith("video:") &&
                     <DeviceSelector devices={devicesSignal.value?.videoInputs} text={"وب کم :"}/>
-                }
+                }*/}
 
             </TooltipProvider>
         </div>

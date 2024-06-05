@@ -1,11 +1,21 @@
 import messagesSignal from "@/signals/peer/messages";
-import {chatChannelSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import statusSignal from "@/signals/peer/status";
+import {toast} from "react-toastify";
+import routerSignal from "@/signals/routerSignal";
 
-function chatChannelListeners(dataChannel : RTCDataChannel) {
+function chatChannelListeners(dataChannel: RTCDataChannel) {
 
-    dataChannel.addEventListener("message", (event) => {
-        const message = JSON.parse(event.data);
-        messagesSignal.value = [...messagesSignal.value, message];
+    dataChannel.addEventListener("message", ({data}) => {
+        if (data === "hangup") {
+            peerConnectionSignal.value?.close();
+            statusSignal.value = undefined;
+            toast.info("ارتباط پایان یافت");
+            routerSignal.value?.push("/");
+        } else {
+            const message = JSON.parse(data);
+            messagesSignal.value = [...messagesSignal.value, message];
+        }
     })
 
     chatChannelSignal.value = dataChannel;
