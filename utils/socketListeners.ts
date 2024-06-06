@@ -6,6 +6,7 @@ import currentResponseSignal from "@/signals/peer/currentResponse";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
+import hangup from "@/utils/hangup";
 
 function socketListeners() {
 
@@ -28,8 +29,14 @@ function socketListeners() {
             console.error(err);
         }
     })
+
     socketSignal.value?.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
+    })
+
+    socketSignal.value?.on("remotePeerNotConnected",()=>{
+        toast.error("این کاربر آنلاین نیست");
+        hangup();
     })
 }
 

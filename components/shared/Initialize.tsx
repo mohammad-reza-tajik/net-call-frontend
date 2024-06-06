@@ -19,16 +19,16 @@ import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnec
 import {useRouter} from "next/navigation";
 import routerSignal from "@/signals/router";
 
-function Initialize({children}: {children: React.ReactNode}) {
+function Initialize({children}: { children: React.ReactNode }) {
 
     routerSignal.value = useRouter();
 
     useEffect(() => {
         (async () => {
             localPeerIdSignal.value = createId();
-            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true});
+            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
             // devicesSignal.value = await getDevices();
-            socketSignal.value =io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
+            socketSignal.value = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
                     deviceType: getDeviceType(),
                     localPeerId
@@ -38,14 +38,14 @@ function Initialize({children}: {children: React.ReactNode}) {
         })();
     }, []);
 
-    useSignalEffect(()=>{
-        if (!peerConnectionSignal.value){
+    useSignalEffect(() => {
+        if (!peerConnectionSignal.value) {
             createConnection();
         }
     })
 
-    useSignalEffect(()=>{
-        if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value ){
+    useSignalEffect(() => {
+        if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value) {
             const chatChannel = peerConnectionSignal.value?.createDataChannel("chat");
             dataChannelListeners(chatChannel!);
             chatChannelListeners(chatChannel!);
