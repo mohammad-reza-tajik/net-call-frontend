@@ -2,11 +2,11 @@
 import type {IRequest} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
-import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
+import routerSignal from "@/signals/router";
 
 interface IRequestItemProps {
     request: IRequest
@@ -16,8 +16,6 @@ function RequestItem({request}: IRequestItemProps) {
 
     const {localPeerId, status} = request;
     let statusText: string | undefined;
-
-    const router = useRouter();
 
     if (status === "screen:send") {
         statusText = "اشتراک گذاری صفحه"
@@ -35,7 +33,7 @@ function RequestItem({request}: IRequestItemProps) {
                 remotePeerId: request.localPeerId
             }
         });
-        router.push(`/connect${peerURL}`);
+        routerSignal.value!.push(`/connect${peerURL}`);
     }
 
     const rejectRequestHandler = () => {

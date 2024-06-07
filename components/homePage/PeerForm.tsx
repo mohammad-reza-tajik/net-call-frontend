@@ -3,16 +3,15 @@ import {toast} from "react-toastify";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useRef} from "react";
-import {useRouter} from "next/navigation";
 import formUrlQuery from "@/utils/formUrlQuery";
 import {useSignals} from "@preact/signals-react/runtime";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import routerSignal from "@/signals/router";
 
 function PeerForm() {
 
     useSignals();
     const remotePeerIdRef = useRef<HTMLInputElement>(null);
-    const router = useRouter();
 
     function submitRemotePeerIdHandler() {
         if (!remotePeerIdRef.current?.value) {
@@ -31,7 +30,7 @@ function PeerForm() {
 
         remotePeerIdSignal.value = remotePeerIdRef.current.value;
         remotePeerIdRef.current.value = "";
-        router.push(`/connect${peerURL}`);
+        routerSignal.value!.push(`/connect${peerURL}`);
     }
 
     return (

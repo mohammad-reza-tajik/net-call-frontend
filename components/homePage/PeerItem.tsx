@@ -2,16 +2,14 @@
 import type {IConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
 import formUrlQuery from "@/utils/formUrlQuery";
-import {useRouter} from "next/navigation";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import routerSignal from "@/signals/router";
 
 interface IPeerItemProps {
     connectedPeer: IConnectedPeer
 }
 
 function PeerItem({connectedPeer: {localPeerId, deviceType}}: IPeerItemProps) {
-
-    const router = useRouter();
 
     const peerURL = formUrlQuery({
         params: {
@@ -21,7 +19,7 @@ function PeerItem({connectedPeer: {localPeerId, deviceType}}: IPeerItemProps) {
 
     const peerClickHandler = () => {
         remotePeerIdSignal.value = localPeerId;
-        router.push(`/connect${peerURL}`);
+        routerSignal.value!.push(`/connect${peerURL}`);
     }
 
     return (
