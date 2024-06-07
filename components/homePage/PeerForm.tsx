@@ -1,5 +1,4 @@
 "use client"
-import {validate} from "uuid";
 import {toast} from "react-toastify";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -20,7 +19,7 @@ function PeerForm() {
             return
         }
 
-        if (!validate(remotePeerIdRef.current.value)) {
+        if (remotePeerIdRef.current.value.length < 36) {
             return toast.error("آیدی وارد شده صحیح نیست");
         }
 

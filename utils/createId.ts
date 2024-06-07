@@ -1,13 +1,19 @@
-import {v4 as uuidV4} from "uuid";
+import randomInt from "@/utils/randomInt";
+function createId(idLength: number) {
 
-function createId() {
+    const allCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+[]{}|;:',.<>?";
 
-    let peerId = localStorage.getItem("peerId");
+    let peerId = localStorage.getItem("peerId") || "";
+
     if (!peerId) {
-        peerId = uuidV4();
+        for (let i = 0; i < idLength; i++) {
+            peerId += Array.from(allCharacters).at(randomInt(0, allCharacters.length - 1));
+        }
         localStorage.setItem("peerId", peerId)
     }
+
     return peerId;
+
 }
 
 export default createId;

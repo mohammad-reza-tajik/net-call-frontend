@@ -9,7 +9,6 @@ import createConnection from "@/utils/createConnection";
 import socketSignal from "@/signals/socket";
 import io from "socket.io-client";
 import getDeviceType from "@/utils/getDeviceType";
-import localPeerId from "@/signals/peer/localPeerId";
 import socketListeners from "@/utils/socketListeners";
 import {useSignalEffect} from "@preact/signals-react/runtime";
 import statusSignal from "@/signals/peer/status";
@@ -25,13 +24,13 @@ function Initialize({children}: { children: React.ReactNode }) {
 
     useEffect(() => {
         (async () => {
-            localPeerIdSignal.value = createId();
+            localPeerIdSignal.value = createId(36);
             localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
             // devicesSignal.value = await getDevices();
             socketSignal.value = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
                     deviceType: getDeviceType(),
-                    localPeerId
+                    localPeerId : localPeerIdSignal.value
                 }
             }).connect();
             socketListeners();
