@@ -21,6 +21,8 @@ import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
+import currentResponseSignal from "@/signals/peer/currentResponse";
+import currentRequestSignal from "@/signals/peer/currentRequest";
 
 function StreamControls() {
 
@@ -28,7 +30,8 @@ function StreamControls() {
     const [muteVideo, setMuteVideo] = useState(false);
     const [muteSound, setMuteSound] = useState(false);
 
-    if (!statusSignal.value) {
+    // only show if we have a status and either one of the current request or response exist
+    if (!statusSignal.value || (!currentResponseSignal.value && !currentRequestSignal.value)) {
         return
     }
 

@@ -18,6 +18,8 @@ import Chat from "@/components/screens/Chat";
 import Drawer from "@/components/shared/Drawer";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import Loader from "@/components/shared/Loader";
+import {Button} from "@/components/ui/button";
+import hangup from "@/utils/hangup";
 
 function ConnectScreen() {
 
@@ -55,9 +57,12 @@ function ConnectScreen() {
                 برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
             </p>
         } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
-            return <p className={"flex justify-center items-center text-xl flex-1"}>
-                در انتظار پاسخ ...
-            </p>
+            return <div className={"flex flex-col gap-5 justify-center items-center text-xl flex-1"}>
+               <p>
+                   در انتظار پاسخ ...
+               </p>
+                <Button onClick={hangup}>انصراف</Button>
+            </div>
         } else if (connectionStateSignal.value === "connecting") {
             return <div className={"flex flex-col gap-5 justify-center items-center text-xl flex-1"}>
                 <p>در حال اتصال ...</p>
