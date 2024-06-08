@@ -7,6 +7,8 @@ import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import routerSignal from "@/signals/router";
+import socketSignal from "@/signals/socket";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
 
 interface IRequestItemProps {
     request: IRequest
@@ -37,6 +39,7 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     const rejectRequestHandler = () => {
+        socketSignal.value?.emit("rejectToServer",{request});
         receivedRequestsSignal.value = receivedRequestsSignal.value.filter((item) => {
             return item.localPeerId !== request.localPeerId && item.status !== request.status;
         })

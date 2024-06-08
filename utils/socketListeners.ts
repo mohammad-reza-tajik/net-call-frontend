@@ -38,6 +38,11 @@ function socketListeners() {
         toast.error("این کاربر آنلاین نیست");
         hangup();
     })
+
+    socketSignal.value?.on("rejectToPeer",()=>{
+        toast.error("درخواست شما رد شد");
+        hangup();
+    })
 }
 
 export default socketListeners;
