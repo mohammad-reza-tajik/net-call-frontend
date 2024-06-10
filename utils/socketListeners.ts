@@ -10,15 +10,21 @@ import hangup from "@/utils/hangup";
 
 function socketListeners() {
 
-    socketSignal.value?.on("requestToPeer", (request : IRequest) => {
+    socketSignal.value?.on("requestToPeer", (request: IRequest) => {
         receivedRequestsSignal.value = [
             ...receivedRequestsSignal.value,
             request
         ]
         toast.info("یک درخواست دریافت شد");
     })
-    socketSignal.value?.on("responseToPeer", async (response : IResponse ) => {
+    socketSignal.value?.on("responseToPeer", async (response: IResponse) => {
         try {
+            /**
+             the following line ensures that we stop if we (the sender) have cancelled the call and received
+             response from the remote peer
+             */
+            if (peerConnectionSignal.value?.signalingState === "stable") return;
+
             currentResponseSignal.value = response;
             await peerConnectionSignal.value?.setRemoteDescription(response.answer);
             response.iceCandidates.forEach(item => {
@@ -34,14 +40,16 @@ function socketListeners() {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
     })
 
-    socketSignal.value?.on("remotePeerNotConnected",()=>{
+    socketSignal.value?.on("remotePeerNotConnected", () => {
         toast.error("این کاربر آنلاین نیست");
         hangup();
     })
 
-    socketSignal.value?.on("rejectToPeer",()=>{
+    socketSignal.value?.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
-        hangup();
+        if (peerConnectionSignal.value?.signalingState !== "stable") {
+            hangup();
+        }
     })
 }
 
