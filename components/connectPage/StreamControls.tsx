@@ -11,7 +11,6 @@ import {
 } from "@/components/shared/Icons";
 // import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
-import {useState} from "react";
 import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
@@ -23,12 +22,16 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import currentRequestSignal from "@/signals/peer/currentRequest";
+import {useSignal} from "@preact/signals-react";
+import {useSignals} from "@preact/signals-react/runtime";
 
 function StreamControls() {
 
-    const [muteMic, setMuteMic] = useState(false);
-    const [muteVideo, setMuteVideo] = useState(false);
-    const [muteSound, setMuteSound] = useState(false);
+    useSignals();
+
+    const isMicMute = useSignal(false);
+    const isVideoMute = useSignal(false);
+    const isSoundMute = useSignal(false);
 
     // only show if we have a status and either one of the current request or response exist
     if (!statusSignal.value || (!currentResponseSignal.value && !currentRequestSignal.value)) {
@@ -36,23 +39,23 @@ function StreamControls() {
     }
 
     const muteMicHandler = () => {
-        setMuteMic((prevState) => !prevState);
+        isMicMute.value = !isMicMute.value;
         localStreamSignal.value?.getAudioTracks().forEach(track => {
-            track.enabled = muteMic;
+            track.enabled = !isMicMute.value;
         })
     }
 
     const muteVideoHandler = () => {
-        setMuteVideo((prevState) => !prevState);
+        isVideoMute.value = !isVideoMute.value;
         localStreamSignal.value?.getVideoTracks().forEach(track => {
-            track.enabled = muteVideo;
+            track.enabled = !isVideoMute.value;
         })
     }
 
     const muteSoundHandler = () =>  {
-        setMuteSound((prevState) => !prevState);
+        isSoundMute.value = !isSoundMute.value;
         remoteStreamSignal.value?.getAudioTracks().forEach(track => {
-            track.enabled = muteSound;
+            track.enabled = !isSoundMute.value;
         })
     }
 
@@ -71,19 +74,19 @@ function StreamControls() {
                               handler={hangupHandler}/>
 
                 <ActionButton
-                    icon={!muteMic ? <Microphone className={"size-7"}/> : <MicrophoneOff className={"size-7"}/>}
-                    tooltipContent={muteMic ? "وصل میکروفون" : "قطع میکروفون"}
+                    icon={isMicMute.value ? <MicrophoneOff className={"size-7"}/> : <Microphone className={"size-7"}/>}
+                    tooltipContent={"قطع / وصل میکروفون"}
                     handler={muteMicHandler}/>
 
                 {
                     statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" &&
-                    <ActionButton icon={!muteVideo ? <Camera className={"size-7"}/> : <CameraOff className={"size-7"}/>}
-                                  tooltipContent={muteVideo ? "وصل تصویر" : "قطع تصویر"}
+                    <ActionButton icon={isVideoMute.value ? <CameraOff className={"size-7"}/> : <Camera className={"size-7"}/>}
+                                  tooltipContent={"قطع / وصل تصویر"}
                                   handler={muteVideoHandler}/>
                 }
 
-                <ActionButton icon={!muteSound ? <Speaker className={"size-7"}/> : <SpeakerOff className={"size-7"}/>}
-                              tooltipContent={muteSound ? "وصل صدا" : "قطع صدا"}
+                <ActionButton icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
+                              tooltipContent={"قطع / وصل صدا"}
                               handler={muteSoundHandler}/>
 
                 <ActionButton icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={()=>{
