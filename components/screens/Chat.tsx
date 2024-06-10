@@ -1,7 +1,7 @@
 "use client"
 import {Button} from "@/components/ui/button";
 import {Close, Paperclip, PaperPlane} from "@/components/shared/Icons";
-import {useRef, useState} from "react";
+import {useRef} from "react";
 import {Textarea} from "@/components/ui/textarea";
 import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import messagesSignal from "@/signals/peer/messages";
@@ -12,29 +12,30 @@ import FileMessage from "@/components/connectPage/FileMessage";
 import TextMessage from "@/components/connectPage/TextMessage";
 import {cn} from "@/lib/utils";
 import sendInChunks from "@/utils/sendInChunks";
+import {useSignal} from "@preact/signals-react";
 
 function Chat() {
 
     useSignals();
 
     const textMessageRef = useRef<HTMLTextAreaElement>(null);
-    const [file, setFile] = useState<File | undefined>(undefined);
-    const [fileBuffer, setFileBuffer] = useState<ArrayBuffer | undefined>(undefined);
+    const file = useSignal<File | undefined>(undefined);
+    const fileBuffer = useSignal<ArrayBuffer | undefined>(undefined);
 
     const sendMessageHandler = async () => {
 
-        if (file && fileBuffer) {
+        if (file.value && fileBuffer.value) {
             // send file data first
             const fileData : IFileData = {
-                name: file.name,
-                mimeType: file.type,
-                size : file.size
+                name: file.value.name,
+                mimeType: file.value.type,
+                size : file.value.size
             }
 
-            await sendInChunks({fileBuffer,fileData});
+            await sendInChunks({fileBuffer : fileBuffer.value,fileData});
 
-            setFile(undefined);
-            setFileBuffer(undefined);
+            file.value = undefined;
+            fileBuffer.value = undefined;
         } else {
 
             if (!textMessageRef.current?.value) return
@@ -59,10 +60,10 @@ function Chat() {
             const [fileHandle] = await window.showOpenFilePicker({multiple: false});
             const chosenFile = await fileHandle.getFile();
             if (!chosenFile) return
-            setFile(chosenFile);
+            file.value = chosenFile;
             reader.addEventListener("load", (event) => {
                 if (!event.target?.result || typeof event.target.result === "string") return
-                setFileBuffer(event.target.result);
+                fileBuffer.value = event.target.result;
             })
             reader.readAsArrayBuffer(chosenFile);
 
@@ -89,18 +90,18 @@ function Chat() {
                     <PaperPlane className={"size-7"}/>
                 </Button>
                 {
-                    !file ? <Textarea ref={textMessageRef} className={"flex-1"}/> :
+                    !file.value ? <Textarea ref={textMessageRef} className={"flex-1"}/> :
                         <div className={"flex items-center justify-between p-3 flex-1 border rounded"}>
                             <p className={"text-sm"}>
                                 فایل انتخابی :
-                                {file.name.slice(8)}
+                                {file.value.name}
                             </p>
-                            <Button size={"icon"} variant={"outline"} onClick={() => setFile(undefined)}>
+                            <Button size={"icon"} variant={"outline"} onClick={() => file.value = undefined}>
                                 <Close className={"size-4"}/>
                             </Button>
                         </div>
                 }
-                <Button size={"icon"} onClick={filePickerHandler} className={cn({"hidden": file})}>
+                <Button size={"icon"} onClick={filePickerHandler} className={cn({"hidden": file.value})}>
                     <Paperclip className={"size-7"}/>
                 </Button>
             </div>
