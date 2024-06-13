@@ -6,8 +6,16 @@ import Header from "@/components/shared/Header";
 import Initialize from "@/components/shared/Initialize";
 
 export const metadata: Metadata = {
-    title: "lanland",
-    description: "make video/audio call and share your screen over your LAN",
+    title: "Net-Call",
+    description: "peer to peer video/audio call and share screen",
+    keywords: ["video-call", "audio-call", "webrtc", "share-screen"],
+    icons: {
+        icon: "/images/logo-96.png",
+        apple: [
+            {url: "/images/logo-96.png", sizes: "96x96", type: "image/png"},
+            {url: "/images/logo-192.png", sizes: "192x192", type: "image/png"},
+        ]
+    }
 };
 
 export const viewport: Viewport = {

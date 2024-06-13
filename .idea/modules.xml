@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/lanland-frontend.iml" filepath="$PROJECT_DIR$/.idea/lanland-frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/net-call-frontend.iml" filepath="$PROJECT_DIR$/.idea/net-call-frontend.iml" />
     </modules>
   </component>
 </project>

@@ -6,7 +6,7 @@ function Logo(props:AnchorHTMLAttributes<HTMLAnchorElement>) {
 
     return (
         <Link href={"/"} {...props} aria-label={"لوگو"}>
-            <Image src={"/logo.svg"} alt={"لوگوی دیوال"} width={100} height={100}/>
+            <Image src={"/images/logo.svg"} alt={"لوگو"} width={100} height={100}/>
         </Link>
     )
 }
