@@ -6,9 +6,10 @@ import Header from "@/components/shared/Header";
 import Initialize from "@/components/shared/Initialize";
 
 export const metadata: Metadata = {
-    title: "Net-Call",
+    title: "Net Call",
     description: "peer to peer video/audio call and share screen",
     keywords: ["video-call", "audio-call", "webrtc", "share-screen"],
+    manifest: "/app.webmanifest",
     icons: {
         icon: "/images/logo-96.png",
         apple: [
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-    themeColor: "#069f69",
+    themeColor: "#485dd5",
     width: "device-width",
     minimumScale: 1,
     maximumScale: 1,

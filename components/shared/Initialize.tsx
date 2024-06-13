@@ -25,7 +25,9 @@ function Initialize({children}: { children: React.ReactNode }) {
     useEffect(() => {
         (async () => {
             localPeerIdSignal.value = createId(36);
-            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+            if (typeof navigator.serviceWorker !== "undefined") {
+                await navigator.serviceWorker.register("/sw.js");
+            }
             // devicesSignal.value = await getDevices();
             socketSignal.value = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
