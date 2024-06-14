@@ -24,12 +24,12 @@ function PeerItem({connectedPeer: {localPeerId, deviceType}}: IPeerItemProps) {
 
     return (
         <button
-              className={"flex flex-col gap-5 p-5 items-center border rounded relative hover:bg-gray-100/10"} onClick={peerClickHandler}>
+              className={"flex flex-col gap-2 md:gap-5 p-3 md:p-5 items-center border rounded relative hover:bg-gray-100/10 "} onClick={peerClickHandler}>
             {
-                deviceType === "desktop" ? <Monitor className={"size-28"}/> : <Mobile className={"size-28"}/>
+                deviceType === "desktop" ? <Monitor className={"size-10 md:size-28"}/> : <Mobile className={"size-10 md:size-28"}/>
             }
-            <span className={"absolute right-2 top-2 bg-green-400 size-3 rounded-full animate-pulse"}/>
-            <p>{localPeerId}</p>
+            <span className={"absolute right-2 top-2 bg-green-400 size-2 md:size-3 rounded-full animate-pulse"}/>
+            <p className={"text-xs md:text-sm truncate w-5/6"}>{localPeerId}</p>
         </button>
     )
 }

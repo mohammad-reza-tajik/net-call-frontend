@@ -34,9 +34,9 @@ function PeerForm() {
     }
 
     return (
-        <div className={"flex flex-col justify-center items-center py-10 gap-5 border rounded"}>
-            <Input className={"w-80 p-7"} ref={remotePeerIdRef} placeholder={"آیدی دستگاه ..."}/>
-            <Button className={"gap-1"} onClick={submitRemotePeerIdHandler} size={"lg"}>
+        <div className={"flex flex-col justify-center items-center py-5 md:py-10 gap-5 border rounded"}>
+            <Input className={"w-3/4 md:w-80 md:p-7"} ref={remotePeerIdRef} placeholder={"آیدی دستگاه ..."}/>
+            <Button onClick={submitRemotePeerIdHandler} size={"lg"}>
                     تایید
             </Button>
         </div>
