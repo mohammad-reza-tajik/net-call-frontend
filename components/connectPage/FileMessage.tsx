@@ -1,6 +1,6 @@
 "use client"
 import type {IFileMessage} from "@/types";
-import {Download, File as FileIcon} from "@/components/shared/Icons";
+import {Check, DoubleChecks, Download, File as FileIcon} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
@@ -11,7 +11,7 @@ interface IFileMessageProps {
     message: IFileMessage
 }
 
-function FileMessage({message : {file , transferredAmount , localPeerId}}: IFileMessageProps) {
+function FileMessage({message : {file , transferredAmount , localPeerId , seen}}: IFileMessageProps) {
 
     const saveFile = async (file: File) => {
         // create a new handle
@@ -47,6 +47,12 @@ function FileMessage({message : {file , transferredAmount , localPeerId}}: IFile
                         <Download className={"size-5"}/>
                         دریافت
                     </Button> : null
+            }
+            {
+                localPeerId === localPeerIdSignal.value ?
+                    seen ? <DoubleChecks className={"self-start"}/> :
+                        <Check className={"self-start"}/> :
+                    null
             }
         </div>
     )

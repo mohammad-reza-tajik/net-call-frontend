@@ -25,10 +25,14 @@ export interface IResponse {
     iceCandidates: RTCIceCandidate[];
 }
 
-export interface ITextMessage {
+export interface IMessage {
+    localPeerId: string;
+    seen? : boolean;
+}
+
+export interface ITextMessage extends IMessage {
     text : string;
     type: "text";
-    localPeerId: string;
 }
 
 export interface IFileData {
@@ -37,10 +41,9 @@ export interface IFileData {
     size : number;
 }
 
-export interface IFileMessage {
+export interface IFileMessage extends IMessage{
     file: File | IFileData;
     type: "file";
-    localPeerId: string;
     transferredAmount : number;
 }
 

@@ -1,21 +1,28 @@
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import type {ITextMessage} from "@/types";
+import {Check, DoubleChecks} from "@/components/shared/Icons";
 
 interface ITextMessageProps {
-    message : ITextMessage
+    message: ITextMessage
 }
 
-function TextMessage({ message }: ITextMessageProps) {
+function TextMessage({message}: ITextMessageProps) {
 
     return (
-        <p
-           className={cn("border py-3 px-5 rounded w-max max-w-1/2",
-               {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
-               {"self-end": message.localPeerId !== localPeerIdSignal.value}
-           )}>
-            {message.type === "text" ? message.text : "a file sent"}
-        </p>
+        <div
+            className={cn("border py-3 px-5 rounded w-max max-w-1/2",
+                {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
+                {"self-end": message.localPeerId !== localPeerIdSignal.value}
+            )}>
+            <p>{message.text}</p>
+            {
+                message.localPeerId === localPeerIdSignal.value ?
+                    message.seen ? <DoubleChecks/> :
+                        <Check/> :
+                        null
+            }
+        </div>
     )
 }
 

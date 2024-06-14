@@ -65,6 +65,11 @@ function StreamControls() {
         hangup();
     }
 
+    const openChatHandler = ()=>{
+        isChatDrawerOpenSignal.value = true;
+        chatChannelSignal.value?.send("seen");
+    }
+
     return (
         <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
@@ -89,9 +94,7 @@ function StreamControls() {
                               tooltipContent={"قطع / وصل صدا"}
                               handler={muteSoundHandler}/>
 
-                <ActionButton icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={()=>{
-                    isChatDrawerOpenSignal.value = true
-                }} />
+                <ActionButton icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={openChatHandler} />
 
                 {/*<DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 

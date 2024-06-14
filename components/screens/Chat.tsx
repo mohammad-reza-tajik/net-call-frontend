@@ -23,34 +23,37 @@ function Chat() {
     const fileBuffer = useSignal<ArrayBuffer | undefined>(undefined);
 
     const sendMessageHandler = async () => {
+        try {
+            if (file.value && fileBuffer.value) {
+                // send file data first
+                const fileData: IFileData = {
+                    name: file.value.name,
+                    mimeType: file.value.type,
+                    size: file.value.size
+                }
 
-        if (file.value && fileBuffer.value) {
-            // send file data first
-            const fileData : IFileData = {
-                name: file.value.name,
-                mimeType: file.value.type,
-                size : file.value.size
+                await sendInChunks({fileBuffer: fileBuffer.value, fileData});
+
+                file.value = undefined;
+                fileBuffer.value = undefined;
+            } else {
+
+                if (!textMessageRef.current?.value) return
+
+                const textMessage: ITextMessage = {
+                    type: "text",
+                    text: textMessageRef.current.value,
+                    localPeerId: localPeerIdSignal.value
+                }
+
+                chatChannelSignal.value?.send(JSON.stringify(textMessage));
+
+                messagesSignal.value = [...messagesSignal.value, textMessage];
+
+                textMessageRef.current.value = "";
             }
-
-            await sendInChunks({fileBuffer : fileBuffer.value,fileData});
-
-            file.value = undefined;
-            fileBuffer.value = undefined;
-        } else {
-
-            if (!textMessageRef.current?.value) return
-
-            const textMessage: ITextMessage = {
-                type: "text",
-                text: textMessageRef.current.value,
-                localPeerId: localPeerIdSignal.value
-            }
-
-            chatChannelSignal.value?.send(JSON.stringify(textMessage));
-
-            messagesSignal.value = [...messagesSignal.value, textMessage];
-
-            textMessageRef.current.value = "";
+        } catch (err) {
+            console.log(err);
         }
     }
 

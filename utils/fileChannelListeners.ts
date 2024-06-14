@@ -1,7 +1,8 @@
 import type {IFileData, IFileMessage} from "@/types";
 import remotePeerId from "@/signals/peer/remotePeerId";
 import messagesSignal from "@/signals/peer/messages";
-import {fileChannelSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnection";
+import {isChatDrawerOpenSignal} from "@/signals/drawer";
 
 const CHUNK_SIZE = 1024 * 256;
 
@@ -46,6 +47,11 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
         if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
 
             console.log("file received");
+
+            if (isChatDrawerOpenSignal.value) {
+                chatChannelSignal.value?.send("seen");
+            }
+            
             dataChannel.close();
 
             const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
