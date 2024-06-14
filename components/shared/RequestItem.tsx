@@ -8,7 +8,8 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import routerSignal from "@/signals/router";
 import socketSignal from "@/signals/socket";
-import localPeerIdSignal from "@/signals/peer/localPeerId";
+import hangup from "@/utils/hangup";
+import {batch} from "@preact/signals-react";
 
 interface IRequestItemProps {
     request: IRequest
@@ -28,8 +29,11 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     const answerRequestHandler = () => {
-        currentRequestSignal.value = request;
-        remotePeerIdSignal.value = localPeerId;
+        hangup();
+        batch(() => {
+            currentRequestSignal.value = request;
+            remotePeerIdSignal.value = localPeerId;
+        });
         const peerURL = formUrlQuery({
             params: {
                 remotePeerId: request.localPeerId
@@ -39,7 +43,7 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     const rejectRequestHandler = () => {
-        socketSignal.value?.emit("rejectToServer",{request});
+        socketSignal.value?.emit("rejectToServer", {request});
         receivedRequestsSignal.value = receivedRequestsSignal.value.filter((item) => {
             return item.localPeerId !== request.localPeerId && item.status !== request.status;
         })

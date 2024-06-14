@@ -58,9 +58,9 @@ function ConnectScreen() {
             </p>
         } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
             return <div className={"flex flex-col gap-5 justify-center items-center text-xl flex-1"}>
-               <p>
-                   در انتظار پاسخ ...
-               </p>
+                <p>
+                    در انتظار پاسخ ...
+                </p>
                 <Button onClick={hangup}>انصراف</Button>
             </div>
         } else if (connectionStateSignal.value === "connecting") {
@@ -68,8 +68,7 @@ function ConnectScreen() {
                 <p>در حال اتصال ...</p>
                 <Loader className={"size-10"}/>
             </div>
-        }
-        else if (statusSignal.value === "screen:send") {
+        } else if (statusSignal.value === "screen:send") {
             return <ScreenSend/>
         } else if (statusSignal.value.startsWith("audio:") && connectionStateSignal.value === "connected") {
             return <AudioCall/>
@@ -79,21 +78,21 @@ function ConnectScreen() {
     }
 
     return (
-        <section className={"flex-1 flex flex-col relative overflow-hidden items-center"}>
-
+        <>
             <Drawer openSignal={isChatDrawerOpenSignal} className={"sm:w-1/2"}>
-                <Chat />
+                <Chat/>
             </Drawer>
+            <section className={"flex-1 flex flex-col relative overflow-hidden items-center"}>
+                {renderScreen()}
 
-            {renderScreen()}
+                <video ref={localVideoRef} controls autoPlay
+                       className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
 
-            <video ref={localVideoRef} controls autoPlay
-                   className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !=="connected"})}/>
-
-            <video ref={remoteVideoRef} controls autoPlay
-                   className={cn("size-full", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !=="connected"})}/>
-            <ActionBar/>
-        </section>
+                <video ref={remoteVideoRef} controls autoPlay
+                       className={cn("size-full", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !== "connected"})}/>
+                <ActionBar/>
+            </section>
+        </>
     )
 }
 
