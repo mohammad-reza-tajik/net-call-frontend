@@ -12,11 +12,11 @@ function TextMessage({message}: ITextMessageProps) {
 
     return (
         <div
-            className={cn("border py-3 px-5 rounded w-max max-w-1/2",
-                {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
+            className={cn("flex flex-col gap-2 border py-3 px-5 rounded min-w-min",
+                {"bg-primary text-primary-foreground self-start": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value}
             )}>
-            <p>{message.text}</p>
+            <p className={"text-sm leading-loose text-wrap"}>{message.text}</p>
             <div className={"flex items-center gap-2"}>
                 {
                     message.localPeerId === localPeerIdSignal.value ?
