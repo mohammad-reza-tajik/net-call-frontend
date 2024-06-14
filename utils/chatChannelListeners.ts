@@ -17,8 +17,8 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
             })
         }
         else {
-            const message = JSON.parse(data);
-            messagesSignal.value = [...messagesSignal.value, message];
+            const newMessage = JSON.parse(data);
+            messagesSignal.value = [...messagesSignal.value, newMessage];
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
             }

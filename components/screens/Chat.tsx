@@ -29,7 +29,8 @@ function Chat() {
                 const fileData: IFileData = {
                     name: file.value.name,
                     mimeType: file.value.type,
-                    size: file.value.size
+                    size: file.value.size,
+                    timestamp : new Date()
                 }
 
                 await sendInChunks({fileBuffer: fileBuffer.value, fileData});
@@ -43,7 +44,8 @@ function Chat() {
                 const textMessage: ITextMessage = {
                     type: "text",
                     text: textMessageRef.current.value,
-                    localPeerId: localPeerIdSignal.value
+                    localPeerId: localPeerIdSignal.value,
+                    timestamp : new Date()
                 }
 
                 chatChannelSignal.value?.send(JSON.stringify(textMessage));

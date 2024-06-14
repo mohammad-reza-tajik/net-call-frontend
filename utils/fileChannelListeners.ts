@@ -39,7 +39,8 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
             file: fileData,
             type: "file",
             localPeerId: remotePeerId.value,
-            transferredAmount: receivedChunks.length * CHUNK_SIZE
+            transferredAmount: receivedChunks.length * CHUNK_SIZE,
+            timestamp :fileData.timestamp
         }
 
         messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
@@ -51,7 +52,7 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
             }
-            
+
             dataChannel.close();
 
             const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
@@ -60,7 +61,8 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
                 file,
                 type: "file",
                 localPeerId: remotePeerId.value,
-                transferredAmount: file.size
+                transferredAmount: file.size,
+                timestamp : fileData.timestamp
             }
 
             messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];

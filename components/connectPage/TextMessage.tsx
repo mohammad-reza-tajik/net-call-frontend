@@ -2,6 +2,7 @@ import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import type {ITextMessage} from "@/types";
 import {Check, DoubleChecks} from "@/components/shared/Icons";
+import getTimestamp from "@/utils/getTimestamp";
 
 interface ITextMessageProps {
     message: ITextMessage
@@ -16,12 +17,15 @@ function TextMessage({message}: ITextMessageProps) {
                 {"self-end": message.localPeerId !== localPeerIdSignal.value}
             )}>
             <p>{message.text}</p>
-            {
-                message.localPeerId === localPeerIdSignal.value ?
-                    message.seen ? <DoubleChecks/> :
-                        <Check/> :
+            <div className={"flex items-center gap-2"}>
+                {
+                    message.localPeerId === localPeerIdSignal.value ?
+                        message.seen ? <DoubleChecks/> :
+                            <Check/> :
                         null
-            }
+                }
+                <span className={"text-xs"}>{getTimestamp(message.timestamp)}</span>
+            </div>
         </div>
     )
 }

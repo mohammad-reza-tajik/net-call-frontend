@@ -28,6 +28,7 @@ export interface IResponse {
 export interface IMessage {
     localPeerId: string;
     seen? : boolean;
+    timestamp : Date;
 }
 
 export interface ITextMessage extends IMessage {
@@ -39,6 +40,7 @@ export interface IFileData {
     name : string;
     mimeType : string;
     size : number;
+    timestamp : Date;
 }
 
 export interface IFileMessage extends IMessage{

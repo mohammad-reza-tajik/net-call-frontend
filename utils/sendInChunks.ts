@@ -6,6 +6,7 @@ import messagesSignal from "@/signals/peer/messages";
 const CHUNK_SIZE = 1024 * 256;
 
 async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, fileData: IFileData }) {
+    const timestamp = new Date();
     let offset = 0;
     const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}-${localPeerIdSignal.value}-${Date.now()}`);
     /**
@@ -32,7 +33,8 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                     file: fileData,
                     type: "file",
                     localPeerId: localPeerIdSignal.value,
-                    transferredAmount: offset
+                    transferredAmount: offset,
+                    timestamp
                 }
 
 
@@ -49,6 +51,7 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                 type: "file",
                 localPeerId: localPeerIdSignal.value,
                 transferredAmount: fileData.size,
+                timestamp
             }
         messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
 
