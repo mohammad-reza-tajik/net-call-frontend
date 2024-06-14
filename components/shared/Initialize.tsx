@@ -28,6 +28,7 @@ function Initialize({children}: { children: React.ReactNode }) {
             if (typeof navigator.serviceWorker !== "undefined") {
                 await navigator.serviceWorker.register("/sw.js");
             }
+            localStreamSignal.value = await navigator.mediaDevices.getUserMedia({audio: true,video: true});
             // devicesSignal.value = await getDevices();
             socketSignal.value = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
                 query: {
