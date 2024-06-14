@@ -3,6 +3,7 @@ import remotePeerId from "@/signals/peer/remotePeerId";
 import messagesSignal from "@/signals/peer/messages";
 import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnection";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
+import haveNewMessageSignal from "@/signals/haveNewMessage";
 
 const CHUNK_SIZE = 1024 * 256;
 
@@ -51,6 +52,8 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
 
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
+            } else {
+                haveNewMessageSignal.value = true;
             }
 
             dataChannel.close();

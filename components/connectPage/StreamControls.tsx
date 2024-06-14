@@ -24,6 +24,8 @@ import currentResponseSignal from "@/signals/peer/currentResponse";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
+import haveNewMessageSignal from "@/signals/haveNewMessage";
+import {cn} from "@/lib/utils";
 
 function StreamControls() {
 
@@ -67,6 +69,7 @@ function StreamControls() {
 
     const openChatHandler = ()=>{
         isChatDrawerOpenSignal.value = true;
+        haveNewMessageSignal.value = false;
         chatChannelSignal.value?.send("seen");
     }
 
@@ -94,7 +97,7 @@ function StreamControls() {
                               tooltipContent={"قطع / وصل صدا"}
                               handler={muteSoundHandler}/>
 
-                <ActionButton icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={openChatHandler} />
+                <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value })} icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={openChatHandler} />
 
                 {/*<DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 

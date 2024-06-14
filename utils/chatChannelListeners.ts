@@ -3,6 +3,7 @@ import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnec
 import {toast} from "react-toastify";
 import hangup from "@/utils/hangup";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
+import haveNewMessageSignal from "@/signals/haveNewMessage";
 
 function chatChannelListeners(dataChannel: RTCDataChannel) {
 
@@ -21,6 +22,8 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
             messagesSignal.value = [...messagesSignal.value, newMessage];
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
+            } else {
+                haveNewMessageSignal.value = true;
             }
         }
     })
