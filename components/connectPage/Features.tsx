@@ -15,7 +15,7 @@ function Features() {
         <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
                 {
-                    features().map((item , index)=>{
+                    features.map((item , index)=>{
                         return (
                             <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />
                         )

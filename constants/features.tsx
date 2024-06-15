@@ -3,8 +3,7 @@ import shareScreen from "@/utils/shareScreen";
 import videoCall from "@/utils/videoCall";
 import audioCall from "@/utils/audioCall";
 
-function features() {
-    return [
+const features = [
         {
             icon: <Monitor className={"size-7"}/>,
             tooltipContent: "به اشتراک گذاری صفحه",
@@ -20,8 +19,7 @@ function features() {
             tooltipContent: "تماس صوتی",
             handler: () => audioCall()
         },
-    ]
-}
+    ];
 
 
 export default features;

@@ -4,7 +4,7 @@ import {Suspense} from "react";
 function ConnectPage() {
 
     return (
-        <main className={"flex flex-1 flex-col py-5"}>
+        <main className={"flex flex-1 flex-col"}>
             <Suspense>
                 <ConnectScreen/>
             </Suspense>

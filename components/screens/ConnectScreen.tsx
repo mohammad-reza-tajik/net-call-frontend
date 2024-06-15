@@ -7,7 +7,7 @@ import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";
 import createAnswer from "@/utils/createAnswer";
 import statusSignal from "@/signals/peer/status";
-import {signalingStateSignal, connectionStateSignal} from "@/signals/peer/peerConnection";
+import {signalingStateSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
@@ -44,7 +44,7 @@ function ConnectScreen() {
 
     useSignalEffect(() => {
         (async () => {
-            if (currentRequestSignal.value) {
+            if (currentRequestSignal.value && peerConnectionSignal.value) {
                 await createAnswer({request: currentRequestSignal.value});
             }
         })();
@@ -53,20 +53,20 @@ function ConnectScreen() {
 
     function renderScreen() {
         if (!statusSignal.value) {
-            return <p className={"flex justify-center items-center text-xl flex-1"}>
+            return <p className={"flex justify-center items-center text-sm md:text-xl flex-1"}>
                 برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
             </p>
         } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-xl flex-1"}>
+            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
                 <p>
                     در انتظار پاسخ ...
                 </p>
                 <Button onClick={hangup}>انصراف</Button>
             </div>
         } else if (connectionStateSignal.value === "connecting") {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-xl flex-1"}>
+            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
                 <p>در حال اتصال ...</p>
-                <Loader className={"size-10"}/>
+                <Loader className={"size-8 md:size-10"}/>
             </div>
         } else if (statusSignal.value === "screen:send") {
             return <ScreenSend/>

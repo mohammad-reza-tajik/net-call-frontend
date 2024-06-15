@@ -5,7 +5,7 @@ function ActionBar() {
 
 
     return (
-        <section className={"p-5 border-t w-full"}>
+        <section className={"p-3 md:p-5 border-t w-full"}>
             <Features />
             <StreamControls />
         </section>
