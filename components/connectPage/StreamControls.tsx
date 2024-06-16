@@ -9,12 +9,12 @@ import {
     SpeakerOff,
     Phone, Chat
 } from "@/components/shared/Icons";
-// import DeviceSelector from "@/components/connectPage/DeviceSelector";
+import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
 import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
-// import devicesSignal from "@/signals/devices";
+import devicesSignal from "@/signals/devices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
@@ -99,12 +99,12 @@ function StreamControls() {
 
                 <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value })} icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={openChatHandler} />
 
-                {/*<DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
+                <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 
                 {
                     statusSignal.value?.startsWith("video:") &&
                     <DeviceSelector devices={devicesSignal.value?.videoInputs} text={"وب کم :"}/>
-                }*/}
+                }
 
             </TooltipProvider>
         </div>

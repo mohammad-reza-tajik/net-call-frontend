@@ -86,10 +86,10 @@ function ConnectScreen() {
                 {renderScreen()}
 
                 <video ref={localVideoRef} controls autoPlay
-                       className={cn("absolute top-5 right-5 w-64 h-36", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
+                       className={cn("absolute top-2 right-2 w-20 h-10 md:top-5 md:right-5 md:w-64 md:h-36 z-50", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
 
                 <video ref={remoteVideoRef} controls autoPlay
-                       className={cn("size-full", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !== "connected"})}/>
+                       className={cn("flex-1", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !== "connected"})}/>
                 <ActionBar/>
             </section>
         </>
