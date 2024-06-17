@@ -40,7 +40,13 @@ function DeviceSelector({devices, text}: Props) {
             const newLocalStream = new MediaStream();
 
             // send new local stream to the remote peer
-            const sender = peerConnectionSignal.value.getSenders().find((sender) => sender.track?.kind === kind.slice(0, 6));
+            const sender = peerConnectionSignal.value.getSenders().find((sender) => {
+                if (sender.track) {
+                    return kind.startsWith(sender.track.kind);
+                } else {
+                    return false;
+                }
+            });
 
             if (kind === "videoinput") {
                 const [videoTrack] = stream.getVideoTracks();
