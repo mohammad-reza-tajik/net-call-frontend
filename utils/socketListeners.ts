@@ -1,4 +1,3 @@
-import socketSignal from "@/signals/socket";
 import type {IConnectedPeer, IRequest, IResponse} from "@/types";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import {toast} from "react-toastify";
@@ -7,17 +6,18 @@ import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
+import {Socket} from "socket.io-client";
 
-function socketListeners() {
+function socketListeners(socket : Socket) {
 
-    socketSignal.value?.on("requestToPeer", (request: IRequest) => {
+    socket.on("requestToPeer", (request: IRequest) => {
         receivedRequestsSignal.value = [
             ...receivedRequestsSignal.value,
             request
         ]
         toast.info("یک درخواست دریافت شد");
     })
-    socketSignal.value?.on("responseToPeer", async (response: IResponse) => {
+    socket.on("responseToPeer", async (response: IResponse) => {
         try {
             /**
              the following line ensures that we stop if we (the sender) have cancelled the call and received
@@ -36,16 +36,16 @@ function socketListeners() {
         }
     })
 
-    socketSignal.value?.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
+    socket.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
     })
 
-    socketSignal.value?.on("remotePeerNotConnected", () => {
+    socket.on("remotePeerNotConnected", () => {
         toast.error("این کاربر آنلاین نیست");
         hangup();
     })
 
-    socketSignal.value?.on("rejectToPeer", () => {
+    socket.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
         if (peerConnectionSignal.value?.signalingState !== "stable") {
             hangup();
