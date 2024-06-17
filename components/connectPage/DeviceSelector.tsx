@@ -50,7 +50,7 @@ function DeviceSelector({devices, text}: Props) {
 
             if (kind === "videoinput") {
                 const [videoTrack] = stream.getVideoTracks();
-                newLocalStream.addTrack(videoTrack)
+                newLocalStream.addTrack(videoTrack);
                 localStreamSignal.value?.getAudioTracks().forEach((track) => {
                     newLocalStream.addTrack(track);
                 })
@@ -58,7 +58,7 @@ function DeviceSelector({devices, text}: Props) {
                 await sender?.replaceTrack(videoTrack);
             } else if (kind === "audioinput") {
                 const [audioTrack] = stream.getAudioTracks();
-                newLocalStream.addTrack(audioTrack)
+                newLocalStream.addTrack(audioTrack);
                 localStreamSignal.value?.getVideoTracks().forEach((track) => {
                     newLocalStream.addTrack(track);
                 })
@@ -85,7 +85,9 @@ function DeviceSelector({devices, text}: Props) {
                     {
                         devices.map((item) => {
                             return (
-                                <SelectItem value={JSON.stringify(item)} key={item.deviceId}>{item.label}</SelectItem>
+                                <SelectItem value={JSON.stringify(item)} key={item.deviceId}>
+                                    {item.label}
+                                </SelectItem>
                             )
                         })
                     }

@@ -12,7 +12,6 @@ import messagesSignal from "@/signals/peer/messages";
 import {batch} from "@preact/signals-react";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
-import devicesSignal from "@/signals/devices";
 import remoteStreamSignal from "@/signals/remoteStream";
 
 function hangup() {
@@ -22,7 +21,6 @@ function hangup() {
         statusSignal.value = undefined;
         currentRequestSignal.value = undefined;
         messagesSignal.value = [];
-        devicesSignal.value = undefined;
         offerSignal.value = undefined;
         answerSignal.value = undefined;
         currentResponseSignal.value = undefined;

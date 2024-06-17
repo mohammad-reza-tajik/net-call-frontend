@@ -54,7 +54,7 @@ function StreamControls() {
         })
     }
 
-    const muteSoundHandler = () =>  {
+    const muteSoundHandler = () => {
         isSoundMute.value = !isSoundMute.value;
         remoteStreamSignal.value?.getAudioTracks().forEach(track => {
             track.enabled = !isSoundMute.value;
@@ -62,12 +62,12 @@ function StreamControls() {
     }
 
     const hangupHandler = () => {
-        socketSignal.value?.emit("hangupToServer", {localPeerId : localPeerIdSignal.value});
+        socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
         chatChannelSignal.value?.send("hangup");
         hangup();
     }
 
-    const openChatHandler = ()=>{
+    const openChatHandler = () => {
         isChatDrawerOpenSignal.value = true;
         haveNewMessageSignal.value = false;
         chatChannelSignal.value?.send("seen");
@@ -87,17 +87,24 @@ function StreamControls() {
                     handler={muteMicHandler}/>
 
                 {
-                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" &&
-                    <ActionButton icon={isVideoMute.value ? <CameraOff className={"size-7"}/> : <Camera className={"size-7"}/>}
-                                  tooltipContent={"قطع / وصل تصویر"}
-                                  handler={muteVideoHandler}/>
+                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" ?
+                    <ActionButton
+                        icon={isVideoMute.value ? <CameraOff className={"size-7"}/> : <Camera className={"size-7"}/>}
+                        tooltipContent={"قطع / وصل تصویر"}
+                        handler={muteVideoHandler}/> :
+                        null
                 }
 
-                <ActionButton icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
-                              tooltipContent={"قطع / وصل صدا"}
-                              handler={muteSoundHandler}/>
+                <ActionButton
+                    icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
+                    tooltipContent={"قطع / وصل صدا"}
+                    handler={muteSoundHandler}/>
 
-                <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value })} icon={<Chat className={"size-7"} />} tooltipContent={"چت"} handler={openChatHandler} />
+                <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value})}
+                              icon={<Chat className={"size-7"}/>}
+                              tooltipContent={"چت"}
+                              handler={openChatHandler}/>
+
 
                 <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 
