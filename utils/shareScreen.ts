@@ -28,8 +28,6 @@ async function shareScreen() {
 
         offerSignal.value = offer;
 
-        localStreamSignal.value = screenStream;
-
 
     } catch (err) {
         console.log(err);

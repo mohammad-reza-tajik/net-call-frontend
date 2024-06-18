@@ -12,29 +12,22 @@ async function videoCall() {
             return
         }
 
-        /*
-            we get the video stream because if we were in a share screen call before , since we overrode the
-            localStream , our video track is now the screen track so get the video track again to use it for video call
-         */
 
-        const videoCallStream = await navigator.mediaDevices.getUserMedia({video: true,audio: true});
-
-        videoCallStream.getTracks().forEach(track => {
-            peerConnectionSignal.value!.addTrack(track, videoCallStream);
+        localStreamSignal.value.getTracks().forEach(track => {
+            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         });
 
         const offer = await peerConnectionSignal.value.createOffer();
         await peerConnectionSignal.value.setLocalDescription(offer);
         offerSignal.value = offer;
-        localStreamSignal.value = videoCallStream;
 
         if (localVideoRefSignal.value?.current) {
             /*
-                we are creating a new stream in a video call ,
+                we are creating a new stream in a video call because
                 we only need the video track to show in local stream
              */
             const localStream = new MediaStream();
-            localStream.addTrack(localStreamSignal.value?.getVideoTracks().at(0)!);
+            localStream.addTrack(localStreamSignal.value.getVideoTracks().at(0)!);
             localVideoRefSignal.value.current.srcObject = localStream;
         }
 
