@@ -13,7 +13,7 @@ async function shareScreen() {
             return
         }
 
-        const audioTrack = localStreamSignal.value.getAudioTracks().at(0);
+        const [audioTrack] = localStreamSignal.value.getAudioTracks();
 
         if (audioTrack) {
             screenStream.addTrack(audioTrack);

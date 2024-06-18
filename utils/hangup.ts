@@ -13,10 +13,13 @@ import {batch} from "@preact/signals-react";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import remoteStreamSignal from "@/signals/remoteStream";
+import localVideoRefSignal from "@/signals/localVideoRef";
+import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 
 function hangup() {
 
     peerConnectionSignal.value?.close();
+
     batch(() => {
         statusSignal.value = undefined;
         currentRequestSignal.value = undefined;
@@ -32,6 +35,12 @@ function hangup() {
         chatChannelSignal.value = undefined;
         fileChannelSignal.value = undefined;
     });
+
+    if (localVideoRefSignal.value?.current && remoteVideoRefSignal.value?.current) {
+        localVideoRefSignal.value.current.srcObject = null;
+        remoteVideoRefSignal.value.current.srcObject = null;
+    }
+
     routerSignal.value?.push("/");
 }
 

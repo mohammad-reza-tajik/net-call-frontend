@@ -11,9 +11,9 @@ async function audioCall() {
             return
         }
 
-        localStreamSignal.value.getAudioTracks().forEach(track => {
-            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
-        });
+        const [audioTrack] = localStreamSignal.value.getAudioTracks();
+
+        peerConnectionSignal.value.addTrack(audioTrack, localStreamSignal.value);
 
         const offer = await peerConnectionSignal.value.createOffer();
         await peerConnectionSignal.value.setLocalDescription(offer);

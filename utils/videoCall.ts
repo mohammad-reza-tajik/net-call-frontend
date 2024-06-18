@@ -12,7 +12,6 @@ async function videoCall() {
             return
         }
 
-
         localStreamSignal.value.getTracks().forEach(track => {
             peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         });
