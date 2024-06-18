@@ -35,8 +35,13 @@ async function createAnswer({request}: {request: IRequest}) {
     receivedRequestsSignal.value = receivedRequestsSignal.value.filter(item => item.localPeerId !== request.localPeerId);
 
     if (localVideoRefSignal.value?.current && request.status === "video:send") {
-        console.log("video is here")
-        localVideoRefSignal.value.current.srcObject = localStreamSignal.value;
+        /*
+            we are creating a new stream in a video call ,
+            we only need the video track to show in local stream
+         */
+        const localStream = new MediaStream();
+        localStream.addTrack(localStreamSignal.value?.getVideoTracks().at(0)!);
+        localVideoRefSignal.value.current.srcObject = localStream;
     }
 
     return answer;
