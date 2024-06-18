@@ -4,6 +4,7 @@ import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
+import localVideoRefSignal from "@/signals/localVideoRef";
 
 interface Props {
     devices?: MediaDeviceInfo[];
@@ -37,8 +38,6 @@ function DeviceSelector({devices, text}: Props) {
                 audio: kind === "audioinput" ? {deviceId: {exact: deviceId}} : false
             });
 
-            const newLocalStream = new MediaStream();
-
             // send new local stream to the remote peer
             const sender = peerConnectionSignal.value.getSenders().find((sender) => {
                 if (sender.track) {
@@ -50,19 +49,12 @@ function DeviceSelector({devices, text}: Props) {
 
             if (kind === "videoinput") {
                 const [videoTrack] = stream.getVideoTracks();
-                newLocalStream.addTrack(videoTrack);
-                localStreamSignal.value?.getAudioTracks().forEach((track) => {
-                    newLocalStream.addTrack(track);
-                })
-                localStreamSignal.value = newLocalStream;
+                if (localVideoRefSignal.value?.current) {
+                    localVideoRefSignal.value.current.srcObject = stream;
+                }
                 await sender?.replaceTrack(videoTrack);
             } else if (kind === "audioinput") {
                 const [audioTrack] = stream.getAudioTracks();
-                newLocalStream.addTrack(audioTrack);
-                localStreamSignal.value?.getVideoTracks().forEach((track) => {
-                    newLocalStream.addTrack(track);
-                })
-                localStreamSignal.value = newLocalStream;
                 await sender?.replaceTrack(audioTrack);
             }
 
