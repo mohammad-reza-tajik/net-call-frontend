@@ -1,9 +1,7 @@
+import {toast} from "react-toastify";
+import hangup from "@/utils/hangup";
 
 function dataChannelListeners(dataChannel: RTCDataChannel) {
-
-    if (dataChannel.label === "dummy") {
-        return dataChannel.close();
-    }
 
     dataChannel.addEventListener("open", () => {
         console.log(`${dataChannel.label} channel is ready`);
@@ -15,6 +13,10 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
     })
 
     dataChannel.addEventListener("close", () => {
+        if (dataChannel.label === "chat") {
+            toast.error("ارتباط قطع شد");
+            hangup();
+        }
         console.log(`${dataChannel.label} channel is closed`);
     })
 

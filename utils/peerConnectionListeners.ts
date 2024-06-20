@@ -76,9 +76,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
                 dataChannelListeners(chatChannel);
                 chatChannelListeners(chatChannel);
             }
-        } else if (peerConnection.connectionState === "disconnected" && statusSignal.value) {
-            toast.error("ارتباط قطع شد");
-            hangup();
         }
     })
 
