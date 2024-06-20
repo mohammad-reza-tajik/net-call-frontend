@@ -63,17 +63,17 @@ function ConnectScreen() {
                 </p>
                 <Button onClick={hangup}>انصراف</Button>
             </div>
-        } else if (connectionStateSignal.value === "connecting") {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
-                <p>در حال اتصال ...</p>
-                <Loader className={"size-8 md:size-10"}/>
-            </div>
         } else if (statusSignal.value === "screen:send") {
             return <ScreenSend/>
         } else if (statusSignal.value.startsWith("audio:") && connectionStateSignal.value === "connected") {
             return <AudioCall/>
         } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
             return
+        } else {
+            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
+                <p>در حال اتصال ...</p>
+                <Loader className={"size-8 md:size-10"}/>
+            </div>
         }
     }
 

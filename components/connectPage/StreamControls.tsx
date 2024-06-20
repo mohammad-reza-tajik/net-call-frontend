@@ -16,12 +16,10 @@ import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
 import devicesSignal from "@/signals/devices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
-import {chatChannelSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, connectionStateSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
-import currentResponseSignal from "@/signals/peer/currentResponse";
-import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
@@ -35,8 +33,7 @@ function StreamControls() {
     const isVideoMute = useSignal(false);
     const isSoundMute = useSignal(false);
 
-    // only show if we have a status and either one of the current request or response exist
-    if (!statusSignal.value || (!currentResponseSignal.value && !currentRequestSignal.value)) {
+    if (connectionStateSignal.value !== "connected") {
         return
     }
 
@@ -104,7 +101,6 @@ function StreamControls() {
                               icon={<Chat className={"size-7"}/>}
                               tooltipContent={"چت"}
                               handler={openChatHandler}/>
-
 
                 <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
 
