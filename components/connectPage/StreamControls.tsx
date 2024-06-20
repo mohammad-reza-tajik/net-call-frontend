@@ -11,12 +11,11 @@ import {
 } from "@/components/shared/Icons";
 import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
-import localStreamSignal from "@/signals/localStream";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
 import devicesSignal from "@/signals/devices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
-import {chatChannelSignal, connectionStateSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
@@ -39,23 +38,28 @@ function StreamControls() {
 
     const muteMicHandler = () => {
         isMicMute.value = !isMicMute.value;
-        localStreamSignal.value?.getAudioTracks().forEach(track => {
-            track.enabled = !isMicMute.value;
-        })
+        const sender = peerConnectionSignal.value!.getSenders().find((sender) => {
+            return sender.track?.kind === "audio";
+        });
+        if (sender?.track) {
+            sender.track.enabled = !isMicMute.value;
+        }
     }
 
     const muteVideoHandler = () => {
         isVideoMute.value = !isVideoMute.value;
-        localStreamSignal.value?.getVideoTracks().forEach(track => {
-            track.enabled = !isVideoMute.value;
-        })
+        const sender = peerConnectionSignal.value!.getSenders().find((sender) => {
+            return sender.track?.kind === "video";
+        });
+        if (sender?.track) {
+            sender.track.enabled = !isVideoMute.value;
+        }
     }
 
     const muteSoundHandler = () => {
         isSoundMute.value = !isSoundMute.value;
-        remoteStreamSignal.value?.getAudioTracks().forEach(track => {
-            track.enabled = !isSoundMute.value;
-        })
+        const [audioTrack] = remoteStreamSignal.value!.getAudioTracks();
+        audioTrack.enabled = !isSoundMute.value;
     }
 
     const hangupHandler = () => {
@@ -84,10 +88,11 @@ function StreamControls() {
 
                 {
                     statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" ?
-                    <ActionButton
-                        icon={isVideoMute.value ? <CameraOff className={"size-7"}/> : <Camera className={"size-7"}/>}
-                        tooltipContent={"قطع / وصل تصویر"}
-                        handler={muteVideoHandler}/> :
+                        <ActionButton
+                            icon={isVideoMute.value ? <CameraOff className={"size-7"}/> :
+                                <Camera className={"size-7"}/>}
+                            tooltipContent={"قطع / وصل تصویر"}
+                            handler={muteVideoHandler}/> :
                         null
                 }
 
