@@ -1,7 +1,6 @@
-import statusSignal from "@/signals/peer/status";
 import localStreamSignal from "@/signals/localStream";
-import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
-import {batch} from "@preact/signals-react";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
+import addToConnection from "@/utils/addToConnection";
 
 async function audioCall() {
     try {
@@ -12,15 +11,7 @@ async function audioCall() {
 
         const [audioTrack] = localStreamSignal.value.getAudioTracks();
 
-        peerConnectionSignal.value.addTrack(audioTrack, localStreamSignal.value);
-
-        const offer = await peerConnectionSignal.value.createOffer();
-        await peerConnectionSignal.value.setLocalDescription(offer);
-
-        batch(() => {
-            statusSignal.value = "audio:send";
-            offerSignal.value = offer;
-        })
+        await addToConnection("audio:send",audioTrack);
 
     } catch (err) {
         console.log(err);
