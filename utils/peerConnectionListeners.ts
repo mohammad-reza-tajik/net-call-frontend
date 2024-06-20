@@ -1,5 +1,5 @@
 import {
-    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal,peerConnectionSignal
+    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal, peerConnectionSignal
 } from "@/signals/peer/peerConnection";
 import {toast} from "react-toastify";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -69,8 +69,13 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
     peerConnection.addEventListener("connectionstatechange", () => {
         connectionStateSignal.value = peerConnection.connectionState;
 
-       if (peerConnection.connectionState === "connected") {
+        if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
+            if (statusSignal.value?.endsWith(":send")) {
+                const chatChannel = peerConnection.createDataChannel("chat");
+                dataChannelListeners(chatChannel);
+                chatChannelListeners(chatChannel);
+            }
         } else if (peerConnection.connectionState === "disconnected" && statusSignal.value) {
             toast.error("ارتباط قطع شد");
             hangup();
@@ -78,6 +83,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
     })
 
     peerConnection.addEventListener("track", (event) => {
+        console.log("track received")
         remoteStreamSignal.value = event.streams.at(0);
         if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
             remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
@@ -86,7 +92,8 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("datachannel", ({channel}) => {
         dataChannelListeners(channel);
-        if (channel.label === "chat"){
+        console.log(channel);
+        if (channel.label === "chat") {
             chatChannelListeners(channel);
         } else {
             fileChannelListeners(channel);
