@@ -1,18 +1,23 @@
-import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 import {batch} from "@preact/signals-react";
 import statusSignal from "@/signals/peer/status";
 import {TStatus} from "@/types";
+import dataChannelListeners from "@/utils/dataChannelListeners";
+import chatChannelListeners from "@/utils/chatChannelListeners";
 
 /**
  this function gets the status and tracks that we want to add to the peer connection
- it also creates a dummy channel before creating offer in order to add it to sdp object
- and when the offer is created it closes the dummy channel
+ it also creates the chat channel
  */
 async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
     try {
 
-        const dummyChannel = peerConnectionSignal.value?.createDataChannel("dummy");
+        if (!chatChannelSignal.value) {
+            const chatChannel = peerConnectionSignal.value!.createDataChannel("chat");
+            dataChannelListeners(chatChannel);
+            chatChannelListeners(chatChannel);
+        }
 
         tracks.forEach((track) => {
             peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
@@ -25,8 +30,6 @@ async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
             statusSignal.value = status;
             offerSignal.value = offer;
         })
-
-        dummyChannel?.close();
 
     } catch (err) {
         console.error(err);

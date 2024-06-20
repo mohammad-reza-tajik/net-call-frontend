@@ -11,7 +11,6 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import dataChannelListeners from "@/utils/dataChannelListeners";
 import chatChannelListeners from "@/utils/chatChannelListeners";
 import fileChannelListeners from "@/utils/fileChannelListeners";
-import hangup from "@/utils/hangup";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
@@ -71,11 +70,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
         if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
-            if (statusSignal.value?.endsWith(":send")) {
-                const chatChannel = peerConnection.createDataChannel("chat");
-                dataChannelListeners(chatChannel);
-                chatChannelListeners(chatChannel);
-            }
         }
     })
 
