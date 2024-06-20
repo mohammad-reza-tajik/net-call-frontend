@@ -14,7 +14,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
 
     dataChannel.addEventListener("close", () => {
         if (dataChannel.label === "chat") {
-            toast.error("ارتباط قطع شد");
+            toast.error("ارتباط پایان یافت");
             hangup();
         }
         console.log(`${dataChannel.label} channel is closed`);

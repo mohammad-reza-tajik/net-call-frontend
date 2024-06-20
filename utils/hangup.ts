@@ -18,6 +18,7 @@ import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 
 function hangup() {
 
+    chatChannelSignal.value?.close();
     peerConnectionSignal.value?.close();
 
     batch(() => {

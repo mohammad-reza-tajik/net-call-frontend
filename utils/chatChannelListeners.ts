@@ -8,11 +8,7 @@ import haveNewMessageSignal from "@/signals/haveNewMessage";
 function chatChannelListeners(dataChannel: RTCDataChannel) {
 
     dataChannel.addEventListener("message", ({data}) => {
-        if (data === "hangup") {
-            peerConnectionSignal.value?.close();
-            toast.info("ارتباط پایان یافت");
-            hangup();
-        } else if (data === "seen") {
+        if (data === "seen") {
             messagesSignal.value = messagesSignal.value.map((message)=> {
                 return {...message , seen : true}
             })
