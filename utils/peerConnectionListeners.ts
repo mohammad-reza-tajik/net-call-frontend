@@ -83,7 +83,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
     })
 
     peerConnection.addEventListener("track", (event) => {
-        console.log("track received")
         remoteStreamSignal.value = event.streams.at(0);
         if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
             remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
@@ -92,7 +91,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("datachannel", ({channel}) => {
         dataChannelListeners(channel);
-        console.log(channel);
         if (channel.label === "chat") {
             chatChannelListeners(channel);
         } else {

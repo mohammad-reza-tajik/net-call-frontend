@@ -29,7 +29,8 @@ async function videoCall() {
                 we only need the video track to show in local stream
              */
             const localStream = new MediaStream();
-            localStream.addTrack(localStreamSignal.value.getVideoTracks().at(0)!);
+            const [videoTrack] = localStreamSignal.value.getVideoTracks();
+            localStream.addTrack(videoTrack);
             localVideoRefSignal.value.current.srcObject = localStream;
         }
 
