@@ -8,10 +8,7 @@ import getDevices from "@/utils/getDevices";
 import createConnection from "@/utils/createConnection";
 import socketSignal from "@/signals/socket";
 import {useSignalEffect} from "@preact/signals-react/runtime";
-import statusSignal from "@/signals/peer/status";
-import dataChannelListeners from "@/utils/dataChannelListeners";
-import chatChannelListeners from "@/utils/chatChannelListeners";
-import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import {useRouter} from "next/navigation";
 import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
@@ -49,14 +46,6 @@ function Initialize({children}: { children: React.ReactNode }) {
     useSignalEffect(() => {
         if (!peerConnectionSignal.value) {
             createConnection();
-        }
-    })
-
-    useSignalEffect(() => {
-        if (statusSignal.value?.endsWith(":send") && !chatChannelSignal.value) {
-            const chatChannel = peerConnectionSignal.value?.createDataChannel("chat");
-            dataChannelListeners(chatChannel!);
-            chatChannelListeners(chatChannel!);
         }
     })
 
