@@ -2,14 +2,13 @@ import statusSignal from "@/signals/peer/status";
 import localStreamSignal from "@/signals/localStream";
 import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localVideoRefSignal from "@/signals/localVideoRef";
+import {batch} from "@preact/signals-react";
 
 async function videoCall() {
     try {
 
-        statusSignal.value = "video:send";
-
-        if (!localStreamSignal.value || !peerConnectionSignal.value) {
-            return
+        if (!peerConnectionSignal.value || !localStreamSignal.value) {
+            throw new Error("no peer connection or local stream");
         }
 
         localStreamSignal.value.getTracks().forEach(track => {
@@ -18,7 +17,11 @@ async function videoCall() {
 
         const offer = await peerConnectionSignal.value.createOffer();
         await peerConnectionSignal.value.setLocalDescription(offer);
-        offerSignal.value = offer;
+
+        batch(() => {
+            offerSignal.value = offer;
+            statusSignal.value = "video:send";
+        })
 
         if (localVideoRefSignal.value?.current) {
             /*
