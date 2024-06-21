@@ -1,9 +1,14 @@
 const STATIC_CACHE_NAME = "static-version";
 const DYNAMIC_CACHE_NAME = "dynamic-version";
 
-const addToStaticCache = async (resources) => {
+const addToStaticCache = async (...resources) => {
     const staticCache = await caches.open(STATIC_CACHE_NAME);
     await staticCache.addAll(resources);
+}
+
+const addToDynamicCache = async (...resources) => {
+    const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
+    await dynamicCache.addAll(resources);
 }
 
 const cacheFirst = async (event) => {
@@ -24,13 +29,12 @@ self.addEventListener("install", (event) => {
 
     event.waitUntil(
         addToStaticCache(
-            [
-                "/",
-                "/fonts/dana-black.woff2",
-                "/fonts/dana-fanum-bold.woff2",
-                "/fonts/dana-fanum-medium.woff2",
-                "/images/logo.svg",
-            ]))
+            "/",
+            "/fonts/dana-black.woff2",
+            "/fonts/dana-fanum-bold.woff2",
+            "/fonts/dana-fanum-medium.woff2",
+            "/images/logo.svg",
+        ))
     // Force the waiting service worker to become the active service worker.
     self.skipWaiting(); // returned promise can be ignored safely
 });
