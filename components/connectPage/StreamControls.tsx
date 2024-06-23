@@ -62,8 +62,9 @@ function StreamControls() {
 
     const muteSoundHandler = () => {
         isSoundMute.value = !isSoundMute.value;
-        const [audioTrack] = remoteStreamSignal.value!.getAudioTracks();
-        audioTrack.enabled = !isSoundMute.value;
+        remoteStreamSignal.value!.getAudioTracks().forEach(audioTrack => {
+            audioTrack.enabled = !isSoundMute.value;
+        });
     }
 
     const hangupHandler = () => {

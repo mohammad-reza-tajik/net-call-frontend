@@ -3,7 +3,6 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
-import localStreamSignal from "@/signals/localStream";
 import localVideoRefSignal from "@/signals/localVideoRef";
 
 interface Props {
@@ -43,6 +42,7 @@ function DeviceSelector({devices, text}: Props) {
                 if (sender.track) {
                     /**
                      the label check is to make sure that the system audio is not the track that's being replaced
+                     we want to mute the mic audio track
                      */
                     return kind.startsWith(sender.track.kind) && sender.track.label !== "System Audio";
                 } else {
