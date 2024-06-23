@@ -39,7 +39,11 @@ function StreamControls() {
     const muteMicHandler = () => {
         isMicMute.value = !isMicMute.value;
         const sender = peerConnectionSignal.value!.getSenders().find((sender) => {
-            return sender.track?.kind === "audio";
+            /**
+             the label check is to make sure that the system audio is not the track that's being muted
+             we want to mute the mic track
+             */
+            return sender.track?.kind === "audio" && sender.track.label !== "System Audio";
         });
         if (sender?.track) {
             sender.track.enabled = !isMicMute.value;

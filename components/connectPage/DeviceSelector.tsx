@@ -41,7 +41,10 @@ function DeviceSelector({devices, text}: Props) {
             // send new local stream to the remote peer
             const sender = peerConnectionSignal.value.getSenders().find((sender) => {
                 if (sender.track) {
-                    return kind.startsWith(sender.track.kind);
+                    /**
+                     the label check is to make sure that the system audio is not the track that's being replaced
+                     */
+                    return kind.startsWith(sender.track.kind) && sender.track.label !== "System Audio";
                 } else {
                     return false;
                 }
