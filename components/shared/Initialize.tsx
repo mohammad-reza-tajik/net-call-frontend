@@ -1,7 +1,6 @@
 "use client"
 import {useEffect} from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import createId from "@/utils/createId";
 import localStreamSignal from "@/signals/localStream";
 import devicesSignal from "@/signals/devices";
 import getDevices from "@/utils/getDevices";
@@ -28,18 +27,25 @@ function Initialize({children}: { children: React.ReactNode }) {
 
     useEffect(() => {
         (async () => {
+            try {
+                const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+                let localPeerId = localStorage.getItem("localPeerId");
+                if (!localPeerId) {
+                    localPeerId = localStream.id;
+                    localStorage.setItem("localPeerId", localPeerId);
+                }
+                const devices = await getDevices();
+                const socket = connectToSocket(localPeerId);
 
-            const localPeerId = createId(36);
-            const localStream = await navigator.mediaDevices.getUserMedia({audio: true,video:true});
-            const devices = await getDevices();
-            const socket = connectToSocket(localPeerId);
-
-            batch(() => {
-                localPeerIdSignal.value = localPeerId;
-                localStreamSignal.value = localStream;
-                devicesSignal.value = devices;
-                socketSignal.value = socket;
-            })
+                batch(() => {
+                    localPeerIdSignal.value = localPeerId;
+                    localStreamSignal.value = localStream;
+                    devicesSignal.value = devices;
+                    socketSignal.value = socket;
+                })
+            } catch (err) {
+                console.error(err);
+            }
         })();
     }, []);
 
