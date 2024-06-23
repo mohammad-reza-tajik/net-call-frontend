@@ -15,6 +15,7 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import remoteStreamSignal from "@/signals/remoteStream";
 import localVideoRefSignal from "@/signals/localVideoRef";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
+import haveNewMessageSignal from "@/signals/haveNewMessage";
 
 function hangup() {
 
@@ -35,6 +36,7 @@ function hangup() {
         connectionStateSignal.value = undefined;
         chatChannelSignal.value = undefined;
         fileChannelSignal.value = undefined;
+        haveNewMessageSignal.value = false;
     });
 
     if (localVideoRefSignal.value?.current && remoteVideoRefSignal.value?.current) {
