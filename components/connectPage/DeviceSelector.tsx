@@ -1,16 +1,22 @@
 "use client"
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localVideoRefSignal from "@/signals/localVideoRef";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuRadioGroup, DropdownMenuRadioItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
+import {Button} from "@/components/ui/button";
+import {Caret} from "@/components/shared/Icons";
 
 interface Props {
     devices?: MediaDeviceInfo[];
-    text?: string;
 }
 
-function DeviceSelector({devices, text}: Props) {
+function DeviceSelector({devices}: Props) {
 
     const device = useSignal("default");
 
@@ -23,9 +29,13 @@ function DeviceSelector({devices, text}: Props) {
     const changeDeviceHandler = async (value: string) => {
         try {
 
-            const {deviceId, label, kind} = JSON.parse(value) as MediaDeviceInfo;
+            device.value = value;
 
-            device.value = label;
+            const deviceInfo = devices.find((mediaDevice)=> mediaDevice.deviceId === value);
+
+            if (!deviceInfo) return
+
+            const { kind} = deviceInfo;
 
             if (!peerConnectionSignal.value) {
                 throw new Error("no connection");
@@ -33,8 +43,8 @@ function DeviceSelector({devices, text}: Props) {
 
             // change local stream
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: kind === "videoinput" ? {deviceId: {exact: deviceId}} : false,
-                audio: kind === "audioinput" ? {deviceId: {exact: deviceId}} : false
+                video: kind === "videoinput" ? {deviceId: {exact: value}} : false,
+                audio: kind === "audioinput" ? {deviceId: {exact: value}} : false
             });
 
             // send new local stream to the remote peer
@@ -68,27 +78,26 @@ function DeviceSelector({devices, text}: Props) {
     }
 
     return (
-        <div className={"flex items-center gap-5"}>
-            <p className={"text-sm"}>{text}</p>
-            <Select onValueChange={changeDeviceHandler} defaultValue={device.value}>
-                <SelectTrigger className={"w-36 md:w-44"}>
-                    <SelectValue>
-                        {device.value}
-                    </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button size={"icon"} className={"rounded-none"}>
+                    <Caret className={"-rotate-90"}/>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+                <DropdownMenuRadioGroup value={device.value} onValueChange={changeDeviceHandler}>
                     {
                         devices.map((item) => {
                             return (
-                                <SelectItem value={JSON.stringify(item)} key={item.deviceId}>
+                                <DropdownMenuRadioItem key={item.deviceId} value={item.deviceId}>
                                     {item.label}
-                                </SelectItem>
+                                </DropdownMenuRadioItem>
                             )
                         })
                     }
-                </SelectContent>
-            </Select>
-        </div>
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
 

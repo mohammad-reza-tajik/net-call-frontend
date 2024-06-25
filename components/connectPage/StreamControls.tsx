@@ -23,6 +23,7 @@ import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import {cn} from "@/lib/utils";
+import {Separator} from "@/components/ui/separator";
 
 function StreamControls() {
 
@@ -86,19 +87,34 @@ function StreamControls() {
                               tooltipContent={"قطع تماس"}
                               handler={hangupHandler}/>
 
-                <ActionButton
-                    icon={isMicMute.value ? <MicrophoneOff className={"size-7"}/> : <Microphone className={"size-7"}/>}
-                    tooltipContent={"قطع / وصل میکروفون"}
-                    handler={muteMicHandler}/>
+                <div className={"flex items-center rounded overflow-hidden"}>
+
+                    <ActionButton
+                        className={"rounded-none"}
+                        icon={isMicMute.value ? <MicrophoneOff className={"size-7"}/> :
+                            <Microphone className={"size-7"}/>}
+                        tooltipContent={"قطع / وصل میکروفون"}
+                        handler={muteMicHandler}/>
+
+                    <Separator orientation={"vertical"} className={"bg-white text-white fill-white"}/>
+                    <DeviceSelector devices={devicesSignal.value?.audioInputs}/>
+                </div>
+
 
                 {
-                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" ?
+                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" &&
+                    <div className={"flex items-center rounded overflow-hidden"}>
+
                         <ActionButton
                             icon={isVideoMute.value ? <CameraOff className={"size-7"}/> :
                                 <Camera className={"size-7"}/>}
                             tooltipContent={"قطع / وصل تصویر"}
-                            handler={muteVideoHandler}/> :
-                        null
+                            handler={muteVideoHandler}/>
+                        {
+                            statusSignal.value?.startsWith("video:") &&
+                            <DeviceSelector devices={devicesSignal.value?.videoInputs}/>
+                        }
+                    </div>
                 }
 
                 <ActionButton
@@ -110,13 +126,6 @@ function StreamControls() {
                               icon={<Chat className={"size-7"}/>}
                               tooltipContent={"چت"}
                               handler={openChatHandler}/>
-
-                <DeviceSelector devices={devicesSignal.value?.audioInputs} text={"میکروفون :"}/>
-
-                {
-                    statusSignal.value?.startsWith("video:") &&
-                    <DeviceSelector devices={devicesSignal.value?.videoInputs} text={"وب کم :"}/>
-                }
 
             </TooltipProvider>
         </div>
