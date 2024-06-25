@@ -7,7 +7,7 @@ import {
     Camera,
     Speaker,
     SpeakerOff,
-    Phone, Chat
+    Phone, Chat, Monitor, MonitorOff
 } from "@/components/shared/Icons";
 import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
@@ -88,7 +88,6 @@ function StreamControls() {
                               handler={hangupHandler}/>
 
                 <div className={"flex items-center rounded overflow-hidden"}>
-
                     <ActionButton
                         className={"rounded-none"}
                         icon={isMicMute.value ? <MicrophoneOff className={"size-7"}/> :
@@ -96,13 +95,13 @@ function StreamControls() {
                         tooltipContent={"قطع / وصل میکروفون"}
                         handler={muteMicHandler}/>
 
-                    <Separator orientation={"vertical"} className={"bg-white text-white fill-white"}/>
+                    <Separator orientation={"vertical"} />
+
                     <DeviceSelector devices={devicesSignal.value?.audioInputs}/>
                 </div>
 
-
                 {
-                    statusSignal.value?.startsWith("video") || statusSignal.value === "screen:send" &&
+                    statusSignal.value?.startsWith("video") &&
                     <div className={"flex items-center rounded overflow-hidden"}>
 
                         <ActionButton
@@ -110,11 +109,19 @@ function StreamControls() {
                                 <Camera className={"size-7"}/>}
                             tooltipContent={"قطع / وصل تصویر"}
                             handler={muteVideoHandler}/>
-                        {
-                            statusSignal.value?.startsWith("video:") &&
-                            <DeviceSelector devices={devicesSignal.value?.videoInputs}/>
-                        }
+
+                        <Separator orientation={"vertical"} />
+
+                        <DeviceSelector devices={devicesSignal.value?.videoInputs}/>
                     </div>
+                }
+
+                {
+                    statusSignal.value === "screen:send" &&
+                    <ActionButton
+                        icon={isVideoMute.value ? <MonitorOff className={"size-7"}/> : <Monitor className={"size-7"}/>}
+                        tooltipContent={"قطع / وصل صفحه"}
+                        handler={muteVideoHandler}/>
                 }
 
                 <ActionButton

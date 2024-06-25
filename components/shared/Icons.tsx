@@ -248,6 +248,12 @@ export function Monitor(props: SVGProps<SVGSVGElement>) {
     )
 }
 
+export function MonitorOff(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 31.56 24.36" {...props}><path d="M31.08 20.71 1.74.2A1.11 1.11 0 1 0 .47 2L3.28 4V17.36a3 3 0 0 0 3 3h20a2.69 2.69 0 0 0 .4 0l3.14 2.19a1.1 1.1 0 1 0 1.26-1.81ZM6.28 18.36a1 1 0 0 1-1-1v-12l18.58 13ZM5.93 2.43 4.19 1.21A3 3 0 0 1 6.28.36h20a3 3 0 0 1 3 3v14A3.05 3.05 0 0 1 29 18.57l-1.74-1.22v-14a1 1 0 0 0-1-1h-20A1 1 0 0 0 5.93 2.43ZM21.54 23.36a1 1 0 0 1-1 1h-8a1 1 0 0 1 0-2h8A1 1 0 0 1 21.54 23.36Z"/></svg>
+    )
+}
+
 export function Camera(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" {...props}><path d="M251.77 73a8 8 0 0 0-8.21.39L208 97.05V72a16 16 0 0 0-16-16H32a16 16 0 0 0-16 16v112a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16v-25l35.56 23.71A8 8 0 0 0 248 184a8 8 0 0 0 8-8V80a8 8 0 0 0-4.23-7M192 184H32V72h160zm48-22.95l-32-21.33v-23.44L240 95Z"></path></svg>
@@ -260,14 +266,11 @@ export function CameraOff(props: SVGProps<SVGSVGElement>) {
     )
 }
 
-
 export function Speaker(props: SVGProps<SVGSVGElement>) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 256 256" {...props}><path d="M155.51 24.81a8 8 0 0 0-8.42.88L77.25 80H32a16 16 0 0 0-16 16v64a16 16 0 0 0 16 16h45.25l69.84 54.31A8 8 0 0 0 160 224V32a8 8 0 0 0-4.49-7.19M32 96h40v64H32Zm112 111.64l-56-43.55V91.91l56-43.55Zm54-106.08a40 40 0 0 1 0 52.88a8 8 0 0 1-12-10.58a24 24 0 0 0 0-31.72a8 8 0 0 1 12-10.58M248 128a79.9 79.9 0 0 1-20.37 53.34a8 8 0 0 1-11.92-10.67a64 64 0 0 0 0-85.33a8 8 0 1 1 11.92-10.67A79.83 79.83 0 0 1 248 128"></path></svg>
     )
 }
-
-
 
 export function SpeakerOff(props: SVGProps<SVGSVGElement>) {
     return (
