@@ -19,15 +19,17 @@ function Initialize({children}: { children: React.ReactNode }) {
 
     useEffect(() => {
         (async () => {
-            if (typeof navigator.serviceWorker !== "undefined") {
-                await navigator.serviceWorker.register("/sw.js");
-            }
-        })()
-    }, []);
-
-    useEffect(() => {
-        (async () => {
             try {
+
+                if (typeof navigator.serviceWorker !== "undefined") {
+                    await navigator.serviceWorker.register("/sw.js");
+                    navigator.serviceWorker.addEventListener("message", (event) => {
+                        if (event.data === "activated") {
+                            routerSignal.value?.refresh();
+                        }
+                    });
+                }
+
                 const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
                 let localPeerId = localStorage.getItem("localPeerId");
                 if (!localPeerId) {
