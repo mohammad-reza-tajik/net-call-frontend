@@ -46,6 +46,12 @@ self.addEventListener("activate", event => {
                     caches.delete(key);
                 }
             })
+
+            const allClients = await self.clients.matchAll({includeUncontrolled: true});
+            allClients.forEach(client => {
+                client.postMessage("activated");
+            });
+
         })()
     )
     // Tell the active service worker to take control of the page immediately.
@@ -61,7 +67,7 @@ self.addEventListener("fetch", (event) => {
 });
 
 
-self.addEventListener("message",(event)=> {
+self.addEventListener("message", (event) => {
     console.log(event.data);
 
 })
