@@ -37,9 +37,11 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                     timestamp
                 }
 
-
-                messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
-
+                messagesSignal.value = [
+                    ...messagesSignal.value.slice(0, transferringFileMessageIndex),
+                    tempFileMessage,
+                    ...messagesSignal.value.slice(transferringFileMessageIndex + 1)
+                ];
 
             } else {
                 // Wait for the buffered amount to decrease before sending the next chunk
@@ -53,7 +55,12 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                 transferredAmount: fileData.size,
                 timestamp
             }
-        messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
+
+        messagesSignal.value = [
+            ...messagesSignal.value.slice(0, transferringFileMessageIndex),
+            fileMessage,
+            ...messagesSignal.value.slice(transferringFileMessageIndex + 1)
+        ];
 
     })
 }

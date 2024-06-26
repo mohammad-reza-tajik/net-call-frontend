@@ -8,13 +8,27 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
 import {Socket} from "socket.io-client";
 
-function socketListeners(socket : Socket) {
+function socketListeners(socket: Socket) {
 
     socket.on("requestToPeer", (request: IRequest) => {
-        receivedRequestsSignal.value = [
-            ...receivedRequestsSignal.value,
-            request
-        ]
+        // check if a request from the same remote peer exists
+        const requestIndex = receivedRequestsSignal.value.findIndex(receivedRequest => {
+            return receivedRequest.localPeerId === request.localPeerId;
+        })
+
+        if (requestIndex >= 0) {
+            receivedRequestsSignal.value = [
+                ...receivedRequestsSignal.value.slice(0, requestIndex),
+                request,
+                ...receivedRequestsSignal.value.slice(requestIndex + 1)
+            ]
+        } else {
+            receivedRequestsSignal.value = [
+                ...receivedRequestsSignal.value,
+                request
+            ]
+        }
+
         toast.info("یک درخواست دریافت شد");
     })
     socket.on("responseToPeer", async (response: IResponse) => {
@@ -23,7 +37,9 @@ function socketListeners(socket : Socket) {
              the following line ensures that we stop if we (the sender) have cancelled the call and received
              response from the remote peer
              */
-            if (peerConnectionSignal.value?.signalingState === "stable") return;
+            if (peerConnectionSignal.value?.signalingState === "stable") {
+                return toast.info("کاربر درخواست خود را لغو کرد");
+            }
 
             currentResponseSignal.value = response;
             await peerConnectionSignal.value?.setRemoteDescription(response.answer);
