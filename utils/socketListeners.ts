@@ -38,7 +38,7 @@ function socketListeners(socket: Socket) {
              response from the remote peer
              */
             if (peerConnectionSignal.value?.signalingState === "stable") {
-                return toast.info("کاربر درخواست خود را لغو کرد");
+                return;
             }
 
             currentResponseSignal.value = response;
