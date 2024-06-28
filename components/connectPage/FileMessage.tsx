@@ -36,10 +36,10 @@ function FileMessage({message}: IFileMessageProps) {
                 {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value})}>
             <FileIcon className={"size-7"}/>
-            <p className={"text-xs"}>
+            <p className={"text-xs [direction:ltr] truncate"}>
                 {message.file.name}
             </p>
-            <p className={"text-xs"}>
+            <p className={"text-xs [direction:ltr]"}>
                 {message.transferredAmount < message.file.size ? `${makeHumanReadable(message.transferredAmount)}/${makeHumanReadable(message.file.size)}` : makeHumanReadable(message.file.size)}
             </p>
             {

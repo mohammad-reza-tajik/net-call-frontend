@@ -11,7 +11,7 @@ function AudioCall() {
             <div className={"flex flex-col gap-5 justify-between items-center size-52 lg:size-96 border rounded p-2 md:p-5 text-sm md:text-base"}>
                 <p className={"bg-primary p-1 md:p-2 rounded text-sm md:text-base"}>فرستنده</p>
                 <Phone className={"size-14 md:size-20"}/>
-                <p className={"w-5/6 truncate"}>
+                <p className={"w-5/6 truncate [direction:ltr]"}>
                     {statusSignal.value === "audio:receive" ? currentRequestSignal.value?.localPeerId : localPeerId.value}
                 </p>
             </div>
@@ -19,7 +19,7 @@ function AudioCall() {
             <div className={"flex flex-col gap-5 justify-between items-center size-52 lg:size-96 border rounded p-2 md:p-5 text-sm md:text-base"}>
                 <p className={"bg-primary p-1 md:p-2 rounded text-sm md:text-base"}>گیرنده</p>
                 <Phone className={"size-14 md:size-20"}/>
-                <p className={"w-5/6 truncate"}>
+                <p className={"w-5/6 truncate [direction:ltr]"}>
                     {statusSignal.value === "audio:receive" ? localPeerId.value : currentResponseSignal.value?.localPeerId}
                 </p>
             </div>

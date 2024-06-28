@@ -11,7 +11,7 @@ function PeerId() {
 
     useSignals();
 
-    async function copyIdHandler() {
+    const copyIdHandler = async () => {
         await navigator.clipboard.writeText(localPeerIdSignal.value);
         toast.success("آیدی کپی شد");
     }

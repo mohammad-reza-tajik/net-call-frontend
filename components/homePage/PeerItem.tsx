@@ -29,7 +29,7 @@ function PeerItem({connectedPeer: {localPeerId, deviceType}}: IPeerItemProps) {
                 deviceType === "desktop" ? <Monitor className={"size-10 md:size-28"}/> : <Mobile className={"size-10 md:size-28"}/>
             }
             <span className={"absolute right-2 top-2 bg-green-400 size-2 md:size-3 rounded-full animate-pulse"}/>
-            <p className={"text-xs md:text-sm truncate w-5/6"}>{localPeerId}</p>
+            <p className={"text-xs md:text-sm truncate w-5/6 [direction:ltr]"}>{localPeerId}</p>
         </button>
     )
 }

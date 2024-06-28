@@ -54,7 +54,7 @@ function RequestItem({request}: IRequestItemProps) {
             <span className={"bg-primary p-1 rounded"}>
                 {statusText}
             </span>
-            <p>
+            <p className={"[direction:ltr]"}>
                 {localPeerId}
             </p>
             <div className={"flex items-center justify-center gap-2"}>
