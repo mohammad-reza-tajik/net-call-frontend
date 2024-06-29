@@ -95,7 +95,7 @@ function StreamControls() {
                         tooltipContent={"قطع / وصل میکروفون"}
                         handler={muteMicHandler}/>
 
-                    <Separator orientation={"vertical"} />
+                    <Separator orientation={"vertical"}/>
 
                     <DeviceSelector devices={devicesSignal.value?.audioInputs}/>
                 </div>
@@ -103,14 +103,13 @@ function StreamControls() {
                 {
                     statusSignal.value?.startsWith("video") &&
                     <div className={"flex items-center rounded overflow-hidden"}>
-
                         <ActionButton
                             icon={isVideoMute.value ? <CameraOff className={"size-7"}/> :
                                 <Camera className={"size-7"}/>}
                             tooltipContent={"قطع / وصل تصویر"}
                             handler={muteVideoHandler}/>
 
-                        <Separator orientation={"vertical"} />
+                        <Separator orientation={"vertical"}/>
 
                         <DeviceSelector devices={devicesSignal.value?.videoInputs}/>
                     </div>
@@ -124,10 +123,16 @@ function StreamControls() {
                         handler={muteVideoHandler}/>
                 }
 
-                <ActionButton
-                    icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
-                    tooltipContent={"قطع / وصل صدا"}
-                    handler={muteSoundHandler}/>
+                <div className={"flex items-center rounded overflow-hidden"}>
+                    <ActionButton className={"rounded-none"}
+                        icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
+                        tooltipContent={"قطع / وصل صدا"}
+                        handler={muteSoundHandler}/>
+
+                    <Separator orientation={"vertical"}/>
+
+                    <DeviceSelector devices={devicesSignal.value?.audioOutputs}/>
+                </div>
 
                 <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value})}
                               icon={<Chat className={"size-7"}/>}
