@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {Caret} from "@/components/shared/Icons";
+import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 
 interface Props {
     devices?: MediaDeviceInfo[];
@@ -31,48 +32,58 @@ function DeviceSelector({devices}: Props) {
 
             device.value = value;
 
-            const deviceInfo = devices.find((mediaDevice)=> mediaDevice.deviceId === value);
+            const deviceInfo = devices.find((mediaDevice) => mediaDevice.deviceId === value);
 
-            if (!deviceInfo) return
+            if (!deviceInfo) {
+                throw new Error("device not found");
+            }
 
-            const { kind} = deviceInfo;
+            const {kind} = deviceInfo;
 
             if (!peerConnectionSignal.value) {
                 throw new Error("no connection");
             }
 
             // change local stream
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: kind === "videoinput" ? {deviceId: {exact: value}} : false,
-                audio: kind === "audioinput" ? {deviceId: {exact: value}} : false
-            });
+            if (kind.endsWith("input")) {
 
-            // send new local stream to the remote peer
-            const sender = peerConnectionSignal.value.getSenders().find((sender) => {
-                if (sender.track) {
-                    /**
-                     the label check is to make sure that the system audio is not the track that's being replaced
-                     we want to mute the mic audio track
-                     */
-                    return kind.startsWith(sender.track.kind) && sender.track.label !== "System Audio";
-                } else {
-                    return false;
-                }
-            });
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: kind === "videoinput" ? {deviceId: {exact: value}} : false,
+                    audio: kind === "audioinput" ? {deviceId: {exact: value}} : false
+                });
 
-            if (kind === "videoinput") {
-                const [videoTrack] = stream.getVideoTracks();
-                if (localVideoRefSignal.value?.current) {
-                    localVideoRefSignal.value.current.srcObject = stream;
+                // send new local stream to the remote peer
+                const sender = peerConnectionSignal.value.getSenders().find((sender) => {
+                    if (sender.track) {
+                        /**
+                         the label check is to make sure that the system audio is not the track that's being replaced
+                         we want to mute the mic audio track
+                         */
+                        return kind.startsWith(sender.track.kind) && sender.track.label !== "System Audio";
+                    } else {
+                        return false;
+                    }
+                });
+
+                if (kind === "videoinput") {
+                    const [videoTrack] = stream.getVideoTracks();
+                    if (localVideoRefSignal.value?.current) {
+                        localVideoRefSignal.value.current.srcObject = stream;
+                    }
+                    await sender?.replaceTrack(videoTrack);
+                } else if (kind === "audioinput") {
+                    const [audioTrack] = stream.getAudioTracks();
+                    await sender?.replaceTrack(audioTrack);
                 }
-                await sender?.replaceTrack(videoTrack);
-            } else if (kind === "audioinput") {
-                const [audioTrack] = stream.getAudioTracks();
-                await sender?.replaceTrack(audioTrack);
+            } else {
+                // we want to change the speaker
+                if (remoteVideoRefSignal.value?.current) {
+                    await remoteVideoRefSignal.value.current.setSinkId(value);
+                }
             }
 
         } catch (err) {
-            console.log(err);
+            console.error(err);
         }
 
     }
