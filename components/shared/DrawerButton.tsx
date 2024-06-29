@@ -7,6 +7,8 @@ import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import RequestItem from "@/components/shared/RequestItem";
 import Drawer from "@/components/shared/Drawer";
 import {useSignals} from "@preact/signals-react/runtime";
+import {cn} from "@/lib/utils";
+import haveNewRequestSignal from "@/signals/haveNewRequest";
 
 function DrawerButton() {
 
@@ -14,8 +16,9 @@ function DrawerButton() {
 
     return (
         <TooltipProvider>
-            <ActionButton icon={<Envelope className={"size-7"} />} tooltipContent={"درخواست های دریافت شده"} handler={()=> {
+            <ActionButton className={cn({"animate-bounce" : haveNewRequestSignal.value})} icon={<Envelope className={"size-7"} />} tooltipContent={"درخواست های دریافت شده"} handler={()=> {
                 isRequestsDrawerOpenSignal.value = true;
+                haveNewRequestSignal.value = false;
             }} />
             <Drawer openSignal={isRequestsDrawerOpenSignal}>
                 {receivedRequestsSignal.value.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :

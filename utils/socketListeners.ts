@@ -7,6 +7,8 @@ import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/utils/hangup";
 import {Socket} from "socket.io-client";
+import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
+import haveNewRequestSignal from "@/signals/haveNewRequest";
 
 function socketListeners(socket: Socket) {
 
@@ -30,6 +32,10 @@ function socketListeners(socket: Socket) {
         }
 
         toast.info("یک درخواست دریافت شد");
+
+        if (!isRequestsDrawerOpenSignal.value) {
+            haveNewRequestSignal.value = true;
+        }
     })
     socket.on("responseToPeer", async (response: IResponse) => {
         try {
