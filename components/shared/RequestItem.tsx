@@ -51,7 +51,7 @@ function RequestItem({request}: IRequestItemProps) {
 
     return (
         <div className={"flex flex-col justify-center items-center p-2 gap-5 border rounded text-xs"}>
-            <span className={"bg-primary p-1 rounded"}>
+            <span className={"bg-primary text-primary-foreground p-1 rounded"}>
                 {statusText}
             </span>
             <p className={"[direction:ltr]"}>
@@ -59,7 +59,7 @@ function RequestItem({request}: IRequestItemProps) {
             </p>
             <div className={"flex items-center justify-center gap-2"}>
                 <Button variant={"outline"} className={"gap-1"} onClick={answerRequestHandler}>
-                    <Thumb className={" size-5"}/>
+                    <Thumb className={"size-5"}/>
                     پذیرفتن
                 </Button>
                 <Button variant={"outline"} className={"gap-1"} onClick={rejectRequestHandler}>

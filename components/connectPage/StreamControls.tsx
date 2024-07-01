@@ -82,7 +82,7 @@ function StreamControls() {
     return (
         <div className={"flex justify-center items-center gap-5"}>
             <TooltipProvider>
-                <ActionButton className={"bg-destructive text-destructive-foreground"}
+                <ActionButton
                               icon={<Phone className={"size-7 rotate-[135deg]"}/>}
                               tooltipContent={"قطع تماس"}
                               handler={hangupHandler}/>
