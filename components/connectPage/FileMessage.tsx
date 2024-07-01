@@ -33,7 +33,7 @@ function FileMessage({message}: IFileMessageProps) {
     return (
         <div
             className={cn("flex flex-col gap-3 border rounded w-max items-center justify-center py-3 px-5",
-                {"bg-primary text-primary-foreground": message.localPeerId === localPeerIdSignal.value},
+                {"bg-primary text-primary-foreground fill-primary-foreground": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value})}>
             <FileIcon className={"size-7"}/>
             <p className={"text-xs [direction:ltr] truncate"}>
