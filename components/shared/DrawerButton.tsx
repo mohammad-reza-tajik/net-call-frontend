@@ -21,7 +21,7 @@ function DrawerButton() {
                 haveNewRequestSignal.value = false;
             }} />
             <Drawer openSignal={isRequestsDrawerOpenSignal}>
-                {receivedRequestsSignal.value.length === 0 ? <p className={"text-center"}>هیچ درخواستی وجود ندارد</p> :
+                {receivedRequestsSignal.value.length === 0 ? <p className={"text-center text-sm"}>هیچ درخواستی وجود ندارد</p> :
                     receivedRequestsSignal.value.map((request, index) => {
                         return <RequestItem request={request} key={index}/>
                     })
