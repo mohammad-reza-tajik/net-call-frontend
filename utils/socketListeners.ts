@@ -1,6 +1,6 @@
 import type {IConnectedPeer, IRequest, IResponse} from "@/types";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
@@ -31,7 +31,7 @@ function socketListeners(socket: Socket) {
             ]
         }
 
-        toast.info("یک درخواست دریافت شد");
+        toast("یک درخواست دریافت شد");
 
         if (!isRequestsDrawerOpenSignal.value) {
             haveNewRequestSignal.value = true;

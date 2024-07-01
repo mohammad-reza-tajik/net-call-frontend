@@ -1,5 +1,5 @@
 "use client"
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useRef} from "react";

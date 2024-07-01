@@ -2,7 +2,7 @@
 
 import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import {useSignals} from "@preact/signals-react/runtime";
 import {Skeleton} from "@/components/ui/skeleton";

@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import makeHumanReadable from "@/utils/makeHumanReadable";
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import getTimestamp from "@/utils/getTimestamp";
 
 interface IFileMessageProps {

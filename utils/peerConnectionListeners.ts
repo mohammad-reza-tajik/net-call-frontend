@@ -1,7 +1,7 @@
 import {
     connectionStateSignal, offerSignal, signalingStateSignal, answerSignal, peerConnectionSignal
 } from "@/signals/peer/peerConnection";
-import {toast} from "react-toastify";
+import {toast} from "react-hot-toast";
 import remoteStreamSignal from "@/signals/remoteStream";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import statusSignal from "@/signals/peer/status";
