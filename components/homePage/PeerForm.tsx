@@ -7,6 +7,7 @@ import formUrlQuery from "@/utils/formUrlQuery";
 import {useSignals} from "@preact/signals-react/runtime";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
 
 function PeerForm() {
 
@@ -18,7 +19,7 @@ function PeerForm() {
             return
         }
 
-        if (remotePeerIdRef.current.value.length < 36) {
+        if (remotePeerIdRef.current.value.length < 36 || remotePeerIdRef.current.value === localPeerIdSignal.value) {
             return toast.error("آیدی وارد شده صحیح نیست");
         }
 
