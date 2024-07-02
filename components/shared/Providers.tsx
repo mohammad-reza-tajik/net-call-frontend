@@ -9,7 +9,7 @@ function Providers({children}: { children: React.ReactNode }) {
         <>
             <Toaster toastOptions={{
                 duration: 5000,
-                position: "bottom-right",
+                position: "bottom-center",
                 icon: <Info className={"size-5"}/>,
                 success: {icon: <CheckCircle className={"size-5"}/>},
                 error: {icon: <Warning className={"size-5 fill-destructive"}/>}
@@ -22,7 +22,7 @@ function Providers({children}: { children: React.ReactNode }) {
                         border: "1px solid hsl(var(--border))",
                     }}>
                         {({icon, message}) => (
-                            <div className={"min-w-56 flex items-center justify-between text-xs md:text-sm p-1"}>
+                            <div className={"flex items-center text-xs md:text-sm gap-10 p-1"}>
                                 <div className={"flex items-center gap-1"}>
                                     {icon}
                                     {message}
