@@ -6,11 +6,11 @@
 
 :root {
 
-    --background: 0 0% 10%;
-    --foreground: 0 0% 95%;
+    --background: 234, 79%, 7%;
+    --foreground: 0 0% 100%;
 
-    --primary: 0 0% 95%;
-    --primary-foreground: 0 0% 10%;
+    --primary: 231, 63%, 56%;
+    --primary-foreground: 0, 0%, 100%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
