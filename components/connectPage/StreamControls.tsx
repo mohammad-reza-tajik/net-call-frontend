@@ -104,6 +104,7 @@ function StreamControls() {
                     statusSignal.value?.startsWith("video") &&
                     <div className={"flex items-center rounded overflow-hidden"}>
                         <ActionButton
+                            className={"rounded-none"}
                             icon={isVideoMute.value ? <CameraOff className={"size-7"}/> :
                                 <Camera className={"size-7"}/>}
                             tooltipContent={"قطع / وصل تصویر"}
