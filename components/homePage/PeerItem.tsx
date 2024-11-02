@@ -1,7 +1,7 @@
 "use client"
 import type {IConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
-import formUrlQuery from "@/utils/formUrlQuery";
+import {formUrlQuery} from "@/lib/utils";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
 

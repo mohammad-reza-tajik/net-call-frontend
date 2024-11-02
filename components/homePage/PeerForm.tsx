@@ -3,11 +3,11 @@ import {toast} from "react-hot-toast";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {useRef} from "react";
-import formUrlQuery from "@/utils/formUrlQuery";
 import {useSignals} from "@preact/signals-react/runtime";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
+import {isValidUUID , formUrlQuery} from "@/lib/utils";
 
 function PeerForm() {
 
@@ -19,7 +19,7 @@ function PeerForm() {
             return
         }
 
-        if (remotePeerIdRef.current.value.length < 36 || remotePeerIdRef.current.value === localPeerIdSignal.value) {
+        if (!isValidUUID(remotePeerIdRef.current.value) || remotePeerIdRef.current.value === localPeerIdSignal.value) {
             return toast.error("آیدی وارد شده صحیح نیست");
         }
 

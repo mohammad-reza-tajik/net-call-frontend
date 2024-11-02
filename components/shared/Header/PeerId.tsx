@@ -27,11 +27,9 @@ function PeerId() {
                         <Skeleton className={"w-60 h-10"}/> :
                         <Tooltip>
                             <TooltipTrigger asChild>
-                                {
-                                    <Button variant={"outline"} onClick={copyIdHandler}>
-                                        {localPeerIdSignal.value}
-                                    </Button>
-                                }
+                                <Button variant={"outline"} onClick={copyIdHandler}>
+                                    {localPeerIdSignal.value}
+                                </Button>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>برای کپی کردن آیدی کلیک کنید</p>

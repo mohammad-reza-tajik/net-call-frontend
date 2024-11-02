@@ -2,7 +2,7 @@ import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import type {ITextMessage} from "@/types";
 import {Check, DoubleChecks} from "@/components/shared/Icons";
-import getTimestamp from "@/utils/getTimestamp";
+import {getTimestamp} from "@/lib/utils";
 
 interface ITextMessageProps {
     message: ITextMessage

@@ -2,11 +2,9 @@
 import type {IFileMessage} from "@/types";
 import {Check, DoubleChecks, Download, File as FileIcon} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
-import {cn} from "@/lib/utils";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import makeHumanReadable from "@/utils/makeHumanReadable";
+import {makeHumanReadable , cn , getTimestamp} from "@/lib/utils";
 import {toast} from "react-hot-toast";
-import getTimestamp from "@/utils/getTimestamp";
 
 interface IFileMessageProps {
     message: IFileMessage
