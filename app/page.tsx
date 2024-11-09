@@ -2,9 +2,9 @@ import StartScreen from "@/components/screens/StartScreen";
 
 function Home() {
   return (
-    <div className={"flex flex-col py-5"}>
+    <main className={"flex flex-col py-5"}>
         <StartScreen />
-    </div>
+    </main>
   );
 }
 
