@@ -61,3 +61,9 @@ export function makeHumanReadable(value : number) {
 
   return `${value.toFixed(2)}${units[exponent]}`;
 }
+
+export function range(start: number, end: number) {
+  const length = end - start + 1;
+  return Array.from({ length }, (_, index) => index + start);
+}
+
