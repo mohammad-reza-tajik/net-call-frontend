@@ -28,7 +28,16 @@ const cacheFirst = async (event) => {
         if (res) {
             return res;
         } else {
-            if (event.request.destination === "script" || event.request.destination === "style") {
+
+            /**
+             * Check if the request is from the same origin as the service worker to avoid caching external resources
+             * like Chrome extension scripts and ...
+             */
+
+            const { origin } = new URL(event.request.url);
+            const isFromMySite = origin === self.location.origin;
+
+            if (isFromMySite && (event.request.destination === "script" || event.request.destination === "style")) {
                 return await addToDynamicCache(event.request);
             }
             return await fetch(event.request);
