@@ -7,21 +7,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateUUID() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,  (char) => {
-    const randomValue = Math.random() * 16 | 0;
-    const finalValue = char == "x" ? randomValue : (randomValue & 0x3 | 0x8);
-    return finalValue.toString(16);
-  });
-}
-
-export function isUUIDValid(uuid : string) {
+export function isValidUUID(uuid : string) {
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   return uuidRegex.test(uuid);
-}
-
-export function randomInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 interface Config {
