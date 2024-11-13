@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {formUrlQuery, range} from "@/lib/utils";
 
@@ -20,14 +20,13 @@ interface Params {
  * @returns An object containing the pagination range, current page, and a handler to change the page.
  */
 function usePagination({itemsPerPage, siblingCount = 1, totalCount}: Params) {
-    const paginationRangeRef = useRef<(string | number)[]>([]);
     const [currentPage, setPage] = useState(1);
     const router = useRouter();
     const searchParams = useSearchParams();
     const pageQuery = searchParams.get("page");
 
-    /**
-     * Effect to set the current page based on the query parameter when it changes.
+    /*
+      Effect to set the current page based on the query parameter when it changes.
      */
     useEffect(() => {
         if (pageQuery) {
@@ -51,8 +50,8 @@ function usePagination({itemsPerPage, siblingCount = 1, totalCount}: Params) {
      * Memoized computation to determine the pagination range and other related values.
      * @returns An object containing the pagination range, current page, and page change handler.
      */
-    return useMemo(() => {
-        const lastPage = Math.ceil(totalCount / itemsPerPage);
+    const paginationRange = useMemo(() => {
+        const lastPage = Math.ceil(totalCount / itemsPerPage); // Calculate the total number of pages
 
         /**
          * Reasoning: The total number of page buttons to display includes:
@@ -61,40 +60,47 @@ function usePagination({itemsPerPage, siblingCount = 1, totalCount}: Params) {
          * - The previous and next sibling pages.
          * - Two additional slots for the ellipses (...) if needed.
          */
-        const totalPageNumbers = siblingCount + 5;
+        const totalPageNumbers = 2 * siblingCount + 5;
 
         /**
-         * Reasoning: If the total number of page buttons to display is greater or equal to the total pages,
+         * Reasoning: If the total number of page buttons to display is greater than or equal to the total pages,
          * display all page numbers. This is a simple case where no ellipses are needed.
          */
         if (totalPageNumbers >= lastPage) {
-            paginationRangeRef.current = range(1, lastPage);
-        } else {
-            const firstPageIndex = 1;
-            const previousSiblingIndex = Math.max(currentPage - siblingCount, 1);
-            const nextSiblingIndex = Math.min(currentPage + siblingCount, lastPage);
-
-            const shouldShowLeftDots = previousSiblingIndex > 2;
-            const shouldShowRightDots = nextSiblingIndex < lastPage - 2;
-
-            if (!shouldShowLeftDots && shouldShowRightDots) {
-                let leftItemCount = 3 + 2 * siblingCount;
-                let leftRange = range(1, leftItemCount);
-
-                paginationRangeRef.current = [...leftRange, '...', lastPage];
-            } else if (shouldShowLeftDots && !shouldShowRightDots) {
-                let rightItemCount = 3 + 2 * siblingCount;
-                let rightRange = range(lastPage - rightItemCount + 1, lastPage);
-
-                paginationRangeRef.current = [firstPageIndex, '...', ...rightRange];
-            } else {
-                let middleRange = range(previousSiblingIndex, nextSiblingIndex);
-                paginationRangeRef.current = [firstPageIndex, '...', ...middleRange, '...', lastPage];
-            }
+            return range(1, lastPage);
         }
 
-        return {paginationRange: paginationRangeRef.current, currentPage, pageChangeHandler};
+        const firstPageIndex = 1; // The first page index is always 1
+        const previousSiblingIndex = Math.max(currentPage - siblingCount, 1); // Calculate the start of the previous siblings
+        const nextSiblingIndex = Math.min(currentPage + siblingCount, lastPage); // Calculate the end of the next siblings
+
+        const shouldShowStartDots = previousSiblingIndex > 2; // Determine if we need to show start dots
+        const shouldShowEndDots = nextSiblingIndex < lastPage - 2; // Determine if we need to show end dots
+
+        if (!shouldShowStartDots && shouldShowEndDots) {
+            // Case 1: No start dots, but end dots are needed
+            const startItemCount = 3 + 2 * siblingCount; // Calculate the number of items to show on the start
+            const startRange = range(1, startItemCount); // Generate the range for the start items
+            return [...startRange, "...", lastPage];  // Combine start items, dots, and last page
+
+        }
+        if (shouldShowStartDots && !shouldShowEndDots) {
+            // Case 2: start dots are needed, but no end dots
+            const endItemCount = 3 + 2 * siblingCount; // Calculate the number of items to show on the end
+            const endRange = range(lastPage - endItemCount + 1, lastPage); // Generate the range for the end items
+            return [firstPageIndex, "...", ...endRange]; // Combine first page, dots, and end items
+        }
+
+        // Case 3: Both start and end dots are needed
+        const middleRange = range(previousSiblingIndex, nextSiblingIndex); // Generate the range for the middle items
+        return [firstPageIndex, "...", ...middleRange, "...", lastPage]; // Combine first page, dots, middle items, and last page
+
+
     }, [totalCount, itemsPerPage, siblingCount, currentPage]);
+
+    return {paginationRange, currentPage, pageChangeHandler};
 }
 
 export default usePagination;
+
+
