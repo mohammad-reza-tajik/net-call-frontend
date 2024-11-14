@@ -2,7 +2,7 @@
 import type {IRequest} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
-import {formUrlQuery} from "@/lib/utils";
+import {buildURL} from "@/lib/utils";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
@@ -34,12 +34,13 @@ function RequestItem({request}: IRequestItemProps) {
             currentRequestSignal.value = request;
             remotePeerIdSignal.value = localPeerId;
         });
-        const peerURL = formUrlQuery({
-            params: {
+        const peerURL = buildURL({
+            url : "/connect",
+            query: {
                 remotePeerId: request.localPeerId
             }
         });
-        routerSignal.value!.push(`/connect${peerURL}`);
+        routerSignal.value!.push(peerURL);
     }
 
     const rejectRequestHandler = () => {

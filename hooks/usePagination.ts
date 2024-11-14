@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
-import {formUrlQuery, range} from "@/lib/utils";
+import {buildURL, range} from "@/lib/utils";
 
 /**
  * Interface for the parameters of the `usePagination` hook.
@@ -38,10 +38,10 @@ function usePagination({itemsPerPage, siblingCount = 1, totalCount}: Params) {
      * Callback function to handle page changes.
      * @param page - The new page number to navigate to.
      */
-    const pageChangeHandler = useCallback((page: number | string) => {
+    const pageChangeHandler = useCallback((page: string | number) => {
         setPage(+page);
         router.push(
-            formUrlQuery({params: {page}, currentParams: searchParams.toString()}),
+            buildURL({query: { page : page + "" }}),
             {scroll: true}
         );
     }, []);

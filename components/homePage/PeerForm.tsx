@@ -7,7 +7,7 @@ import {useSignals} from "@preact/signals-react/runtime";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import {isValidUUID , formUrlQuery} from "@/lib/utils";
+import {isValidUUID , buildURL} from "@/lib/utils";
 
 function PeerForm() {
 
@@ -20,18 +20,20 @@ function PeerForm() {
         }
 
         if (!isValidUUID(remotePeerIdRef.current.value) || remotePeerIdRef.current.value === localPeerIdSignal.value) {
-            return toast.error("آیدی وارد شده صحیح نیست");
+            toast.error("آیدی وارد شده صحیح نیست");
+            return;
         }
 
-        const peerURL = formUrlQuery({
-            params: {
+        const peerURL = buildURL({
+            query: {
                 remotePeerId:remotePeerIdRef.current.value
-            }
+            },
+            url : "/connect"
         });
 
         remotePeerIdSignal.value = remotePeerIdRef.current.value;
         remotePeerIdRef.current.value = "";
-        routerSignal.value!.push(`/connect${peerURL}`);
+        routerSignal.value!.push(peerURL);
     }
 
     return (

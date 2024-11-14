@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import qs from "query-string";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -12,25 +11,48 @@ export function isValidUUID(uuid : string) {
   return uuidRegex.test(uuid);
 }
 
-interface Config {
-  currentParams? : string;
-  params?: Record<string, string | number>;
-  hash?:string;
+interface Options {
+  url?: string;
+  query?: Record<string, string | null | undefined >;
+  hash?: string | null | undefined;
 }
 
-export function formUrlQuery({params , currentParams = ""} : Config = {} ) : string {
-  const query = qs.parse(currentParams);
+/**
+ * Builds a URL with the given options.
+ * @param options - The options object containing the URL, query parameters, and hash.
+ * @returns The constructed URL as a string.
+ */
+export function buildURL(options: Options): string {
+  // Use the current URL if no URL is provided
+  let url = options.url || window.location.href;
 
-  if (params) {
-    Object.keys(params).forEach(key => {
-      query[key] = String(params[key]);
-    })
+  // If the URL starts with '/', consider it a path relative to the current URL
+  if (url.startsWith("/")) {
+    url = new URL(window.location.origin + url).href;
   }
-  return qs.stringifyUrl({
-    url: "",
-    query: query
-  }, {skipNull: true})
+  // Parse the URL
+  const urlObj = new URL(url);
 
+  // Set query parameters
+  if (options.query) {
+    for (const [key, value] of Object.entries(options.query)) {
+      if (value !== null && value !== undefined) {
+        urlObj.searchParams.set(key, value);
+      } else {
+        urlObj.searchParams.delete(key);
+      }
+    }
+  }
+
+  // Set the hash
+  if (options.hash !== null && options.hash !== undefined) {
+    urlObj.hash = options.hash;
+  } else {
+    urlObj.hash = "";
+  }
+
+  // Return the updated URL
+  return urlObj.toString();
 }
 
 export function getTimestamp(date : Date) {
@@ -54,4 +76,3 @@ export function range(start: number, end: number) {
   const length = end - start + 1;
   return Array.from({ length }, (_, index) => index + start);
 }
-
