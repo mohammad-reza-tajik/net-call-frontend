@@ -1,7 +1,9 @@
-const STATIC_CACHE_NAME = "static-version";
-const DYNAMIC_CACHE_NAME = "dynamic-version";
+const STATIC_CACHE_NAME = "static-1732004644062";
+const DYNAMIC_CACHE_NAME = "dynamic-1732004644062";
 
-const addToStaticCache = async (...resources) => {
+const serviceWorker = self as unknown as ServiceWorkerGlobalScope;
+
+const addToStaticCache = async (...resources : string[]) => {
     try {
         const staticCache = await caches.open(STATIC_CACHE_NAME);
         await staticCache.addAll(resources);
@@ -10,7 +12,7 @@ const addToStaticCache = async (...resources) => {
     }
 }
 
-const addToDynamicCache = async (request) => {
+const addToDynamicCache = async (request : Request) => {
     try {
         const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
         const response = await fetch(request);
@@ -22,7 +24,7 @@ const addToDynamicCache = async (request) => {
     }
 }
 
-const cacheFirst = async (event) => {
+const cacheFirst = async (event : FetchEvent) => {
     try {
         const res = await caches.match(event.request);
         if (res) {
@@ -35,7 +37,7 @@ const cacheFirst = async (event) => {
              */
 
             const { origin } = new URL(event.request.url);
-            const isFromMySite = origin === self.location.origin;
+            const isFromMySite = origin === serviceWorker.location.origin;
 
             if (isFromMySite && (event.request.destination === "script" || event.request.destination === "style")) {
                 return await addToDynamicCache(event.request);
@@ -45,10 +47,11 @@ const cacheFirst = async (event) => {
     } catch (err) {
         console.error("Fetch failed:", err);
         // Optionally, return a fallback response here
+        return new Response("Failed to fetch resource", { status: 503 });
     }
 }
 
-self.addEventListener("install", (event) => {
+serviceWorker.addEventListener("install", (event ) => {
     console.log("-----[ service worker installed ]-----");
 
     event.waitUntil((async () => {
@@ -61,14 +64,14 @@ self.addEventListener("install", (event) => {
                 "/images/logo.svg"
             );
             // Force the waiting service worker to become the active service worker.
-            await self.skipWaiting(); // returned promise can be ignored safely
+            await serviceWorker.skipWaiting(); // returned promise can be ignored safely
         } catch (err) {
             console.error("Install event failed:", err);
         }
     })());
 });
 
-self.addEventListener("activate", (event) => {
+serviceWorker.addEventListener("activate", (event) => {
     console.log("-----[ service worker activated ]-----");
 
     event.waitUntil((async () => {
@@ -82,23 +85,23 @@ self.addEventListener("activate", (event) => {
                 })
             );
 
-            const allClients = await self.clients.matchAll({ includeUncontrolled: true });
+            const allClients = await serviceWorker.clients.matchAll({ includeUncontrolled: true });
             allClients.forEach(client => {
                 client.postMessage("activated");
             });
 
             // Tell the active service worker to take control of the page immediately.
-            await self.clients.claim();
+            await serviceWorker.clients.claim();
         } catch (err) {
             console.error("Activate event failed:", err);
         }
     })());
 });
 
-self.addEventListener("fetch", (event) => {
+serviceWorker.addEventListener("fetch", (event ) => {
     event.respondWith(cacheFirst(event));
 });
 
-self.addEventListener("message", (event) => {
+serviceWorker.addEventListener("message", (event) => {
     console.log(event.data);
 });

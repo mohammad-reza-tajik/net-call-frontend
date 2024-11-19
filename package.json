@@ -3,8 +3,9 @@
   "version": "1.5.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "prebuild": "node updateSW.mjs",
+    "dev": "next dev --turbo",
+    "bundle:sw": "esbuild public/sw.ts --bundle --outfile=public/sw.js --minify --target=es2022",
+    "prebuild": "node updateSW.mjs && npm run bundle:sw",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -36,6 +37,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/wicg-file-system-access": "^2023.10.5",
+    "esbuild": "^0.24.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
