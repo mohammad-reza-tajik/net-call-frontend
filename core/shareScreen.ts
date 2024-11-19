@@ -1,6 +1,6 @@
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
-import addToConnection from "@/utils/addToConnection";
+import addToConnection from "@/core/addToConnection";
 
 async function shareScreen() {
     try {

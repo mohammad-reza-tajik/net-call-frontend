@@ -8,10 +8,10 @@ import statusSignal from "@/signals/peer/status";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
-import dataChannelListeners from "@/utils/dataChannelListeners";
-import chatChannelListeners from "@/utils/chatChannelListeners";
-import fileChannelListeners from "@/utils/fileChannelListeners";
-import hangup from "@/utils/hangup";
+import dataChannelListeners from "@/core/dataChannelListeners";
+import chatChannelListeners from "@/core/chatChannelListeners";
+import fileChannelListeners from "@/core/fileChannelListeners";
+import hangup from "@/core/hangup";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 

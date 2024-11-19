@@ -1,7 +1,7 @@
 import {Phone, Monitor, Camera} from "@/components/shared/Icons";
-import shareScreen from "@/utils/shareScreen";
-import videoCall from "@/utils/videoCall";
-import audioCall from "@/utils/audioCall";
+import shareScreen from "@/core/shareScreen";
+import videoCall from "@/core/videoCall";
+import audioCall from "@/core/audioCall";
 
 const features = [
         {

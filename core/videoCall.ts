@@ -1,7 +1,7 @@
 import localStreamSignal from "@/signals/localStream";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localVideoRefSignal from "@/signals/localVideoRef";
-import addToConnection from "@/utils/addToConnection";
+import addToConnection from "@/core/addToConnection";
 
 async function videoCall() {
     try {

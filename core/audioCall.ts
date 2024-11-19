@@ -1,6 +1,6 @@
 import localStreamSignal from "@/signals/localStream";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
-import addToConnection from "@/utils/addToConnection";
+import addToConnection from "@/core/addToConnection";
 
 async function audioCall() {
     try {

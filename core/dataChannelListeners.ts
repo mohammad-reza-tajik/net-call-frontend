@@ -1,5 +1,5 @@
 import {toast} from "react-hot-toast";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 
 function dataChannelListeners(dataChannel: RTCDataChannel) {
 

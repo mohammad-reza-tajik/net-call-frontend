@@ -18,7 +18,7 @@ import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import {chatChannelSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";

@@ -5,7 +5,7 @@ import {cn} from "@/lib/utils";
 import ScreenSend from "@/components/screens/ScreenSend";
 import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";
-import createAnswer from "@/utils/createAnswer";
+import createAnswer from "@/core/createAnswer";
 import statusSignal from "@/signals/peer/status";
 import {signalingStateSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
@@ -19,7 +19,7 @@ import Drawer from "@/components/shared/Drawer";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import Loader from "@/components/shared/Loader";
 import {Button} from "@/components/ui/button";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 
 function ConnectScreen() {
 

@@ -1,6 +1,6 @@
-import getDeviceType from "@/utils/getDeviceType";
+import getDeviceType from "@/core/getDeviceType";
 import io from "socket.io-client";
-import socketListeners from "@/utils/socketListeners";
+import socketListeners from "@/core/socketListeners";
 
 function connectToSocket(localPeerId: string) {
 

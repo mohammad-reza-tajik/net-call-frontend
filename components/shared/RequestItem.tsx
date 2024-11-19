@@ -8,7 +8,7 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import routerSignal from "@/signals/router";
 import socketSignal from "@/signals/socket";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 import {batch} from "@preact/signals-react";
 
 interface IRequestItemProps {

@@ -5,7 +5,7 @@ import currentResponseSignal from "@/signals/peer/currentResponse";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 import {Socket} from "socket.io-client";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";

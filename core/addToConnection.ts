@@ -3,8 +3,8 @@ import localStreamSignal from "@/signals/localStream";
 import {batch} from "@preact/signals-react";
 import statusSignal from "@/signals/peer/status";
 import {TStatus} from "@/types";
-import dataChannelListeners from "@/utils/dataChannelListeners";
-import chatChannelListeners from "@/utils/chatChannelListeners";
+import dataChannelListeners from "@/core/dataChannelListeners";
+import chatChannelListeners from "@/core/chatChannelListeners";
 
 /**
  this function gets the status and tracks that we want to add to the peer connection

@@ -1,7 +1,7 @@
 import messagesSignal from "@/signals/peer/messages";
 import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import {toast} from "react-hot-toast";
-import hangup from "@/utils/hangup";
+import hangup from "@/core/hangup";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 

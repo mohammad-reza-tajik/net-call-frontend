@@ -1,4 +1,4 @@
-import peerConnectionListeners from "@/utils/peerConnectionListeners";
+import peerConnectionListeners from "@/core/peerConnectionListeners";
 
 function createConnection() {
 

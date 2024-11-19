@@ -3,15 +3,15 @@ import {useEffect} from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import localStreamSignal from "@/signals/localStream";
 import devicesSignal from "@/signals/devices";
-import getDevices from "@/utils/getDevices";
-import createConnection from "@/utils/createConnection";
+import getDevices from "@/core/getDevices";
+import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import {useSignalEffect} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import {useRouter} from "next/navigation";
 import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
-import connectToSocket from "@/utils/connectToSocket";
+import connectToSocket from "@/core/connectToSocket";
 
 function Initialize({children}: { children: React.ReactNode }) {
 
