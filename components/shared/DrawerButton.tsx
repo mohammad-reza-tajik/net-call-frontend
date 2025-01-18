@@ -7,7 +7,7 @@ import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import RequestItem from "@/components/shared/RequestItem";
 import Drawer from "@/components/shared/Drawer";
 import {useSignals} from "@preact/signals-react/runtime";
-import {cn} from "@/lib/utils";
+import cn from "@/lib/utils/cn";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 
 function DrawerButton() {

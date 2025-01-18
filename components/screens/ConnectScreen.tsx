@@ -1,7 +1,7 @@
 "use client"
 
 import AudioCall from "@/components/screens/AudioCall";
-import {cn} from "@/lib/utils";
+import cn from "@/lib/utils/cn";
 import ScreenSend from "@/components/screens/ScreenSend";
 import ActionBar from "@/components/connectPage/ActionBar";
 import {useEffect, useRef} from "react";

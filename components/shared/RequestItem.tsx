@@ -2,7 +2,7 @@
 import type {IRequest} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
-import {buildURL} from "@/lib/utils";
+import buildURL from "@/lib/utils/buildURL";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";

@@ -1,7 +1,7 @@
 "use client"
 import type {IConnectedPeer} from "@/types";
 import {Mobile, Monitor} from "@/components/shared/Icons";
-import {buildURL} from "@/lib/utils";
+import buildURL from "@/lib/utils/buildURL";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
 

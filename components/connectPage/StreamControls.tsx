@@ -22,7 +22,7 @@ import hangup from "@/core/hangup";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
-import {cn} from "@/lib/utils";
+import cn from "@/lib/utils/cn";
 import {Separator} from "@/components/ui/separator";
 
 function StreamControls() {

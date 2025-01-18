@@ -10,7 +10,7 @@ import {useSignals} from "@preact/signals-react/runtime";
 import type {IFileData, ITextMessage} from "@/types";
 import FileMessage from "@/components/connectPage/FileMessage";
 import TextMessage from "@/components/connectPage/TextMessage";
-import {cn} from "@/lib/utils";
+import cn from "@/lib/utils/cn";
 import sendInChunks from "@/core/sendInChunks";
 import {useSignal} from "@preact/signals-react";
 

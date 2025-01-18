@@ -7,7 +7,8 @@ import {useSignals} from "@preact/signals-react/runtime";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import routerSignal from "@/signals/router";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import {isValidUUID , buildURL} from "@/lib/utils";
+import isValidUUID from "@/lib/utils/isValidUUID";
+import buildURL from "@/lib/utils/buildURL";
 
 function PeerForm() {
 

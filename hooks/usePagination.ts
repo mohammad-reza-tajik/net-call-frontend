@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
-import {buildURL, range} from "@/lib/utils";
+import buildURL from "@/lib/utils/buildURL";
+import range from "@/lib/utils/range";
 
 /**
  * Interface for the parameters of the `usePagination` hook.

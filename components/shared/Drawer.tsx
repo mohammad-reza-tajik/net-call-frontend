@@ -1,5 +1,5 @@
 "use client"
-import {cn} from "@/lib/utils";
+import cn from "@/lib/utils/cn";
 import {Button} from "@/components/ui/button";
 import {Close} from "@/components/shared/Icons";
 import {useSignals} from "@preact/signals-react/runtime";

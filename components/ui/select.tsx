@@ -4,7 +4,7 @@ import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import {Caret} from "@/components/shared/Icons";
 
-import { cn } from "@/lib/utils"
+import  cn  from "@/lib/utils/cn"
 
 const Select = SelectPrimitive.Root
 
