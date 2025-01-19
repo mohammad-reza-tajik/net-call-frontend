@@ -17,7 +17,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     const iceCandidates: RTCIceCandidate[] = [];
 
-    let candidateTimeout: NodeJS.Timeout | undefined;
+    let candidateTimeout: NodeJS.Timeout;
 
     peerConnection.addEventListener("icecandidate", (event) => {
         if (event.candidate) {
@@ -41,10 +41,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
                 }, 1000)
             }
             if (iceCandidates.length > 0 && answerSignal.value && statusSignal.value?.endsWith(":receive")) {
-
-                if (candidateTimeout) {
-                    clearTimeout(candidateTimeout);
-                }
 
                 clearTimeout(candidateTimeout);
 

@@ -4,7 +4,7 @@ import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { Check, Caret, Circle } from "@/components/shared/Icons";
 
-import { cn } from "@/lib/utils/cn";
+import cn from "@/lib/utils/cn";
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
