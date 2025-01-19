@@ -26,6 +26,8 @@ function RequestItem({request}: IRequestItemProps) {
         statusText = "تماس تصویری"
     } else if (status === "audio:send") {
         statusText = "تماس صوتی"
+    } else if (status === "game:send"){
+        statusText = "بازی"
     }
 
     const answerRequestHandler = () => {
