@@ -12,7 +12,7 @@ function Features() {
     }
 
     return (
-        <div className={"flex justify-center items-center gap-5"}>
+        <div className={"flex justify-center items-center gap-5 p-5 border-t"}>
             <TooltipProvider>
                 {
                     features.map((item , index)=>{
