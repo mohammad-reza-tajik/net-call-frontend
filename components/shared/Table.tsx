@@ -64,7 +64,7 @@ function Table({ headers, data, onSortByHeader, renderCell, className }: ITableP
                 <tr key={index}>
                     {headers.map((header) => (
                         header && (
-                            <td className={"py-5 text-center first:rounded-s last:rounded-e border-b"} key={header.label}>
+                            <td className={"py-5 text-center text-xs md:text-base first:rounded-s last:rounded-e border-b"} key={header.label}>
                                 {renderCell ? renderCell(header, dataItem[header.label], dataItem) : dataItem[header.label]}
                             </td>
                         )
