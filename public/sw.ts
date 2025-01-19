@@ -1,9 +1,9 @@
-const STATIC_CACHE_NAME = "static-1732004644062";
-const DYNAMIC_CACHE_NAME = "dynamic-1732004644062";
+const STATIC_CACHE_NAME = "static-version";
+const DYNAMIC_CACHE_NAME = "dynamic-version";
 
 const serviceWorker = self as unknown as ServiceWorkerGlobalScope;
 
-const addToStaticCache = async (...resources : string[]) => {
+async function addToStaticCache(...resources : string[])  {
     try {
         const staticCache = await caches.open(STATIC_CACHE_NAME);
         await staticCache.addAll(resources);
@@ -12,11 +12,11 @@ const addToStaticCache = async (...resources : string[]) => {
     }
 }
 
-const addToDynamicCache = async (request : Request) => {
+async function addToDynamicCache(request : Request)  {
     try {
         const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
         const response = await fetch(request);
-        await dynamicCache.put(request, response.clone());
+        await dynamicCache.add(request);
         return response;
     } catch (err) {
         console.error("Failed to add to dynamic cache:", err);
@@ -24,7 +24,7 @@ const addToDynamicCache = async (request : Request) => {
     }
 }
 
-const cacheFirst = async (event : FetchEvent) => {
+async function cacheFirst(event : FetchEvent) {
     try {
         const res = await caches.match(event.request);
         if (res) {
@@ -39,7 +39,7 @@ const cacheFirst = async (event : FetchEvent) => {
             const { origin } = new URL(event.request.url);
             const isFromMySite = origin === serviceWorker.location.origin;
 
-            if (isFromMySite && (event.request.destination === "script" || event.request.destination === "style")) {
+            if (isFromMySite && (event.request.destination === "script" || event.request.destination === "style" || event.request.destination === "image")) {
                 return await addToDynamicCache(event.request);
             }
             return await fetch(event.request);
@@ -47,7 +47,7 @@ const cacheFirst = async (event : FetchEvent) => {
     } catch (err) {
         console.error("Fetch failed:", err);
         // Optionally, return a fallback response here
-        return new Response("Failed to fetch resource", { status: 503 });
+        return await caches.match("/offline.html") || new Response("offline",{status : 503});
     }
 }
 
@@ -61,7 +61,8 @@ serviceWorker.addEventListener("install", (event ) => {
                 "/fonts/dana-black.woff2",
                 "/fonts/dana-fanum-bold.woff2",
                 "/fonts/dana-fanum-medium.woff2",
-                "/images/logo.svg"
+                "/offline.html",
+                "/manifest.json"
             );
             // Force the waiting service worker to become the active service worker.
             await serviceWorker.skipWaiting(); // returned promise can be ignored safely

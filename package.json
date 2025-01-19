@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo",
     "bundle:sw": "esbuild public/sw.ts --bundle --outfile=public/sw.js --minify --target=es2022",
-    "prebuild": "node updateSW.mjs && npm run bundle:sw",
+    "prebuild": "node updateSW.js && npm run bundle:sw && node injectOfflineCss.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

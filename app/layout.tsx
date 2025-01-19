@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Net Call",
     description: "peer to peer video/audio call and share screen",
     keywords: ["video-call", "audio-call", "webrtc", "share-screen"],
-    manifest: "/app.webmanifest",
+    manifest: "/manifest.json",
     icons: {
         icon: "/images/logo-96.png",
         apple: [
