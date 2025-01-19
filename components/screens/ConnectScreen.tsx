@@ -20,6 +20,7 @@ import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import Loader from "@/components/shared/Loader";
 import {Button} from "@/components/ui/button";
 import hangup from "@/core/hangup";
+import PigGame from "@/components/screens/PigGame";
 
 function ConnectScreen() {
 
@@ -69,6 +70,8 @@ function ConnectScreen() {
             return <AudioCall/>
         } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
             return
+        } else if (statusSignal.value?.startsWith("game")) {
+            return <PigGame />
         } else {
             return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
                 <p>در حال اتصال ...</p>

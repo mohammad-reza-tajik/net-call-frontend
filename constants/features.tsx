@@ -1,7 +1,8 @@
-import {Phone, Monitor, Camera} from "@/components/shared/Icons";
+import {Phone, Monitor, Camera, GameController} from "@/components/shared/Icons";
 import shareScreen from "@/core/shareScreen";
 import videoCall from "@/core/videoCall";
 import audioCall from "@/core/audioCall";
+import inviteToGame from "@/core/inviteToGame";
 
 const features = [
         {
@@ -19,6 +20,12 @@ const features = [
             tooltipContent: "تماس صوتی",
             handler: () => audioCall()
         },
+
+    {
+        icon: <GameController className={"size-7"}/>,
+        tooltipContent: "بازی",
+        handler: () => inviteToGame()
+    }
     ];
 
 

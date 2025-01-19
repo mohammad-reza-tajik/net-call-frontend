@@ -12,6 +12,7 @@ import dataChannelListeners from "@/core/dataChannelListeners";
 import chatChannelListeners from "@/core/chatChannelListeners";
 import fileChannelListeners from "@/core/fileChannelListeners";
 import hangup from "@/core/hangup";
+import gameChannelListeners from "@/core/gameChannelListeners";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
@@ -84,8 +85,10 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
         dataChannelListeners(channel);
         if (channel.label === "chat") {
             chatChannelListeners(channel);
-        } else {
+        } else if (channel.label === "file") {
             fileChannelListeners(channel);
+        } else if (channel.label === "game"){
+            gameChannelListeners(channel);
         }
     })
 

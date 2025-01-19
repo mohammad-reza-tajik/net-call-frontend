@@ -33,7 +33,7 @@ function StreamControls() {
     const isVideoMute = useSignal(false);
     const isSoundMute = useSignal(false);
 
-    if (connectionStateSignal.value !== "connected") {
+    if (connectionStateSignal.value !== "connected" || statusSignal.value?.startsWith("game")) {
         return
     }
 
@@ -80,7 +80,7 @@ function StreamControls() {
     }
 
     return (
-        <div className={"flex justify-center items-center gap-5"}>
+        <div className={"flex justify-center items-center gap-5 p-5 border-t"}>
             <TooltipProvider>
                 <ActionButton
                               icon={<Phone className={"size-7 rotate-[135deg]"}/>}
