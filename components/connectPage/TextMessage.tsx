@@ -12,7 +12,7 @@ function TextMessage({message}: ITextMessageProps) {
 
     return (
         <div
-            className={cn("flex flex-col gap-2 border py-3 px-5 rounded min-w-min",
+            className={cn("flex flex-col gap-2 border py-3 px-5 rounded max-w-3/4",
                 {"bg-primary text-primary-foreground fill-primary-foreground self-start": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value}
             )}>

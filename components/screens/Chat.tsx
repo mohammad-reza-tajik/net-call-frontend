@@ -19,27 +19,27 @@ function Chat() {
     useSignals();
 
     const textMessageRef = useRef<HTMLTextAreaElement>(null);
-    const file = useSignal<File | undefined>(undefined);
-    const fileBuffer = useSignal<ArrayBuffer | undefined>(undefined);
+    const fileSignal = useSignal<File | undefined>(undefined);
+    const fileBufferSignal = useSignal<ArrayBuffer | undefined>(undefined);
 
     const sendMessageHandler = async () => {
         try {
-            if (file.value && fileBuffer.value) {
+            if (fileSignal.value && fileBufferSignal.value) {
                 // send file data first
                 const fileData: IFileData = {
-                    name: file.value.name,
-                    mimeType: file.value.type,
-                    size: file.value.size,
+                    name: fileSignal.value.name,
+                    mimeType: fileSignal.value.type,
+                    size: fileSignal.value.size,
                     timestamp : new Date()
                 }
 
-                await sendInChunks({fileBuffer: fileBuffer.value, fileData});
+                await sendInChunks({fileBuffer: fileBufferSignal.value, fileData});
 
-                file.value = undefined;
-                fileBuffer.value = undefined;
+                fileSignal.value = undefined;
+                fileBufferSignal.value = undefined;
             } else {
 
-                if (!textMessageRef.current?.value) return
+                if (!textMessageRef.current?.value.trim()) return
 
                 const textMessage: ITextMessage = {
                     type: "text",
@@ -59,28 +59,23 @@ function Chat() {
         }
     }
 
-    const filePickerHandler = async () => {
-        try {
+    const filePickerHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const chosenFile = event.target.files?.[0];
+        if (chosenFile) {
+            fileSignal.value = chosenFile;
             const reader = new FileReader();
-            const [fileHandle] = await window.showOpenFilePicker({multiple: false});
-            const chosenFile = await fileHandle.getFile();
-            if (!chosenFile) return
-            file.value = chosenFile;
             reader.addEventListener("load", (event) => {
                 if (!event.target?.result || typeof event.target.result === "string") return
-                fileBuffer.value = event.target.result;
+                fileBufferSignal.value = event.target.result;
             })
             reader.readAsArrayBuffer(chosenFile);
 
-        } catch (err) {
-            console.log("user didn't pick any files");
         }
-
-    }
+    };
 
     return (
         <>
-            <div className={"flex flex-col flex-1 overflow-y-auto overflow-x-hidden gap-3"}>
+            <div className={"@container flex flex-col flex-1 overflow-y-auto gap-3"}>
                 {
                     messagesSignal.value.map((message, index) => {
                         if (message.type === "text") {
@@ -95,19 +90,30 @@ function Chat() {
                     <PaperPlane className={"size-7"}/>
                 </Button>
                 {
-                    !file.value ? <Textarea ref={textMessageRef} className={"flex-1"}/> :
+                    !fileSignal.value ? <Textarea ref={textMessageRef} className={"flex-1"}/> :
                         <div className={"flex items-center justify-between p-3 flex-1 border rounded"}>
                             <p className={"text-sm"}>
                                 فایل انتخابی :
-                                {file.value.name}
+                                {fileSignal.value.name}
                             </p>
-                            <Button size={"icon"} variant={"outline"} onClick={() => file.value = undefined}>
+                            <Button size={"icon"} variant={"outline"} onClick={() => fileSignal.value = undefined}>
                                 <Close className={"size-4"}/>
                             </Button>
                         </div>
                 }
-                <Button size={"icon"} onClick={filePickerHandler} className={cn({"hidden": file.value})}>
-                    <Paperclip className={"size-7"}/>
+
+                <input
+                    id={"file-upload"}
+                    type={"file"}
+                    className={"hidden"}
+                    multiple
+                    onChange={filePickerHandler}
+                />
+
+                <Button size={"icon"} className={cn({"hidden": fileSignal.value})}>
+                    <label htmlFor="file-upload">
+                        <Paperclip className={"size-7"}/>
+                    </label>
                 </Button>
             </div>
 
