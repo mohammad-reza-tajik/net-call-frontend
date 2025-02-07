@@ -8,7 +8,7 @@ const CHUNK_SIZE = 1024 * 256;
 async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, fileData: IFileData }) {
     const timestamp = new Date();
     let offset = 0;
-    const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}-${localPeerIdSignal.value}-${Date.now()}`);
+    const dataChannel = peerConnectionSignal.value!.createDataChannel(`file:${fileData.name}__${localPeerIdSignal.value}__${Date.now()}`);
     /**
      transferringFileMessageIndex variable is the index of the file-message we're going to send . we know that
      it's going to be placed after the last element in the array so the index will be

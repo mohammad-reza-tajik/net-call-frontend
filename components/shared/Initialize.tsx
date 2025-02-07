@@ -1,5 +1,5 @@
 "use client"
-import {useEffect} from "react";
+import {Suspense, useEffect} from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import localStreamSignal from "@/signals/localStream";
 import devicesSignal from "@/signals/devices";
@@ -12,7 +12,22 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
-import hangup from "@/core/hangup";
+
+function HangupOnRouteChange() {
+    const pathName = usePathname();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        console.log("page changed")
+        if (peerConnectionSignal.value?.connectionState === "connected" || peerConnectionSignal.value?.connectionState === "connecting") {
+            // by closing the connection we close all data channels and that will trigger a hangup
+            peerConnectionSignal.value?.close();
+            socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
+        }
+    }, [pathName, searchParams]);
+
+    return <></>
+}
 
 function Initialize({children}: { children: React.ReactNode }) {
 
@@ -52,16 +67,6 @@ function Initialize({children}: { children: React.ReactNode }) {
         })();
     }, []);
 
-    const pathName = usePathname();
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        if (peerConnectionSignal.value?.connectionState === "connected" || peerConnectionSignal.value?.connectionState === "connecting") {
-            socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-            hangup();
-        }
-    }, [pathName,searchParams]);
-
     useSignalEffect(() => {
         if (!peerConnectionSignal.value) {
             createConnection();
@@ -70,6 +75,9 @@ function Initialize({children}: { children: React.ReactNode }) {
 
     return (
         <>
+            <Suspense>
+                <HangupOnRouteChange/>
+            </Suspense>
             {children}
         </>
     )

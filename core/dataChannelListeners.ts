@@ -13,7 +13,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
     })
 
     dataChannel.addEventListener("close", () => {
-        if (dataChannel.label === "chat") {
+        if (!dataChannel.label.startsWith("file")) {
             toast.error("ارتباط پایان یافت");
             hangup();
         }

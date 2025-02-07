@@ -67,6 +67,12 @@ function socketListeners(socket: Socket) {
         hangup();
     })
 
+    socket.on("hangupToPeer",()=>{
+        if (peerConnectionSignal.value?.signalingState !== "stable") {
+            hangup();
+        }
+    })
+
     socket.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
         if (peerConnectionSignal.value?.signalingState !== "stable") {
