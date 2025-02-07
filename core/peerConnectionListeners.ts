@@ -85,7 +85,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
         dataChannelListeners(channel);
         if (channel.label === "chat") {
             chatChannelListeners(channel);
-        } else if (channel.label === "file") {
+        } else if (channel.label.startsWith("file")) {
             fileChannelListeners(channel);
         } else if (channel.label === "game"){
             gameChannelListeners(channel);
