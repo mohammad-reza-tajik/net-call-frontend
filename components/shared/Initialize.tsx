@@ -8,10 +8,11 @@ import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import {useSignalEffect} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
+import hangup from "@/core/hangup";
 
 function Initialize({children}: { children: React.ReactNode }) {
 
@@ -50,6 +51,16 @@ function Initialize({children}: { children: React.ReactNode }) {
             }
         })();
     }, []);
+
+    const pathName = usePathname();
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        if (peerConnectionSignal.value?.connectionState === "connected" || peerConnectionSignal.value?.connectionState === "connecting") {
+            socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
+            hangup();
+        }
+    }, [pathName,searchParams]);
 
     useSignalEffect(() => {
         if (!peerConnectionSignal.value) {
