@@ -37,7 +37,7 @@ export interface ITableProps {
  * @param {ITableProps} props - The properties for the Table component.
  * @returns {JSX.Element} - The rendered table.
  */
-function Table({ headers, data, onSortByHeader, renderCell, className }: ITableProps): JSX.Element {
+function Table({ headers, data, onSortByHeader, renderCell, className }: ITableProps): React.JSX.Element {
     return (
         <table className={`border-collapse table-fixed w-full ${className}`}>
             <thead>
