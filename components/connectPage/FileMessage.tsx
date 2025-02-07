@@ -3,7 +3,7 @@ import type {IFileMessage} from "@/types";
 import {Check, DoubleChecks, Download, File as FileIcon} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import  cn from "@/lib/utils/cn";
+import cn from "@/lib/utils/cn";
 import makeHumanReadable from "@/lib/utils/makeHumanReadable";
 import getTimestamp from "@/lib/utils/getTimeStamp";
 import {toast} from "react-hot-toast";
@@ -13,21 +13,10 @@ interface IFileMessageProps {
 }
 
 function FileMessage({message}: IFileMessageProps) {
-
-    const saveFile = async (file: File) => {
-        // create a new handle
-        const newHandle = await window.showSaveFilePicker({suggestedName: file.name});
-
-        // create a FileSystemWritableFileStream to write to
-        const writableStream = await newHandle.createWritable();
-
-        // write our file
-        await writableStream.write(file);
-
-        // close the file and write the contents to disk.
-        await writableStream.close();
-
-        toast.success("دانلود انجام شد");
+    const createDownloadLink = (file: File): string => {
+        // Create a Blob URL for the file
+        const blob = new Blob([file], {type: file.type});
+        return URL.createObjectURL(blob);
     }
 
     return (
@@ -36,17 +25,19 @@ function FileMessage({message}: IFileMessageProps) {
                 {"bg-primary text-primary-foreground fill-primary-foreground": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value})}>
             <FileIcon className={"size-7"}/>
-            <p className={"text-xs [direction:ltr] truncate"}>
+            <p className={"text-xs [direction:ltr] text-wrap text-center"}>
                 {message.file.name}
             </p>
-            <p className={"text-xs [direction:ltr]"}>
+            <p className={"text-xs [direction:ltr] text-wrap"}>
                 {message.transferredAmount < message.file.size ? `${makeHumanReadable(message.transferredAmount)}/${makeHumanReadable(message.file.size)}` : makeHumanReadable(message.file.size)}
             </p>
             {
                 localPeerIdSignal.value !== message.localPeerId && message.transferredAmount >= message.file.size ?
-                    <Button variant={"outline"} onClick={() => saveFile(message.file as File)} className={"gap-2"}>
-                        <Download className={"size-5"}/>
-                        دریافت
+                    <Button variant={"outline"} className={"gap-2"} asChild>
+                        <a href={createDownloadLink(message.file as File)} download={message.file.name}>
+                            <Download className={"size-5"}/>
+                            دریافت
+                        </a>
                     </Button> : null
             }
             <div className={"flex items-center gap-2 self-start"}>

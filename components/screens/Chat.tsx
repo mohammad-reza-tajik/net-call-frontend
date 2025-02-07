@@ -75,7 +75,7 @@ function Chat() {
 
     return (
         <>
-            <div className={"@container flex flex-col flex-1 overflow-y-auto gap-3"}>
+            <div className={"@container flex flex-col flex-1 overflow-y-auto overflow-x-auto gap-3"}>
                 {
                     messagesSignal.value.map((message, index) => {
                         if (message.type === "text") {
