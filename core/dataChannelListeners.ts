@@ -1,3 +1,5 @@
+import hangup from "@/core/hangup";
+import {toast} from "react-hot-toast";
 
 function dataChannelListeners(dataChannel: RTCDataChannel) {
 
@@ -11,6 +13,10 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
     })
 
     dataChannel.addEventListener("close", () => {
+        if (!dataChannel.label.startsWith("file")) {
+            toast.error("ارتباط پایان یافت");
+            hangup();
+        }
         console.log(`${dataChannel.label} channel is closed`);
     })
 
