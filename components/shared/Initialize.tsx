@@ -8,26 +8,11 @@ import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import {useSignalEffect} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
 import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
-
-function HangupOnRouteChange() {
-    const pathName = usePathname();
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        console.log("page changed")
-        if (peerConnectionSignal.value?.connectionState === "connected" || peerConnectionSignal.value?.connectionState === "connecting") {
-            // by closing the connection we close all data channels and that will trigger a hangup
-            peerConnectionSignal.value?.close();
-            socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-        }
-    }, [pathName, searchParams]);
-
-    return <></>
-}
+import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
 
 function Initialize({children}: { children: React.ReactNode }) {
 

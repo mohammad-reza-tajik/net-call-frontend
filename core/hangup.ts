@@ -25,10 +25,7 @@ import {
 } from "@/signals/games/pigGame";
 
 function hangup() {
-
-    chatChannelSignal.value?.close();
-    gameChannelSignal.value?.close();
-    fileChannelSignal.value?.close();
+    
     peerConnectionSignal.value?.close();
 
     batch(() => {
