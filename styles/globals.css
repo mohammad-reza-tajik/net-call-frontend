@@ -2,6 +2,38 @@
 
 @import "tailwindcss";
 
+:root {
+
+    --background: 234, 79%, 7%;
+    --foreground: 0 0% 100%;
+
+    --primary: 231, 63%, 56%;
+    --primary-foreground: 0, 0%, 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 100% 65%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -42,104 +74,45 @@
 
 }
 
-@utility container {
-  margin-inline: auto;
-  padding-inline: 2rem;
-  @media (width >= --theme(--breakpoint-sm)) {
-    max-width: none;
-  }
-  @media (width >= 1400px) {
-    max-width: 1400px;
-  }
-}
-
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
+    *,
+    *:before,
+    *:after {
+        @apply border-border;
+    }
 
-:root {
+    ::-webkit-scrollbar {
+        @apply w-1;
+    }
 
-    --background: 234, 79%, 7%;
-    --foreground: 0 0% 100%;
+    ::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
 
-    --primary: 231, 63%, 56%;
-    --primary-foreground: 0, 0%, 100%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 212.7 26.8% 83.9%;
-    --radius: 0.5rem;
-}
-
-*,
-*:before,
-*:after {
-    @apply border-border;
-}
-
-::-webkit-scrollbar {
-    @apply w-1;
-}
-
-::-webkit-scrollbar-track {
-    @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    @apply bg-primary cursor-pointer ;
-}
+    ::-webkit-scrollbar-thumb {
+        @apply bg-primary cursor-pointer ;
+    }
 
 
-a, a:visited, a:active {
-    @apply fill-foreground;
-}
+    a, a:visited, a:active {
+        @apply fill-foreground;
+    }
 
-/**** hide arrows in input[type=number] ****/
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    @apply appearance-none m-0;
-}
+    /**** hide arrows in input[type=number] ****/
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        @apply appearance-none m-0;
+    }
 
-input[type=number] {
-    @apply appearance-none;
-}
+    input[type=number] {
+        @apply appearance-none;
+    }
 
-.contained {
-    @apply max-w-(--breakpoint-xl) px-1 mx-auto;
-}
+    .contained {
+        @apply max-w-(--breakpoint-xl) px-1 mx-auto;
+    }
 
-::placeholder {
-    @apply text-xs md:text-sm;
+    ::placeholder {
+        @apply text-xs md:text-sm;
+    }
 }
