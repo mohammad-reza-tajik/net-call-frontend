@@ -16,10 +16,19 @@ import remoteStreamSignal from "@/signals/remoteStream";
 import localVideoRefSignal from "@/signals/localVideoRef";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
+import {
+    diceSignal,
+    gameChannelSignal, isGameOverSignal, isYourTurnSignal,
+    myScoreSignal,
+    opponentScoreSignal,
+    temporaryScoreSignal
+} from "@/signals/games/pigGame";
 
 function hangup() {
 
     chatChannelSignal.value?.close();
+    gameChannelSignal.value?.close();
+    fileChannelSignal.value?.close();
     peerConnectionSignal.value?.close();
 
     batch(() => {
@@ -36,7 +45,14 @@ function hangup() {
         connectionStateSignal.value = undefined;
         chatChannelSignal.value = undefined;
         fileChannelSignal.value = undefined;
+        gameChannelSignal.value = undefined;
         haveNewMessageSignal.value = false;
+        diceSignal.value = 5;
+        opponentScoreSignal.value = 0;
+        myScoreSignal.value = 0;
+        temporaryScoreSignal.value = 0;
+        isYourTurnSignal.value = false;
+        isGameOverSignal.value = false;
     });
 
     if (localVideoRefSignal.value?.current && remoteVideoRefSignal.value?.current) {
