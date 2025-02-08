@@ -80,7 +80,7 @@ function StreamControls() {
     }
 
     return (
-        <div className={"flex justify-center items-center gap-5 p-5 border-t"}>
+        <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
             <TooltipProvider>
                 <ActionButton
                               icon={<Phone className={"size-7 rotate-[135deg]"}/>}

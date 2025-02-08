@@ -77,7 +77,7 @@ function ConnectScreen() {
             <Drawer openSignal={isChatDrawerOpenSignal} className={"sm:w-1/2"}>
                 <Chat/>
             </Drawer>
-            <section className={"@container relative overflow-hidden h-[calc(100vh-146px)]"}>
+            <section className={"@container relative overflow-hidden h-[calc(100dvh-146px)]"}>
                 {renderScreen()}
 
                 <div
