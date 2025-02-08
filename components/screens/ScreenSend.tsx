@@ -4,7 +4,7 @@ import currentResponseSignal from "@/signals/peer/currentResponse";
 function ScreenSend() {
 
     return (
-        <div className={"flex flex-1 justify-center items-center flex-col gap-4 md:gap-7"}>
+        <div className={"flex justify-center items-center flex-col size-full gap-4 md:gap-7"}>
             <Monitor className={"size-20 md:size-28"}/>
             <div className={"text-sm md:text-lg text-center leading-loose"}>
                 صفحه شما برای

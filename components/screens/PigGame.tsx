@@ -14,6 +14,7 @@ import {
     opponentScoreSignal,
     temporaryScoreSignal
 } from "@/signals/games/pigGame";
+import {batch} from "@preact/signals-react";
 
 function PigGame() {
 
@@ -71,17 +72,19 @@ function PigGame() {
     }
 
     function restartGameHandler() {
-        isYourTurnSignal.value = true;
-        diceSignal.value = 1;
-        opponentScoreSignal.value = 0;
-        temporaryScoreSignal.value = 0;
-        myScoreSignal.value = 0;
+        batch(() => {
+            isYourTurnSignal.value = true;
+            diceSignal.value = 1;
+            opponentScoreSignal.value = 0;
+            temporaryScoreSignal.value = 0;
+            myScoreSignal.value = 0;
+            isGameOverSignal.value = false;
+        });
         gameChannelSignal.value?.send(JSON.stringify({type: "restartGame"}));
-        isGameOverSignal.value = false;
     }
 
     return (
-        <section className={"flex flex-col justify-between items-center gap-5 flex-1 w-full relative"}>
+        <section className={"flex flex-col justify-between items-center gap-5 size-full relative"}>
 
             {
                 isGameOverSignal.value && (

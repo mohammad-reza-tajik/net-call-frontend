@@ -31,7 +31,7 @@ function RootLayout({children}: { children: React.ReactNode; }) {
     return (
         <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"}>
         <body className={"bg-background text-foreground fill-foreground relative"}>
-        <div className={"h-screen contained overflow-hidden flex flex-col"}>
+        <div className={"h-screen w-screen contained overflow-hidden flex flex-col"}>
             <Providers>
                 <Initialize>
                     <Header/>

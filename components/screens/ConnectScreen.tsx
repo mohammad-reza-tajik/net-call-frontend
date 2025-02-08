@@ -4,16 +4,14 @@ import AudioCall from "@/components/screens/AudioCall";
 import cn from "@/lib/utils/cn";
 import ScreenSend from "@/components/screens/ScreenSend";
 import ActionBar from "@/components/connectPage/ActionBar";
-import {useEffect, useRef} from "react";
+import {Suspense, useEffect, useRef} from "react";
 import createAnswer from "@/core/createAnswer";
 import statusSignal from "@/signals/peer/status";
-import {signalingStateSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {connectionStateSignal, peerConnectionSignal, signalingStateSignal} from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import localVideoRefSignal from "@/signals/localVideoRef";
-import {useSearchParams} from "next/navigation";
-import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import Chat from "@/components/screens/Chat";
 import Drawer from "@/components/shared/Drawer";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
@@ -21,6 +19,7 @@ import Loader from "@/components/shared/Loader";
 import {Button} from "@/components/ui/button";
 import hangup from "@/core/hangup";
 import PigGame from "@/components/screens/PigGame";
+import RemotePeerIdUpdater from "@/components/connectPage/RemotePeerIdUpdater";
 
 function ConnectScreen() {
 
@@ -29,19 +28,10 @@ function ConnectScreen() {
     const localVideoRef = useRef<HTMLVideoElement | null>(null);
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
 
-    const remotePeerIdQuery = useSearchParams().get("remotePeerId");
-
-    useEffect(() => {
-        if (!remotePeerIdSignal.value && remotePeerIdQuery) {
-            remotePeerIdSignal.value = remotePeerIdQuery;
-        }
-    }, [remotePeerIdQuery]);
-
     useEffect(() => {
         remoteVideoRefSignal.value = remoteVideoRef;
         localVideoRefSignal.value = localVideoRef;
     }, []);
-
 
     useSignalEffect(() => {
         (async () => {
@@ -51,14 +41,13 @@ function ConnectScreen() {
         })();
     })
 
-
     function renderScreen() {
         if (!statusSignal.value) {
-            return <p className={"flex justify-center items-center text-sm md:text-xl flex-1"}>
-                برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
-            </p>
+             return <p className={"flex justify-center items-center text-sm md:text-xl size-full"}>
+                 برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
+             </p>
         } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
+            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
                 <p>
                     در انتظار پاسخ ...
                 </p>
@@ -71,9 +60,9 @@ function ConnectScreen() {
         } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
             return
         } else if (statusSignal.value?.startsWith("game")) {
-            return <PigGame />
+            return <PigGame/>
         } else {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl flex-1"}>
+            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
                 <p>در حال اتصال ...</p>
                 <Loader className={"size-8 md:size-10"}/>
             </div>
@@ -82,19 +71,27 @@ function ConnectScreen() {
 
     return (
         <>
+            <Suspense>
+                <RemotePeerIdUpdater />
+            </Suspense>
             <Drawer openSignal={isChatDrawerOpenSignal} className={"sm:w-1/2"}>
                 <Chat/>
             </Drawer>
-            <section className={"flex-1 flex flex-col relative overflow-hidden items-center"}>
+            <section className={"@container relative overflow-hidden h-[calc(100vh-146px)]"}>
                 {renderScreen()}
 
-                <video ref={localVideoRef} controls autoPlay
-                       className={cn("absolute top-2 right-2 w-20 h-10 md:top-5 md:right-5 md:w-64 md:h-36 z-50", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
+                <div
+                    className={"absolute top-1 right-1 z-50 max-w-1/2 @lg:max-w-1/4 overflow-hidden"}>
+                    <video ref={localVideoRef} autoPlay
+                           className={cn("size-full object-contain ", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
+                </div>
 
-                <video ref={remoteVideoRef} controls autoPlay
-                       className={cn("flex-1", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !== "connected"})}/>
-                <ActionBar/>
+                <div className={"relative size-full overflow-hidden"}>
+                    <video ref={remoteVideoRef} autoPlay
+                           className={cn("size-full object-contain ", {"hidden": !statusSignal.value?.startsWith("video:") && statusSignal.value !== "screen:receive" || connectionStateSignal.value !== "connected"})}/>
+                </div>
             </section>
+            <ActionBar/>
         </>
     )
 }
