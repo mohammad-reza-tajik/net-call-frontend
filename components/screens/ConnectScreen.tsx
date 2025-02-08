@@ -81,7 +81,7 @@ function ConnectScreen() {
                 {renderScreen()}
 
                 <div
-                    className={"absolute top-1 right-1 z-50 max-w-1/2 @lg:max-w-1/4 overflow-hidden"}>
+                    className={"absolute top-1 right-1 z-30 max-w-1/2 @lg:max-w-1/4 overflow-hidden"}>
                     <video ref={localVideoRef} autoPlay
                            className={cn("size-full object-contain ", {"hidden": !statusSignal.value?.startsWith("video:") || connectionStateSignal.value !== "connected"})}/>
                 </div>
