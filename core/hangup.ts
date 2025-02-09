@@ -23,6 +23,7 @@ import {
     opponentScoreSignal,
     temporaryScoreSignal
 } from "@/signals/games/pigGame";
+import {isChatDrawerOpenSignal} from "@/signals/drawer";
 
 function hangup() {
     
@@ -31,6 +32,7 @@ function hangup() {
     batch(() => {
         statusSignal.value = undefined;
         currentRequestSignal.value = undefined;
+        isChatDrawerOpenSignal.value = false;
         messagesSignal.value = [];
         offerSignal.value = undefined;
         answerSignal.value = undefined;
