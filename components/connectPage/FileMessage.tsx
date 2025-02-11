@@ -6,7 +6,6 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 import cn from "@/lib/utils/cn";
 import makeHumanReadable from "@/lib/utils/makeHumanReadable";
 import getTimestamp from "@/lib/utils/getTimeStamp";
-import {toast} from "react-hot-toast";
 
 interface IFileMessageProps {
     message: IFileMessage
