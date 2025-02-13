@@ -32,6 +32,7 @@ function Initialize({children}: { children: React.ReactNode }) {
                     });
                 }
 
+                const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
                 const permission = await Notification.requestPermission();
 
                 if (permission !== "granted") {
