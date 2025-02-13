@@ -55,7 +55,7 @@ function socketListeners(socket: Socket) {
             haveNewRequestSignal.value = true;
         }
     })
-    
+
     socket.on("responseToPeer", async (response: IResponse) => {
         try {
             /**
