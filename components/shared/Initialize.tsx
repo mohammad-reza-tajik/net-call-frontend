@@ -13,6 +13,7 @@ import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
 import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
+import {toast} from "react-hot-toast";
 
 function Initialize({children}: { children: React.ReactNode }) {
 
@@ -31,7 +32,12 @@ function Initialize({children}: { children: React.ReactNode }) {
                     });
                 }
 
-                const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+                const permission = await Notification.requestPermission();
+
+                if (permission !== "granted") {
+                    throw new Error("دسترسی به اعلان مورد نیاز است");
+                }
+
                 let localPeerId = localStorage.getItem("localPeerId");
                 if (!localPeerId) {
                     localPeerId = localStream.id;
@@ -47,7 +53,10 @@ function Initialize({children}: { children: React.ReactNode }) {
                     socketSignal.value = socket;
                 })
             } catch (err) {
-                console.error(err);
+                if (err instanceof Error) {
+                    toast.error(err.message);
+                    console.error(err);
+                }
             }
         })();
     }, []);

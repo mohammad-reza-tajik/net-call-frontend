@@ -6,9 +6,10 @@ import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/core/hangup";
-import {Socket} from "socket.io-client";
+import type {Socket} from "socket.io-client";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
+import showNotification from "@/lib/utils/showNotification";
 
 function socketListeners(socket: Socket) {
 
@@ -31,12 +32,30 @@ function socketListeners(socket: Socket) {
             ]
         }
 
+        let statusText: string | undefined;
+
+        if (request.status === "screen:send") {
+            statusText = "اشتراک گذاری صفحه"
+        } else if (request.status === "video:send") {
+            statusText = "تماس تصویری"
+        } else if (request.status === "audio:send") {
+            statusText = "تماس صوتی"
+        } else if (request.status === "game:send"){
+            statusText = "بازی"
+        }
+
+        showNotification({
+            title : "یک درخواست دریافت شد",
+            body : `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
+        });
+
         toast("یک درخواست دریافت شد");
 
         if (!isRequestsDrawerOpenSignal.value) {
             haveNewRequestSignal.value = true;
         }
     })
+
     socket.on("responseToPeer", async (response: IResponse) => {
         try {
             /**

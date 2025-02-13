@@ -4,6 +4,7 @@ import messagesSignal from "@/signals/peer/messages";
 import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnection";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
+import showNotification from "@/lib/utils/showNotification";
 
 const CHUNK_SIZE = 1024 * 256;
 
@@ -49,6 +50,12 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
         if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
 
             console.log("file received");
+
+            showNotification({
+                title : "پیام جدید",
+                body : fileData.name,
+                tag : `newMessage-${remotePeerId.value}`
+            });
 
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
