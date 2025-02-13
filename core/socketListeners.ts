@@ -44,18 +44,18 @@ function socketListeners(socket: Socket) {
             statusText = "بازی"
         }
 
-
         showNotification({
             title : "یک درخواست دریافت شد",
             body : `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
         });
-        
+
         toast("یک درخواست دریافت شد");
 
         if (!isRequestsDrawerOpenSignal.value) {
             haveNewRequestSignal.value = true;
         }
     })
+    
     socket.on("responseToPeer", async (response: IResponse) => {
         try {
             /**
