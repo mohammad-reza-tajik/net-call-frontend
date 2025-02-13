@@ -104,19 +104,22 @@ serviceWorker.addEventListener("fetch", (event) => {
 });
 
 serviceWorker.addEventListener("notificationclick", (event) => {
-    (async () => {
-        try {
-            const allClients = await serviceWorker.clients.matchAll({type: "window", includeUncontrolled: true});
-            const clientToFocus = allClients.find(client => client.url === serviceWorker.location.origin + "/");
-            if (clientToFocus) {
-                clientToFocus.postMessage("focus");
-            } else {
-                // If no matching client is found, serviceWorker.clients.openWindow("/") opens a new window at the root URL.
-                await serviceWorker.clients.openWindow("/");
-            }
+    event.notification.close(); // Close the notification
+    event.waitUntil(
+        (async () => {
+            try {
+                const allClients = await serviceWorker.clients.matchAll({type: "window", includeUncontrolled: false});
+                const clientToFocus = allClients.find(client => client.url === serviceWorker.location.origin + "/" && "focus" in client);
 
-        } catch (err) {
-            console.error("notificationClick event failed:", err);
-        }
-    })();
+                if (clientToFocus) {
+                    await clientToFocus.focus();
+                } else {
+                    // If no matching client is found, serviceWorker.clients.openWindow("/") opens a new window at the root URL.
+                    await serviceWorker.clients.openWindow("/");
+                }
+
+            } catch (err) {
+                console.error("notificationClick event failed:", err);
+            }
+        })());
 });
