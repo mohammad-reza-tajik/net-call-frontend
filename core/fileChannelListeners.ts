@@ -62,7 +62,7 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
             } else {
                 haveNewMessageSignal.value = true;
             }
-            
+
             dataChannel.close();
 
             const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
