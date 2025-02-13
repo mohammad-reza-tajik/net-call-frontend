@@ -1,5 +1,5 @@
 import {signal} from "@preact/signals-react";
-import {Socket} from "socket.io-client";
+import type {Socket} from "socket.io-client";
 
 const socketSignal = signal<Socket | undefined>(undefined);
 

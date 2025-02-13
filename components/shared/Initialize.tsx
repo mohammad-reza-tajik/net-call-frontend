@@ -13,7 +13,8 @@ import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
 import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
-import {toast} from "react-hot-toast";
+import { type Toast, toast} from "react-hot-toast";
+import {Button} from "@/components/ui/button";
 
 function Initialize({children}: { children: React.ReactNode }) {
 
@@ -28,15 +29,31 @@ function Initialize({children}: { children: React.ReactNode }) {
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data === "activated") {
                             routerSignal.value?.refresh();
+                        } else if (event.data === "focus"){
+                            window.focus();
                         }
                     });
                 }
 
                 const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-                const permission = await Notification.requestPermission();
 
-                if (permission !== "granted") {
-                    throw new Error("دسترسی به اعلان مورد نیاز است");
+                // this is because we need to request notification permission on a user gesture
+                if (Notification.permission !== "granted") {
+                    toast((t: Toast) => (
+                        <div className={"flex items-center gap-2"}>
+                        <p>دسترسی به اعلان مورد نیاز است</p>
+                        <Button onClick={async () => {
+                            const permission = await Notification.requestPermission();
+                            if (permission !== "granted") {
+                                throw new Error("دسترسی به اعلان مورد نیاز است");
+                            }
+                            toast.dismiss(t.id)
+                        }}>
+                            دادن مجوز
+                        </Button>
+                        </div>
+                    ) , {id : "notification-permission" , duration : 60 * 60 * 1000});
+
                 }
 
                 let localPeerId = localStorage.getItem("localPeerId");

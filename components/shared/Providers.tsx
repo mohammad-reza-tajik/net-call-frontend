@@ -27,7 +27,7 @@ function Providers({children}: { children: React.ReactNode }) {
                                     {icon}
                                     {message}
                                 </div>
-                                {t.type !== "loading" && (
+                                {t.type !== "loading" && t.id !== "notification-permission" && (
                                     <Button size={"icon"} className={"size-7"} onClick={() => toast.dismiss(t.id)}>
                                         <Close className={"size-5"}/>
                                     </Button>

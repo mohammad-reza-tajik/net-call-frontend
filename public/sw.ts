@@ -3,7 +3,7 @@ const DYNAMIC_CACHE_NAME = "dynamic-version";
 
 const serviceWorker = self as unknown as ServiceWorkerGlobalScope;
 
-async function addToStaticCache(...resources : string[])  {
+async function addToStaticCache(...resources: string[]) {
     try {
         const staticCache = await caches.open(STATIC_CACHE_NAME);
         await staticCache.addAll(resources);
@@ -12,7 +12,7 @@ async function addToStaticCache(...resources : string[])  {
     }
 }
 
-async function addToDynamicCache(request : Request)  {
+async function addToDynamicCache(request: Request) {
     try {
         const dynamicCache = await caches.open(DYNAMIC_CACHE_NAME);
         const response = await fetch(request);
@@ -24,7 +24,7 @@ async function addToDynamicCache(request : Request)  {
     }
 }
 
-async function cacheFirst(event : FetchEvent) {
+async function cacheFirst(event: FetchEvent) {
     try {
         const res = await caches.match(event.request);
         if (res) {
@@ -36,7 +36,7 @@ async function cacheFirst(event : FetchEvent) {
              * like Chrome extension scripts and ...
              */
 
-            const { origin } = new URL(event.request.url);
+            const {origin} = new URL(event.request.url);
             const isFromMySite = origin === serviceWorker.location.origin;
 
             if (isFromMySite && (event.request.destination === "script" || event.request.destination === "style" || event.request.destination === "image")) {
@@ -47,11 +47,11 @@ async function cacheFirst(event : FetchEvent) {
     } catch (err) {
         console.error("Fetch failed:", err);
         // Optionally, return a fallback response here
-        return await caches.match("/offline.html") || new Response("offline",{status : 503});
+        return await caches.match("/offline.html") || new Response("offline", {status: 503});
     }
 }
 
-serviceWorker.addEventListener("install", (event ) => {
+serviceWorker.addEventListener("install", (event) => {
     console.log("-----[ service worker installed ]-----");
 
     event.waitUntil((async () => {
@@ -86,7 +86,7 @@ serviceWorker.addEventListener("activate", (event) => {
                 })
             );
 
-            const allClients = await serviceWorker.clients.matchAll({ includeUncontrolled: true });
+            const allClients = await serviceWorker.clients.matchAll({includeUncontrolled: true});
             allClients.forEach(client => {
                 client.postMessage("activated");
             });
@@ -99,10 +99,24 @@ serviceWorker.addEventListener("activate", (event) => {
     })());
 });
 
-serviceWorker.addEventListener("fetch", (event ) => {
+serviceWorker.addEventListener("fetch", (event) => {
     event.respondWith(cacheFirst(event));
 });
 
-serviceWorker.addEventListener("message", (event) => {
-    console.log(event.data);
+serviceWorker.addEventListener("notificationclick", (event) => {
+    (async () => {
+        try {
+            const allClients = await serviceWorker.clients.matchAll({type: "window", includeUncontrolled: true});
+            const clientToFocus = allClients.find(client => client.url === serviceWorker.location.origin + "/");
+            if (clientToFocus) {
+                clientToFocus.postMessage("focus");
+            } else {
+                // If no matching client is found, serviceWorker.clients.openWindow("/") opens a new window at the root URL.
+                await serviceWorker.clients.openWindow("/");
+            }
+
+        } catch (err) {
+            console.error("notificationClick event failed:", err);
+        }
+    })();
 });
