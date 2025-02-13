@@ -13,6 +13,7 @@ import chatChannelListeners from "@/core/chatChannelListeners";
 import fileChannelListeners from "@/core/fileChannelListeners";
 import hangup from "@/core/hangup";
 import gameChannelListeners from "@/core/gameChannelListeners";
+import showNotification from "@/lib/utils/showNotification";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
@@ -68,6 +69,10 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
         if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
+            showNotification({
+                title : `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
+
+            })
         } else if (peerConnection.connectionState === "failed") {
             hangup();
             toast.error("متاسفانه ارتباط برقرار نشد");
