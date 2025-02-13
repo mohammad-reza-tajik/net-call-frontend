@@ -94,6 +94,9 @@ function socketListeners(socket: Socket) {
 
     socket.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
+        showNotification({
+            title : "درخواست شما رد شد",
+        });
         if (peerConnectionSignal.value?.signalingState !== "stable") {
             hangup();
         }
