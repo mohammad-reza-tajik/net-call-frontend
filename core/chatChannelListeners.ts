@@ -2,6 +2,8 @@ import messagesSignal from "@/signals/peer/messages";
 import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
+import showNotification from "@/lib/utils/showNotification";
+import type {ITextMessage} from "@/types";
 
 function chatChannelListeners(dataChannel: RTCDataChannel) {
 
@@ -12,7 +14,13 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
             })
         }
         else {
-            const newMessage = JSON.parse(data);
+            const newMessage = JSON.parse(data) as ITextMessage;
+            showNotification({
+                title : "پیام جدید",
+                body : newMessage.text,
+                tag : `newMessage-${newMessage.localPeerId}`
+            });
+
             messagesSignal.value = [...messagesSignal.value, newMessage];
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
