@@ -1,10 +1,12 @@
 
 export type TStatus = `${"screen" | "video" | "audio" | "game"}:${"send"|"receive"}`;
 
+export type TDeviceType = "desktop" | "mobile";
+
 export interface IConnectedPeer {
     socketId : string;
     localPeerId : string;
-    deviceType: "desktop" | "mobile";
+    deviceType: TDeviceType;
 }
 
 export interface IRequest {

@@ -4,6 +4,7 @@ import {TooltipProvider} from "@/components/ui/tooltip";
 import features from "@/constants/features";
 import ActionButton from "@/components/connectPage/ActionButton";
 import statusSignal from "@/signals/peer/status";
+import getDeviceType from "@/core/getDeviceType";
 
 function Features() {
 
@@ -16,6 +17,7 @@ function Features() {
             <TooltipProvider>
                 {
                     features.map((item , index)=>{
+                        if (getDeviceType() === "mobile" && item.name === "screen-share") return;
                         return (
                             <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />
                         )
