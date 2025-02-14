@@ -115,4 +115,8 @@
     ::placeholder {
         @apply text-xs md:text-sm;
     }
+
+    button {
+        @apply cursor-pointer;
+    }
 }

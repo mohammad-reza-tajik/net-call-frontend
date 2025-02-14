@@ -13,11 +13,11 @@ import {Button} from "@/components/ui/button";
 import {Caret} from "@/components/shared/Icons";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 
-interface Props {
+interface IProps {
     devices?: MediaDeviceInfo[];
 }
 
-function DeviceSelector({devices}: Props) {
+function DeviceSelector({devices}: IProps) {
 
     const device = useSignal("default");
 

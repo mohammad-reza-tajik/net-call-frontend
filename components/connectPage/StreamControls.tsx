@@ -13,7 +13,7 @@ import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
 import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
-import devicesSignal from "@/signals/devices";
+import iODevicesSignal from "@/signals/iODevices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import {chatChannelSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
@@ -97,7 +97,7 @@ function StreamControls() {
 
                     <Separator orientation={"vertical"}/>
 
-                    <DeviceSelector devices={devicesSignal.value?.audioInputs}/>
+                    <DeviceSelector devices={iODevicesSignal.value?.audioInputs}/>
                 </div>
 
                 {
@@ -112,7 +112,7 @@ function StreamControls() {
 
                         <Separator orientation={"vertical"}/>
 
-                        <DeviceSelector devices={devicesSignal.value?.videoInputs}/>
+                        <DeviceSelector devices={iODevicesSignal.value?.videoInputs}/>
                     </div>
                 }
 
@@ -132,7 +132,7 @@ function StreamControls() {
 
                     <Separator orientation={"vertical"}/>
 
-                    <DeviceSelector devices={devicesSignal.value?.audioOutputs}/>
+                    <DeviceSelector devices={iODevicesSignal.value?.audioOutputs}/>
                 </div>
 
                 <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value})}

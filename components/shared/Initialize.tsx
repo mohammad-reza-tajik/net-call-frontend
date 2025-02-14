@@ -2,8 +2,8 @@
 import {Suspense, useEffect} from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import localStreamSignal from "@/signals/localStream";
-import devicesSignal from "@/signals/devices";
-import getDevices from "@/core/getDevices";
+import iODevicesSignal from "@/signals/iODevices";
+import getIODevices from "@/core/getIODevices";
 import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import {useSignalEffect} from "@preact/signals-react/runtime";
@@ -62,12 +62,13 @@ function Initialize({children}: { children: React.ReactNode }) {
                     localStorage.setItem("localPeerId", localPeerId);
                 }
                 const devices = await getDevices();
+                const devices = await getIODevices();
                 const socket = connectToSocket(localPeerId);
 
                 batch(() => {
                     localPeerIdSignal.value = localPeerId;
                     localStreamSignal.value = localStream;
-                    devicesSignal.value = devices;
+                    iODevicesSignal.value = devices;
                     socketSignal.value = socket;
                 })
             } catch (err) {

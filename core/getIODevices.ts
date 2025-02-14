@@ -1,4 +1,4 @@
-async function getDevices() {
+async function getIODevices() {
 
     const devices = await navigator.mediaDevices.enumerateDevices();
     const videoInputs = devices.filter(device => device.kind === "videoinput");
@@ -8,4 +8,4 @@ async function getDevices() {
     return {videoInputs, audioInputs , audioOutputs};
 }
 
-export default getDevices;
+export default getIODevices;
