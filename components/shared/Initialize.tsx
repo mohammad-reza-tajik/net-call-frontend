@@ -61,7 +61,6 @@ function Initialize({children}: { children: React.ReactNode }) {
                     localPeerId = localStream.id;
                     localStorage.setItem("localPeerId", localPeerId);
                 }
-                const devices = await getDevices();
                 const devices = await getIODevices();
                 const socket = connectToSocket(localPeerId);
 
