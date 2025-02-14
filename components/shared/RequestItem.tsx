@@ -10,6 +10,7 @@ import routerSignal from "@/signals/router";
 import socketSignal from "@/signals/socket";
 import hangup from "@/core/hangup";
 import {batch} from "@preact/signals-react";
+import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
 
 interface IRequestItemProps {
     request: IRequest
@@ -35,6 +36,7 @@ function RequestItem({request}: IRequestItemProps) {
         batch(() => {
             currentRequestSignal.value = request;
             remotePeerIdSignal.value = localPeerId;
+            isRequestsDrawerOpenSignal.value = false;
         });
         const peerURL = buildURL({
             url : "/connect",

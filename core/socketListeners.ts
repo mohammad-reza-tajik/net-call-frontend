@@ -14,7 +14,7 @@ import showNotification from "@/lib/utils/showNotification";
 function socketListeners(socket: Socket) {
 
     socket.on("requestToPeer", (request: IRequest) => {
-        // check if a request from the same remote peer exists
+        // check if a request from the same remote peer exists and replace them with new one
         const requestIndex = receivedRequestsSignal.value.findIndex(receivedRequest => {
             return receivedRequest.localPeerId === request.localPeerId;
         })
@@ -40,13 +40,13 @@ function socketListeners(socket: Socket) {
             statusText = "تماس تصویری"
         } else if (request.status === "audio:send") {
             statusText = "تماس صوتی"
-        } else if (request.status === "game:send"){
+        } else if (request.status === "game:send") {
             statusText = "بازی"
         }
 
         showNotification({
-            title : "یک درخواست دریافت شد",
-            body : `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
+            title: "یک درخواست دریافت شد",
+            body: `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
         });
 
         toast("یک درخواست دریافت شد");
@@ -86,7 +86,7 @@ function socketListeners(socket: Socket) {
         hangup();
     })
 
-    socket.on("hangupToPeer",()=>{
+    socket.on("hangupToPeer", () => {
         if (peerConnectionSignal.value?.signalingState !== "stable") {
             hangup();
         }
@@ -95,8 +95,11 @@ function socketListeners(socket: Socket) {
     socket.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
         showNotification({
-            title : "درخواست شما رد شد",
+            title: "درخواست شما رد شد",
         });
+        /*
+        if we're still waiting for the response hangup but if we are on another connection with another peer just ignore
+        */
         if (peerConnectionSignal.value?.signalingState !== "stable") {
             hangup();
         }
