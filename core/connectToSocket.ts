@@ -1,13 +1,15 @@
-import getDeviceType from "@/core/getDeviceType";
 import io from "socket.io-client";
 import socketListeners from "@/core/socketListeners";
+import type {IConnectedPeer} from "@/types";
 
-function connectToSocket(localPeerId: string) {
+interface IConnectToSocketParams extends Omit<IConnectedPeer, "socketId">{}
+
+function connectToSocket({localPeerId , deviceType} : IConnectToSocketParams) {
 
     const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL!, {
         query: {
-            deviceType: getDeviceType(),
-            localPeerId
+            deviceType,
+            localPeerId,
         }
     }).connect();
 

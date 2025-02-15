@@ -15,6 +15,7 @@ import connectToSocket from "@/core/connectToSocket";
 import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
 import { type Toast, toast} from "react-hot-toast";
 import {Button} from "@/components/ui/button";
+import getDeviceType from "@/core/getDeviceType";
 
 function Initialize({children}: { children: React.ReactNode }) {
 
@@ -61,8 +62,9 @@ function Initialize({children}: { children: React.ReactNode }) {
                     localPeerId = localStream.id;
                     localStorage.setItem("localPeerId", localPeerId);
                 }
+                const deviceType = getDeviceType();
                 const devices = await getIODevices();
-                const socket = connectToSocket(localPeerId);
+                const socket = connectToSocket({localPeerId , deviceType});
 
                 batch(() => {
                     localPeerIdSignal.value = localPeerId;
