@@ -17,21 +17,22 @@ import { type Toast, toast} from "react-hot-toast";
 import {Button} from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
 
-function Initialize({children}: { children: React.ReactNode }) {
+interface IProps {
+    children: React.ReactNode;
+}
+
+function Initialize({children}: IProps) {
 
     routerSignal.value = useRouter();
 
     useEffect(() => {
         (async () => {
             try {
-
                 if (typeof navigator.serviceWorker !== "undefined") {
                     await navigator.serviceWorker.register("/sw.js");
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data === "activated") {
                             routerSignal.value?.refresh();
-                        } else if (event.data === "focus"){
-                            window.focus();
                         }
                     });
                 }

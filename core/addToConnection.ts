@@ -2,7 +2,7 @@ import {chatChannelSignal, offerSignal, peerConnectionSignal} from "@/signals/pe
 import localStreamSignal from "@/signals/localStream";
 import {batch} from "@preact/signals-react";
 import statusSignal from "@/signals/peer/status";
-import {TStatus} from "@/types";
+import type {TStatus} from "@/types";
 import dataChannelListeners from "@/core/dataChannelListeners";
 import chatChannelListeners from "@/core/chatChannelListeners";
 
