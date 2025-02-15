@@ -10,7 +10,7 @@ import {useSignals} from "@preact/signals-react/runtime";
 import cn from "@/lib/utils/cn";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 
-function DrawerButton() {
+function RequestDrawerButton() {
 
     useSignals();
 
@@ -31,4 +31,4 @@ function DrawerButton() {
     )
 }
 
-export default DrawerButton;
+export default RequestDrawerButton;

@@ -1,6 +1,6 @@
 import PeerId from "@/components/shared/PeerId";
 import Logo from "@/components/shared/Logo";
-import DrawerButton from "@/components/shared/DrawerButton";
+import RequestDrawerButton from "@/components/shared/RequestDrawerButton";
 
 function Header() {
 
@@ -9,7 +9,7 @@ function Header() {
         <header className={"flex justify-between items-center p-2 py-3 border-b"}>
             <Logo className={"size-10"}/>
             <PeerId />
-            <DrawerButton />
+            <RequestDrawerButton />
         </header>
     )
 }
