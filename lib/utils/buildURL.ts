@@ -1,5 +1,5 @@
 
-interface Options {
+interface IOptions {
     url?: string;
     query?: Record<string, string | null | undefined >;
     hash?: string | null | undefined;
@@ -10,7 +10,7 @@ interface Options {
  * @param options - The options object containing the URL, query parameters, and hash.
  * @returns The constructed URL as a string.
  */
-function buildURL(options: Options): string {
+function buildURL(options: IOptions): string {
     // Use the current URL if no URL is provided
     let url = options.url || window.location.href;
 
@@ -39,6 +39,9 @@ function buildURL(options: Options): string {
         urlObj.hash = "";
     }
 
+    if (!options.url) {
+        return `${urlObj.search}${urlObj.hash}`
+    }
     // Return the updated URL
     return urlObj.toString();
 }
