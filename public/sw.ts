@@ -104,22 +104,24 @@ serviceWorker.addEventListener("fetch", (event) => {
 });
 
 serviceWorker.addEventListener("notificationclick", (event) => {
-    event.notification.close(); // Close the notification
     event.waitUntil(
         (async () => {
             try {
-                const allClients = await serviceWorker.clients.matchAll({type: "window", includeUncontrolled: false});
+                const allClients = await serviceWorker.clients.matchAll({type: "window", includeUncontrolled: true});
                 const clientToFocus = allClients.find(client => client.url === serviceWorker.location.origin + "/" && "focus" in client);
 
                 if (clientToFocus) {
                     await clientToFocus.focus();
                 } else {
                     // If no matching client is found, serviceWorker.clients.openWindow("/") opens a new window at the root URL.
-                    await serviceWorker.clients.openWindow("/");
+                    const client = await serviceWorker.clients.openWindow("/");
+                    client?.focus();
                 }
 
             } catch (err) {
                 console.error("notificationClick event failed:", err);
+            } finally {
+                event.notification.close(); // Close the notification
             }
         })());
 });
