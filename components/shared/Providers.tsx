@@ -16,10 +16,10 @@ function Providers({children}: { children: React.ReactNode }) {
             }}>
                 {(t) => (
                     <ToastBar toast={t} style={{
-                        backgroundColor: "hsl(var(--background))",
-                        color: "hsl(var(--foreground))",
-                        fill: "hsl(var(--foreground))",
-                        border: "1px solid hsl(var(--border))",
+                        backgroundColor: "var(--color-background)",
+                        color: "var(--color-foreground)",
+                        fill: "var(--color-foreground)",
+                        border: "1px solid var(--color-border)",
                     }}>
                         {({icon, message}) => (
                             <div className={"flex items-center text-xs md:text-sm gap-10 p-1"}>

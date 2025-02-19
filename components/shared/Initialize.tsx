@@ -44,7 +44,7 @@ function Initialize({children}: IProps) {
                     toast((t: Toast) => (
                         <div className={"flex items-center gap-2"}>
                         <p>دسترسی به اعلان مورد نیاز است</p>
-                        <Button onClick={async () => {
+                        <Button size={"sm"} className={"text-xs"} onClick={async () => {
                             const permission = await Notification.requestPermission();
                             if (permission !== "granted") {
                                 throw new Error("دسترسی به اعلان مورد نیاز است");
@@ -54,7 +54,7 @@ function Initialize({children}: IProps) {
                             دادن مجوز
                         </Button>
                         </div>
-                    ) , {id : "notification-permission" , duration : 60 * 60 * 1000});
+                    ) , {id : "notification-permission" , duration : Infinity});
 
                 }
 
