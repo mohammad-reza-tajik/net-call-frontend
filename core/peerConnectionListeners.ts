@@ -1,5 +1,6 @@
 import {
-    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal, peerConnectionSignal
+    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal, peerConnectionSignal,
+    chatChannelSignal
 } from "@/signals/peer/peerConnection";
 import {toast} from "react-hot-toast";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -74,7 +75,11 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
             })
         } else if (peerConnection.connectionState === "failed") {
-            hangup();
+            if(chatChannelSignal.value) {
+                chatChannelSignal.value.close();
+            } else {
+                hangup();
+            }            
             toast.error("متاسفانه ارتباط برقرار نشد");
         }
     })

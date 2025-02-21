@@ -2,7 +2,7 @@ import type {IConnectedPeer, IRequest, IResponse} from "@/types";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import {toast} from "react-hot-toast";
 import currentResponseSignal from "@/signals/peer/currentResponse";
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/core/hangup";
@@ -83,12 +83,22 @@ function socketListeners(socket: Socket) {
 
     socket.on("remotePeerNotConnected", () => {
         toast.error("این کاربر آنلاین نیست");
-        hangup();
+        if(chatChannelSignal.value) {
+            chatChannelSignal.value.close();
+        } else {
+            hangup();
+        }
+
     })
 
     socket.on("hangupToPeer", () => {
         if (peerConnectionSignal.value?.signalingState !== "stable") {
-            hangup();
+            if(chatChannelSignal.value) {
+                chatChannelSignal.value.close();
+            } else {
+                hangup();
+            }
+
         }
     })
 
@@ -101,7 +111,12 @@ function socketListeners(socket: Socket) {
         if we're still waiting for the response hangup but if we are on another connection with another peer just ignore
         */
         if (peerConnectionSignal.value?.signalingState !== "stable") {
-            hangup();
+            if(chatChannelSignal.value) {
+                chatChannelSignal.value.close();
+            } else {
+                hangup();
+            }
+            
         }
     })
 }
