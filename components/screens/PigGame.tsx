@@ -1,7 +1,7 @@
 "use client"
 
 import {Button} from "@/components/ui/button";
-import {Dice1, Dice2, Dice3, Dice4, Dice5, Dice6, Plus} from "@/components/shared/Icons";
+import {Plus} from "@/components/shared/Icons";
 import randomInt from "@/lib/utils/randomInt";
 import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import {toast} from "react-hot-toast";
@@ -15,6 +15,9 @@ import {
     temporaryScoreSignal
 } from "@/signals/games/pigGame";
 import {batch} from "@preact/signals-react";
+
+
+const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]; // Unicode dice symbols
 
 function PigGame() {
 
@@ -61,16 +64,6 @@ function PigGame() {
         temporaryScoreSignal.value = 0;
     }
 
-
-    function renderDice() {
-        if (diceSignal.value === 1) return <Dice1 className={"size-36"}/>
-        else if (diceSignal.value === 2) return <Dice2 className={"size-36"}/>
-        else if (diceSignal.value === 3) return <Dice3 className={"size-36"}/>
-        else if (diceSignal.value === 4) return <Dice4 className={"size-36"}/>
-        else if (diceSignal.value === 5) return <Dice5 className={"size-36"}/>
-        else return <Dice6 className={"size-36"}/>
-    }
-
     function restartGameHandler() {
         batch(() => {
             isYourTurnSignal.value = true;
@@ -103,7 +96,9 @@ function PigGame() {
             </div>
 
 
-            {renderDice()}
+            <p className={"text-9xl"}>
+                {diceFaces[diceSignal.value - 1]}
+            </p>
 
             <div className={"border rounded size-12 flex justify-center items-center text-xl"}>
                 {temporaryScoreSignal.value}
@@ -111,7 +106,9 @@ function PigGame() {
 
             <div className={"flex items-center justify-center gap-5"}>
                 <Button className={"gap-2"} onClick={rollDiceHandler} disabled={!isYourTurnSignal.value}>
-                    <Dice5 className={"size-5"}/>
+                    <span className={"text-2xl"}>
+                        {diceFaces[4]}
+                    </span>
                     انداختن تاس
                 </Button>
                 <Button className={"gap-2"} onClick={addScoreHandler} disabled={!isYourTurnSignal.value}>

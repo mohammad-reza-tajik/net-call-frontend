@@ -91,6 +91,7 @@ function Drawer({
                 aria-modal={true}
                 aria-labelledby={title ? titleId : undefined}
                 aria-hidden={!isOpen}
+                inert={!isOpen}
             >
                 {/* Drawer header */}
                 <header
