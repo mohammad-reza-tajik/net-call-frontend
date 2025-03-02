@@ -12,14 +12,14 @@ async function inviteToGame() {
             throw new Error("no peer connection");
         }
 
-        const gameChannel = peerConnectionSignal.value!.createDataChannel("game");
+        const gameChannel = peerConnectionSignal.value.createDataChannel("game");
         dataChannelListeners(gameChannel);
         gameChannelListeners(gameChannel);
 
         isYourTurnSignal.value = true;
 
-        const offer = await peerConnectionSignal.value!.createOffer();
-        await peerConnectionSignal.value!.setLocalDescription(offer);
+        const offer = await peerConnectionSignal.value.createOffer();
+        await peerConnectionSignal.value.setLocalDescription(offer);
 
         batch(() => {
             statusSignal.value = "game:send";

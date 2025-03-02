@@ -70,7 +70,11 @@ function StreamControls() {
 
     const hangupHandler = () => {
         socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-        hangup();
+        if(chatChannelSignal.value) {
+            chatChannelSignal.value.close();
+        } else {
+            hangup();
+        }
     }
 
     const openChatHandler = () => {

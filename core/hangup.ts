@@ -26,8 +26,6 @@ import {
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 
 function hangup() {
-    
-    peerConnectionSignal.value?.close();
 
     batch(() => {
         statusSignal.value = undefined;

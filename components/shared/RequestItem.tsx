@@ -11,6 +11,7 @@ import socketSignal from "@/signals/socket";
 import hangup from "@/core/hangup";
 import {batch} from "@preact/signals-react";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
+import { chatChannelSignal } from "@/signals/peer/peerConnection";
 
 interface IRequestItemProps {
     request: IRequest
@@ -32,7 +33,12 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     const answerRequestHandler = () => {
-        hangup();
+        if(chatChannelSignal.value) {
+            chatChannelSignal.value.close();
+        } else {
+            hangup();
+        }
+
         batch(() => {
             currentRequestSignal.value = request;
             remotePeerIdSignal.value = localPeerId;

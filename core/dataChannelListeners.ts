@@ -14,7 +14,7 @@ function dataChannelListeners(dataChannel: RTCDataChannel) {
 
     dataChannel.addEventListener("close", () => {
         // this is crucial if we want to inform the other peer that the call is ended ASAP
-        if (!dataChannel.label.startsWith("file")) {
+        if (dataChannel.label === "chat") {
             toast.error("ارتباط پایان یافت");
             hangup();
         }
