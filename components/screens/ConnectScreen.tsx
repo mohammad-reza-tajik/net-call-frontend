@@ -69,12 +69,16 @@ function ConnectScreen() {
         }
     }
 
-    return (
+    const closeDrawerHandler = () => {
+        isChatDrawerOpenSignal.value = false
+    }
+
+        return (
         <>
             <Suspense>
                 <RemotePeerIdUpdater />
             </Suspense>
-            <Drawer openSignal={isChatDrawerOpenSignal} className={"sm:w-1/2"}>
+            <Drawer isOpen={isChatDrawerOpenSignal.value} onClose={closeDrawerHandler} direction={"left"} title={"چت"}>
                 <Chat/>
             </Drawer>
             <section className={"@container relative overflow-hidden h-[calc(100dvh-146px)]"}>
