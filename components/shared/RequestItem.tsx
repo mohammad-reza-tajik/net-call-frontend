@@ -61,11 +61,11 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     return (
-        <div className={"flex flex-col justify-center items-center p-2 gap-5 border rounded text-xs"}>
+        <div className={"flex flex-col justify-center items-center p-2 gap-5 border-b text-xs"}>
             <span className={"bg-primary text-primary-foreground p-1 rounded"}>
                 {statusText}
             </span>
-            <p className={"[direction:ltr]"}>
+            <p className={"[direction:ltr] text-wrap text-center"}>
                 {localPeerId}
             </p>
             <div className={"flex items-center justify-center gap-2"}>

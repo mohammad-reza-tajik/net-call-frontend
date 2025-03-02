@@ -57,13 +57,13 @@ function Drawer({
      */
     function getPositionClass(): string {
         if (direction === "left") {
-            return "top-0 left-0 h-[100dvh] md:w-1/4";
+            return "top-0 left-0 md:w-1/4";
         } else if (direction === "top") {
-            return "top-0 left-0 w-screen h-[100dvh] md:h-1/2";
+            return "top-0 left-0 md:h-1/2";
         } else if (direction === "bottom") {
-            return "bottom-0 left-0 w-screen h-[100dvh] md:h-1/2";
+            return "bottom-0 left-0 md:h-1/2";
         } else {
-            return "top-0 right-0 h-[100dvh] w-1/2 md:w-1/4";
+            return "top-0 right-0 md:w-1/4";
         }
     }
 
@@ -84,7 +84,7 @@ function Drawer({
             {/* Drawer content */}
             <section
                 className={cn(
-                    `fixed z-50 bg-background transition-transform duration-300 ease-in-out overflow-x-hidden overflow-y-auto ${getTransformClass()} ${getPositionClass()}`,
+                    `h-[100dvh] w-screen fixed flex flex-col z-50 bg-background transition-transform duration-300 ease-in-out overflow-x-hidden overflow-y-auto ${getTransformClass()} ${getPositionClass()}`,
                     drawerClassName
                 )}
                 role={"dialog"}
