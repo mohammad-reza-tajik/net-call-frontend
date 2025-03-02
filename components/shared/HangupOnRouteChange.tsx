@@ -1,10 +1,8 @@
 import {usePathname, useSearchParams} from "next/navigation";
 import {useEffect} from "react";
-import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import hangup from "@/core/hangup";
-import { gameChannelSignal } from "@/signals/games/pigGame";
 
 function HangupOnRouteChange() {
     const pathName = usePathname();
@@ -13,14 +11,7 @@ function HangupOnRouteChange() {
     useEffect(() => {
         if (peerConnectionSignal.value?.connectionState === "connected" || peerConnectionSignal.value?.connectionState === "connecting") {
             socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-
-            if(chatChannelSignal.value) {
-                chatChannelSignal.value.close();
-            } else if (gameChannelSignal.value) {
-                gameChannelSignal.value.close();
-            } else {
-                hangup();
-            }
+            peerConnectionSignal.value.close();
         }
     }, [pathName, searchParams]);
 

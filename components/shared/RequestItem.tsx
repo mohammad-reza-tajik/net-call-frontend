@@ -11,7 +11,7 @@ import socketSignal from "@/signals/socket";
 import hangup from "@/core/hangup";
 import {batch} from "@preact/signals-react";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
-import { chatChannelSignal } from "@/signals/peer/peerConnection";
+import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 
 interface IRequestItemProps {
     request: IRequest
@@ -33,8 +33,8 @@ function RequestItem({request}: IRequestItemProps) {
     }
 
     const answerRequestHandler = () => {
-        if(chatChannelSignal.value) {
-            chatChannelSignal.value.close();
+        if (peerConnectionSignal.value?.connectionState === "connected") {
+            peerConnectionSignal.value.close();
         } else {
             hangup();
         }

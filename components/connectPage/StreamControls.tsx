@@ -18,7 +18,6 @@ import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import {chatChannelSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import hangup from "@/core/hangup";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
@@ -29,16 +28,16 @@ function StreamControls() {
 
     useSignals();
 
-    const isMicMute = useSignal(false);
-    const isVideoMute = useSignal(false);
-    const isSoundMute = useSignal(false);
+    const isMicMuteSignal = useSignal(false);
+    const isVideoMuteSignal = useSignal(false);
+    const isSoundMuteSignal = useSignal(false);
 
     if (connectionStateSignal.value !== "connected" || statusSignal.value?.startsWith("game")) {
         return
     }
 
     const muteMicHandler = () => {
-        isMicMute.value = !isMicMute.value;
+        isMicMuteSignal.value = !isMicMuteSignal.value;
         const sender = peerConnectionSignal.value!.getSenders().find((sender) => {
             /**
              the label check is to make sure that the system audio is not the track that's being muted
@@ -47,34 +46,30 @@ function StreamControls() {
             return sender.track?.kind === "audio" && sender.track.label !== "System Audio";
         });
         if (sender?.track) {
-            sender.track.enabled = !isMicMute.value;
+            sender.track.enabled = !isMicMuteSignal.value;
         }
     }
 
     const muteVideoHandler = () => {
-        isVideoMute.value = !isVideoMute.value;
+        isVideoMuteSignal.value = !isVideoMuteSignal.value;
         const sender = peerConnectionSignal.value!.getSenders().find((sender) => {
             return sender.track?.kind === "video";
         });
         if (sender?.track) {
-            sender.track.enabled = !isVideoMute.value;
+            sender.track.enabled = !isVideoMuteSignal.value;
         }
     }
 
     const muteSoundHandler = () => {
-        isSoundMute.value = !isSoundMute.value;
+        isSoundMuteSignal.value = !isSoundMuteSignal.value;
         remoteStreamSignal.value!.getAudioTracks().forEach(audioTrack => {
-            audioTrack.enabled = !isSoundMute.value;
+            audioTrack.enabled = !isSoundMuteSignal.value;
         });
     }
 
     const hangupHandler = () => {
         socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-        if(chatChannelSignal.value) {
-            chatChannelSignal.value.close();
-        } else {
-            hangup();
-        }
+        peerConnectionSignal.value?.close();
     }
 
     const openChatHandler = () => {
@@ -94,7 +89,7 @@ function StreamControls() {
                 <div className={"flex items-center rounded overflow-hidden"}>
                     <ActionButton
                         className={"rounded-none"}
-                        icon={isMicMute.value ? <MicrophoneOff className={"size-7"}/> :
+                        icon={isMicMuteSignal.value ? <MicrophoneOff className={"size-7"}/> :
                             <Microphone className={"size-7"}/>}
                         tooltipContent={"قطع / وصل میکروفون"}
                         handler={muteMicHandler}/>
@@ -109,7 +104,7 @@ function StreamControls() {
                     <div className={"flex items-center rounded overflow-hidden"}>
                         <ActionButton
                             className={"rounded-none"}
-                            icon={isVideoMute.value ? <CameraOff className={"size-7"}/> :
+                            icon={isVideoMuteSignal.value ? <CameraOff className={"size-7"}/> :
                                 <Camera className={"size-7"}/>}
                             tooltipContent={"قطع / وصل تصویر"}
                             handler={muteVideoHandler}/>
@@ -123,14 +118,14 @@ function StreamControls() {
                 {
                     statusSignal.value === "screen:send" &&
                     <ActionButton
-                        icon={isVideoMute.value ? <MonitorOff className={"size-7"}/> : <Monitor className={"size-7"}/>}
+                        icon={isVideoMuteSignal.value ? <MonitorOff className={"size-7"}/> : <Monitor className={"size-7"}/>}
                         tooltipContent={"قطع / وصل صفحه"}
                         handler={muteVideoHandler}/>
                 }
 
                 <div className={"flex items-center rounded overflow-hidden"}>
                     <ActionButton className={"rounded-none"}
-                        icon={isSoundMute.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
+                        icon={isSoundMuteSignal.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
                         tooltipContent={"قطع / وصل صدا"}
                         handler={muteSoundHandler}/>
 
