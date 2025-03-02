@@ -4,6 +4,7 @@ import {chatChannelSignal, peerConnectionSignal} from "@/signals/peer/peerConnec
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import hangup from "@/core/hangup";
+import { gameChannelSignal } from "@/signals/games/pigGame";
 
 function HangupOnRouteChange() {
     const pathName = usePathname();
@@ -15,6 +16,8 @@ function HangupOnRouteChange() {
 
             if(chatChannelSignal.value) {
                 chatChannelSignal.value.close();
+            } else if (gameChannelSignal.value) {
+                gameChannelSignal.value.close();
             } else {
                 hangup();
             }
