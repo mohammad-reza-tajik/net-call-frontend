@@ -2,7 +2,7 @@
   "compilerOptions": {
     "lib": ["dom", "dom.iterable", "esnext","webworker"],
     "allowJs": true,
-    "types": ["@types/wicg-file-system-access"],
+    "types": [],
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,

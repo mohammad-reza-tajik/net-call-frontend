@@ -12,7 +12,6 @@ import {batch} from "@preact/signals-react";
 function gameChannelListeners(dataChannel: RTCDataChannel) {
 
     dataChannel.addEventListener("message", ({data}) => {
-        console.log(data);
         const {type, dice, temporaryScore, score} = JSON.parse(data);
 
         if (type === "changeTurn") {
