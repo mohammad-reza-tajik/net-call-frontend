@@ -1,6 +1,10 @@
 import {
-    connectionStateSignal, offerSignal, signalingStateSignal, answerSignal, peerConnectionSignal,
-    chatChannelSignal
+    answerSignal,
+    chatChannelSignal,
+    connectionStateSignal,
+    offerSignal,
+    peerConnectionSignal,
+    signalingStateSignal
 } from "@/signals/peer/peerConnection";
 import {toast} from "react-hot-toast";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -20,49 +24,40 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     const iceCandidates: RTCIceCandidate[] = [];
 
-    let candidateTimeout: NodeJS.Timeout;
-
     peerConnection.addEventListener("icecandidate", (event) => {
-        if (event.candidate) {
+        if (event.candidate !== null) {
             iceCandidates.push(event.candidate);
-
-            if (iceCandidates.length > 0 && offerSignal.value && statusSignal.value?.endsWith(":send")) {
-
-                if (candidateTimeout) {
-                    clearTimeout(candidateTimeout);
-                }
-
-                candidateTimeout = setTimeout(() => {
-                    socketSignal.value?.emit("requestToServer", {
-                        iceCandidates: iceCandidates,
-                        offer: offerSignal.value,
-                        localPeerId: localPeerIdSignal.value,
-                        remotePeerId: remotePeerIdSignal.value,
-                        status: statusSignal.value,
-                        socketId: socketSignal.value?.id
-                    });
-                }, 1000)
+        } else {
+            // when event.candidate is null it means that all candidates have been gathered
+            if (iceCandidates.length === 0) {
+                throw new Error("No candidates found");
             }
-            if (iceCandidates.length > 0 && answerSignal.value && statusSignal.value?.endsWith(":receive")) {
 
-                clearTimeout(candidateTimeout);
-
-                candidateTimeout = setTimeout(() => {
-                    socketSignal.value?.emit("responseToServer", {
-                        iceCandidates: iceCandidates,
-                        answer: answerSignal.value,
-                        localPeerId: localPeerIdSignal.value,
-                        remotePeerId: remotePeerIdSignal.value,
-                        status: statusSignal.value,
-                        socketId: socketSignal.value?.id
-                    });
-                }, 1000)
+            if (offerSignal.value && statusSignal.value?.endsWith(":send")) {
+                socketSignal.value?.emit("requestToServer", {
+                    iceCandidates: iceCandidates,
+                    offer: offerSignal.value,
+                    localPeerId: localPeerIdSignal.value,
+                    remotePeerId: remotePeerIdSignal.value,
+                    status: statusSignal.value,
+                    socketId: socketSignal.value?.id
+                });
+            } else if (answerSignal.value && statusSignal.value?.endsWith(":receive")) {
+                socketSignal.value?.emit("responseToServer", {
+                    iceCandidates: iceCandidates,
+                    answer: answerSignal.value,
+                    localPeerId: localPeerIdSignal.value,
+                    remotePeerId: remotePeerIdSignal.value,
+                    status: statusSignal.value,
+                    socketId: socketSignal.value?.id
+                });
             }
         }
     });
 
     peerConnection.addEventListener("signalingstatechange", () => {
         signalingStateSignal.value = peerConnection.signalingState;
+        console.log(peerConnection.signalingState)
     })
 
     peerConnection.addEventListener("connectionstatechange", () => {
@@ -71,15 +66,15 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
         if (peerConnection.connectionState === "connected") {
             toast.success("متصل شدید");
             showNotification({
-                title : `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
+                title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
 
             })
         } else if (peerConnection.connectionState === "failed") {
-            if(chatChannelSignal.value) {
+            if (chatChannelSignal.value) {
                 chatChannelSignal.value.close();
             } else {
                 hangup();
-            }            
+            }
             toast.error("متاسفانه ارتباط برقرار نشد");
         }
     })
@@ -97,7 +92,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
             chatChannelListeners(channel);
         } else if (channel.label.startsWith("file")) {
             fileChannelListeners(channel);
-        } else if (channel.label === "game"){
+        } else if (channel.label === "game") {
             gameChannelListeners(channel);
         }
     })
