@@ -30,7 +30,7 @@ function Drawer({
                     overlayClassName,
                     drawerClassName,
                     headerClassName,
-                }: IDrawerProps) {
+                }: IDrawerProps): ReactNode {
 
 
     const titleId = useId(); // Generates a unique ID for each instance
@@ -90,7 +90,6 @@ function Drawer({
                 role={"dialog"}
                 aria-modal={true}
                 aria-labelledby={title ? titleId : undefined}
-                aria-hidden={!isOpen}
                 inert={!isOpen}
             >
                 {/* Drawer header */}
@@ -100,7 +99,7 @@ function Drawer({
                         headerClassName
                     )}
                 >
-                    <Button size={"icon"} onClick={onClose} aria-label={"بستن منو"}>
+                    <Button size={"icon"} onClick={onClose} aria-label={"بستن منو"} disabled={!isOpen}>
                         <Close/>
                     </Button>
                     <h2 className={"flex-1 text-center"} id={titleId}>

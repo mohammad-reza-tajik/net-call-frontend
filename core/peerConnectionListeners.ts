@@ -57,7 +57,6 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("signalingstatechange", () => {
         signalingStateSignal.value = peerConnection.signalingState;
-        console.log(peerConnection.signalingState);
     });
 
     peerConnection.addEventListener("connectionstatechange", () => {
