@@ -43,7 +43,7 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
             localPeerId: remotePeerId.value,
             transferredAmount: receivedChunks.length * CHUNK_SIZE,
             timestamp :fileData.timestamp
-        }
+        };
 
         messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
 
@@ -73,14 +73,14 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
                 localPeerId: remotePeerId.value,
                 transferredAmount: file.size,
                 timestamp : fileData.timestamp
-            }
+            };
 
             messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
 
             fileData = undefined;
             receivedChunks = [];
         }
-    })
+    });
 
     fileChannelSignal.value = dataChannel;
 }

@@ -6,7 +6,7 @@ function ConnectPage() {
         <main className={"flex flex-1 flex-col"}>
                 <ConnectScreen/>
         </main>
-    )
+    );
 }
 
 export default ConnectPage;

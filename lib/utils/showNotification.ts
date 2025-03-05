@@ -21,7 +21,7 @@ async function showNotification({title, ...options}: INotification) {
 
             notification.addEventListener("click", () => {
                 window.focus();
-            })
+            });
 
             document.addEventListener("visibilitychange", () => {
                 if (document.visibilityState === "visible") {
@@ -39,7 +39,7 @@ async function showNotification({title, ...options}: INotification) {
                 lang: "fa-IR",
                 dir: "rtl",
                 ...options
-            })
+            });
 
         }
 

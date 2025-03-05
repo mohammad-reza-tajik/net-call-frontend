@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {Suspense, useEffect} from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import localStreamSignal from "@/signals/localStream";
@@ -49,7 +49,7 @@ function Initialize({children}: IProps) {
                             if (permission !== "granted") {
                                 throw new Error("دسترسی به اعلان مورد نیاز است");
                             }
-                            toast.dismiss(t.id)
+                            toast.dismiss(t.id);
                         }}>
                             دادن مجوز
                         </Button>
@@ -72,7 +72,7 @@ function Initialize({children}: IProps) {
                     localStreamSignal.value = localStream;
                     iODevicesSignal.value = devices;
                     socketSignal.value = socket;
-                })
+                });
             } catch (err) {
                 if (err instanceof Error) {
                     toast.error(err.message);
@@ -86,7 +86,7 @@ function Initialize({children}: IProps) {
         if (!peerConnectionSignal.value) {
             createConnection();
         }
-    })
+    });
 
     return (
         <>
@@ -95,7 +95,7 @@ function Initialize({children}: IProps) {
             </Suspense>
             {children}
         </>
-    )
+    );
 }
 
 export default Initialize;

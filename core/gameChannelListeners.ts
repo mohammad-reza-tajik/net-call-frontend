@@ -22,7 +22,7 @@ function gameChannelListeners(dataChannel: RTCDataChannel) {
             batch(() => {
                 diceSignal.value = dice;
                 temporaryScoreSignal.value = temporaryScore;
-            })
+            });
         }
 
         if (type === "addScore") {
@@ -30,7 +30,7 @@ function gameChannelListeners(dataChannel: RTCDataChannel) {
                 isYourTurnSignal.value = true;
                 opponentScoreSignal.value = score;
                 temporaryScoreSignal.value = 0;
-            })
+            });
         }
 
         if (type === "restartGame") {
@@ -41,10 +41,10 @@ function gameChannelListeners(dataChannel: RTCDataChannel) {
                 temporaryScoreSignal.value = 0;
                 diceSignal.value = 1;
                 isGameOverSignal.value = false;
-            })
+            });
         }
 
-    })
+    });
 
     gameChannelSignal.value = dataChannel;
 

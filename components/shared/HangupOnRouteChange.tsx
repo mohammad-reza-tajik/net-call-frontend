@@ -15,7 +15,7 @@ function HangupOnRouteChange() {
         }
     }, [pathName, searchParams]);
 
-    return <></>
+    return <></>;
 }
 
 export default HangupOnRouteChange;

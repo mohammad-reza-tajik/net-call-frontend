@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import Pagination from "@/components/shared/Pagination";
 import {useSearchParams} from "next/navigation";
-import Table from "@/components/shared/Table";
+import Table, {type Header} from "@/components/shared/Table";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
 import {useSignals} from "@preact/signals-react/runtime";
 import type {IConnectedPeer} from "@/types";
@@ -28,9 +28,9 @@ function PeerList() {
 
     function sortByHeaderHandler(header: string) {
         connectedPeersSignal.value = connectedPeersSignal.value.toSorted((a, b) => {
-            // @ts-ignore
+            // @ts-expect-error since headers are of type any
             if (a[header] < b[header]) return -1;
-            // @ts-ignore
+            // @ts-expect-error  since headers are of type any
             if (a[header] > b[header]) return 1;
             return 0;
         });
@@ -48,13 +48,13 @@ function PeerList() {
         return [...headers, {label : "--connectButtons"}];
     }
 
-    function renderCellHandler(header: any, data: string, dataItem : Record<keyof IConnectedPeer, any>) {
+    function renderCellHandler(header: Header, data: string, dataItem : Record<keyof IConnectedPeer, unknown>) {
         if (header.label.startsWith("--")) {
             return <Button asChild>
                 <Link href={`/connect?remotePeerId=${dataItem.localPeerId}`}>
                     اتصال
                 </Link>
-            </Button>
+            </Button>;
         }
         return data;
     }
@@ -72,7 +72,7 @@ function PeerList() {
                     </>
             }
         </>
-    )
+    );
 }
 
 export default PeerList;

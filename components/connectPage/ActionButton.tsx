@@ -21,7 +21,7 @@ function ActionButton({ icon, tooltipContent, handler, className }: IActionButto
                 </TooltipContent>
             </Tooltip>
 
-    )
+    );
 }
 
 export default ActionButton;

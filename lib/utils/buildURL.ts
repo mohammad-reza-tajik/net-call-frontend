@@ -40,7 +40,7 @@ function buildURL(options: IOptions): string {
     }
 
     if (!options.url) {
-        return `${urlObj.search}${urlObj.hash}`
+        return `${urlObj.search}${urlObj.hash}`;
     }
     // Return the updated URL
     return urlObj.toString();

@@ -9,7 +9,7 @@ function ActionBar() {
             <Features />
             <StreamControls />
         </>
-    )
+    );
 }
 
 export default ActionBar;

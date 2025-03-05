@@ -27,7 +27,7 @@ function TextMessage({message}: ITextMessageProps) {
                 <span className={"text-xs"}>{getTimestamp(message.timestamp)}</span>
             </div>
         </div>
-    )
+    );
 }
 
 export default TextMessage;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {Button} from "@/components/ui/button";
 import {CheckCircle, Close, Info, Warning} from "@/components/shared/Icons";
 import {Toaster, ToastBar, toast} from "react-hot-toast";
@@ -39,7 +39,7 @@ function Providers({children}: { children: React.ReactNode }) {
             </Toaster>
             {children}
         </>
-    )
+    );
 }
 
 export default Providers;

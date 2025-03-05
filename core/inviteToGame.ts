@@ -24,7 +24,7 @@ async function inviteToGame() {
         batch(() => {
             statusSignal.value = "game:send";
             offerSignal.value = offer;
-        })
+        });
 
 
     } catch (err) {

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import type {IFileMessage} from "@/types";
 import {Check, DoubleChecks, Download, File as FileIcon} from "@/components/shared/Icons";
 import {Button} from "@/components/ui/button";
@@ -16,7 +16,7 @@ function FileMessage({message}: IFileMessageProps) {
         // Create a Blob URL for the file
         const blob = new Blob([file], {type: file.type});
         return URL.createObjectURL(blob);
-    }
+    };
 
     return (
         <div
@@ -50,7 +50,7 @@ function FileMessage({message}: IFileMessageProps) {
                 <span className={"text-xs"}>{getTimestamp(message.timestamp)}</span>
             </div>
         </div>
-    )
+    );
 }
 
 export default FileMessage;

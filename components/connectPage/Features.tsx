@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {TooltipProvider} from "@/components/ui/tooltip";
 import features from "@/constants/features";
@@ -9,7 +9,7 @@ import getDeviceType from "@/core/getDeviceType";
 function Features() {
 
     if (statusSignal.value){
-        return
+        return;
     }
 
     return (
@@ -20,12 +20,12 @@ function Features() {
                         if (getDeviceType() === "mobile" && item.name === "screen-share") return;
                         return (
                             <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />
-                        )
+                        );
                     })
                 }
             </TooltipProvider>
         </div>
-    )
+    );
 }
 
 export default Features;

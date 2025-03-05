@@ -11,7 +11,7 @@ function Header() {
             <PeerId />
             <RequestDrawerButton />
         </header>
-    )
+    );
 }
 
 export default Header;

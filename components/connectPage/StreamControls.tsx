@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {
     Microphone,
@@ -33,7 +33,7 @@ function StreamControls() {
     const isSoundMuteSignal = useSignal(false);
 
     if (connectionStateSignal.value !== "connected" || statusSignal.value?.startsWith("game")) {
-        return
+        return;
     }
 
     const muteMicHandler = () => {
@@ -48,7 +48,7 @@ function StreamControls() {
         if (sender?.track) {
             sender.track.enabled = !isMicMuteSignal.value;
         }
-    }
+    };
 
     const muteVideoHandler = () => {
         isVideoMuteSignal.value = !isVideoMuteSignal.value;
@@ -58,25 +58,25 @@ function StreamControls() {
         if (sender?.track) {
             sender.track.enabled = !isVideoMuteSignal.value;
         }
-    }
+    };
 
     const muteSoundHandler = () => {
         isSoundMuteSignal.value = !isSoundMuteSignal.value;
         remoteStreamSignal.value!.getAudioTracks().forEach(audioTrack => {
             audioTrack.enabled = !isSoundMuteSignal.value;
         });
-    }
+    };
 
     const hangupHandler = () => {
         socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
         peerConnectionSignal.value?.close();
-    }
+    };
 
     const openChatHandler = () => {
         isChatDrawerOpenSignal.value = true;
         haveNewMessageSignal.value = false;
         chatChannelSignal.value?.send("seen");
-    }
+    };
 
     return (
         <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
@@ -141,7 +141,7 @@ function StreamControls() {
 
             </TooltipProvider>
         </div>
-    )
+    );
 }
 
 export default StreamControls;

@@ -21,7 +21,7 @@ async function createAnswer({request}: { request: IRequest }) {
         } else if (request.status === "video:send") {
             localStreamSignal.value.getTracks().forEach(track => {
                 peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
-            })
+            });
         }
 
         await peerConnectionSignal.value.setRemoteDescription(request.offer);
@@ -30,13 +30,13 @@ async function createAnswer({request}: { request: IRequest }) {
 
         request.iceCandidates.forEach(item => {
             peerConnectionSignal.value!.addIceCandidate(item);
-        })
+        });
 
         batch(() => {
             statusSignal.value = answerStatus;
             answerSignal.value = answer;
             receivedRequestsSignal.value = receivedRequestsSignal.value.filter(item => item.localPeerId !== request.localPeerId);
-        })
+        });
 
         if (localVideoRefSignal.value?.current && request.status === "video:send") {
             /*

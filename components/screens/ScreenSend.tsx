@@ -14,7 +14,7 @@ function ScreenSend() {
                 به اشتراک گذاشته شده است
             </div>
         </div>
-    )
+    );
 }
 
 export default ScreenSend;

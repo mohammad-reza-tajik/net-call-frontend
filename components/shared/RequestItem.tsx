@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import type {IRequest} from "@/types";
 import {Button} from "@/components/ui/button";
 import {Thumb} from "@/components/shared/Icons";
@@ -23,13 +23,13 @@ function RequestItem({request}: IRequestItemProps) {
     let statusText: string | undefined;
 
     if (status === "screen:send") {
-        statusText = "اشتراک گذاری صفحه"
+        statusText = "اشتراک گذاری صفحه";
     } else if (status === "video:send") {
-        statusText = "تماس تصویری"
+        statusText = "تماس تصویری";
     } else if (status === "audio:send") {
-        statusText = "تماس صوتی"
+        statusText = "تماس صوتی";
     } else if (status === "game:send"){
-        statusText = "بازی"
+        statusText = "بازی";
     }
 
     const answerRequestHandler = () => {
@@ -51,14 +51,14 @@ function RequestItem({request}: IRequestItemProps) {
             }
         });
         routerSignal.value!.push(peerURL);
-    }
+    };
 
     const rejectRequestHandler = () => {
         socketSignal.value?.emit("rejectToServer", {request});
         receivedRequestsSignal.value = receivedRequestsSignal.value.filter((item) => {
             return item.localPeerId !== request.localPeerId && item.status !== request.status;
-        })
-    }
+        });
+    };
 
     return (
         <div className={"flex flex-col justify-center items-center p-2 gap-5 border-b text-xs"}>
@@ -79,7 +79,7 @@ function RequestItem({request}: IRequestItemProps) {
                 </Button>
             </div>
         </div>
-    )
+    );
 }
 
 export default RequestItem;

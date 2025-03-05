@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
@@ -14,7 +14,7 @@ function PeerId() {
     const copyIdHandler = async () => {
         await navigator.clipboard.writeText(localPeerIdSignal.value);
         toast.success("آیدی کپی شد");
-    }
+    };
 
     return (
         <TooltipProvider>
@@ -38,7 +38,7 @@ function PeerId() {
                 }
             </div>
         </TooltipProvider>
-    )
+    );
 }
 
 export default PeerId;

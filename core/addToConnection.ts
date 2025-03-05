@@ -13,7 +13,7 @@ async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
 
         tracks.forEach((track) => {
             peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
-        })
+        });
 
         const offer = await peerConnectionSignal.value!.createOffer();
         await peerConnectionSignal.value!.setLocalDescription(offer);
@@ -21,7 +21,7 @@ async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
         batch(() => {
             statusSignal.value = status;
             offerSignal.value = offer;
-        })
+        });
 
     } catch (err) {
         console.error(err);

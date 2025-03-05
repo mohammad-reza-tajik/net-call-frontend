@@ -1,5 +1,5 @@
-"use client"
-import usePagination from '@/hooks/usePagination';
+"use client";
+import usePagination from "@/hooks/usePagination";
 import {Button} from "@/components/ui/button";
 import {Caret} from "@/components/shared/Icons";
 

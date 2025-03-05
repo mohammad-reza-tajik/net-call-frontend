@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {Button} from "@/components/ui/button";
 import {Close, Paperclip, PaperPlane} from "@/components/shared/Icons";
 import {useRef} from "react";
@@ -31,7 +31,7 @@ function Chat() {
                     mimeType: fileSignal.value.type,
                     size: fileSignal.value.size,
                     timestamp : new Date()
-                }
+                };
 
                 await sendInChunks({fileBuffer: fileBufferSignal.value, fileData});
 
@@ -39,14 +39,14 @@ function Chat() {
                 fileBufferSignal.value = undefined;
             } else {
 
-                if (!textMessageRef.current?.value.trim()) return
+                if (!textMessageRef.current?.value.trim()) return;
 
                 const textMessage: ITextMessage = {
                     type: "text",
                     text: textMessageRef.current.value,
                     localPeerId: localPeerIdSignal.value,
                     timestamp : new Date()
-                }
+                };
 
                 chatChannelSignal.value?.send(JSON.stringify(textMessage));
 
@@ -57,7 +57,7 @@ function Chat() {
         } catch (err) {
             console.log(err);
         }
-    }
+    };
 
     const filePickerHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const chosenFile = event.target.files?.[0];
@@ -65,9 +65,9 @@ function Chat() {
             fileSignal.value = chosenFile;
             const reader = new FileReader();
             reader.addEventListener("load", (event) => {
-                if (!event.target?.result || typeof event.target.result === "string") return
+                if (!event.target?.result || typeof event.target.result === "string") return;
                 fileBufferSignal.value = event.target.result;
-            })
+            });
             reader.readAsArrayBuffer(chosenFile);
 
         }
@@ -79,9 +79,9 @@ function Chat() {
                 {
                     messagesSignal.value.map((message, index) => {
                         if (message.type === "text") {
-                            return <TextMessage key={index} message={message}/>
+                            return <TextMessage key={index} message={message}/>;
                         }
-                        return <FileMessage key={index} message={message}/>
+                        return <FileMessage key={index} message={message}/>;
                     })
                 }
             </div>
@@ -117,7 +117,7 @@ function Chat() {
             </div>
 
         </>
-    )
+    );
 }
 
 export default Chat;

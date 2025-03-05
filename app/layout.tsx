@@ -25,7 +25,7 @@ export const viewport: Viewport = {
     maximumScale: 1,
     userScalable: false,
     initialScale: 1
-}
+};
 
 function RootLayout({children}: { children: React.ReactNode; }) {
     return (
@@ -44,4 +44,4 @@ function RootLayout({children}: { children: React.ReactNode; }) {
     );
 }
 
-export default RootLayout
+export default RootLayout;

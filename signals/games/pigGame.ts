@@ -9,4 +9,4 @@ const diceSignal = signal(5);
 const isYourTurnSignal = signal(false);
 
 
-export {myScoreSignal, temporaryScoreSignal , opponentScoreSignal , gameChannelSignal , isGameOverSignal , isYourTurnSignal ,diceSignal}
+export {myScoreSignal, temporaryScoreSignal , opponentScoreSignal , gameChannelSignal , isGameOverSignal , isYourTurnSignal ,diceSignal};

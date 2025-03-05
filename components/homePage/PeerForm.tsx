@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {toast} from "react-hot-toast";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -17,7 +17,7 @@ function PeerForm() {
 
     function submitRemotePeerIdHandler() {
         if (!remotePeerIdRef.current?.value) {
-            return
+            return;
         }
 
         if (!isValidUUID(remotePeerIdRef.current.value) || remotePeerIdRef.current.value === localPeerIdSignal.value) {
@@ -44,7 +44,7 @@ function PeerForm() {
                     تایید
             </Button>
         </div>
-    )
+    );
 }
 
 export default PeerForm;

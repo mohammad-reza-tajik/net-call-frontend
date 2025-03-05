@@ -14,7 +14,7 @@ function NotFound() {
                 </Link>
             </Button>
         </section>
-    )
+    );
 }
 
 export default NotFound;

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {Envelope} from "@/components/shared/Icons";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
 import {TooltipProvider} from "@/components/ui/tooltip";
@@ -15,8 +15,8 @@ function RequestDrawerButton() {
     useSignals();
 
     const closeDrawerHandler = () => {
-        isRequestsDrawerOpenSignal.value = false
-    }
+        isRequestsDrawerOpenSignal.value = false;
+    };
 
     return (
         <TooltipProvider>
@@ -35,12 +35,12 @@ function RequestDrawerButton() {
                 {receivedRequestsSignal.value.length === 0 ?
                     <p className={"text-center text-sm p-2"}>هیچ درخواستی وجود ندارد</p> :
                     receivedRequestsSignal.value.map((request, index) => {
-                        return <RequestItem request={request} key={index}/>
+                        return <RequestItem request={request} key={index}/>;
                     })
                 }
             </Drawer>
         </TooltipProvider>
-    )
+    );
 }
 
 export default RequestDrawerButton;

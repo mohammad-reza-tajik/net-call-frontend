@@ -20,7 +20,7 @@ function StartScreen() {
             </h2>
             <PeerForm/>
         </section>
-    )
+    );
 }
 
 export default StartScreen;

@@ -24,7 +24,7 @@ function AudioCall() {
                 </p>
             </div>
         </div>
-    )
+    );
 }
 
 export default AudioCall;

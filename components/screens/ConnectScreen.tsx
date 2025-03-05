@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import AudioCall from "@/components/screens/AudioCall";
 import cn from "@/lib/utils/cn";
@@ -39,39 +39,39 @@ function ConnectScreen() {
                 await createAnswer({request: currentRequestSignal.value});
             }
         })();
-    })
+    });
 
     function renderScreen() {
         if (!statusSignal.value) {
              return <p className={"flex justify-center items-center text-sm md:text-xl size-full"}>
                  برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
-             </p>
+             </p>;
         } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
             return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
                 <p>
                     در انتظار پاسخ ...
                 </p>
                 <Button onClick={hangup}>انصراف</Button>
-            </div>
+            </div>;
         } else if (statusSignal.value === "screen:send") {
-            return <ScreenSend/>
+            return <ScreenSend/>;
         } else if (statusSignal.value.startsWith("audio:") && connectionStateSignal.value === "connected") {
-            return <AudioCall/>
+            return <AudioCall/>;
         } else if (statusSignal.value.startsWith("video:") || statusSignal.value === "screen:receive") {
-            return
+            return;
         } else if (statusSignal.value?.startsWith("game")) {
-            return <PigGame/>
+            return <PigGame/>;
         } else {
             return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
                 <p>در حال اتصال ...</p>
                 <Loader className={"size-8 md:size-10"}/>
-            </div>
+            </div>;
         }
     }
 
     const closeDrawerHandler = () => {
-        isChatDrawerOpenSignal.value = false
-    }
+        isChatDrawerOpenSignal.value = false;
+    };
 
         return (
         <>
@@ -97,7 +97,7 @@ function ConnectScreen() {
             </section>
             <ActionBar/>
         </>
-    )
+    );
 }
 
 export default ConnectScreen;

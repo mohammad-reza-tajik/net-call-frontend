@@ -25,4 +25,4 @@ async function shareScreen() {
 
 }
 
-export default shareScreen
+export default shareScreen;

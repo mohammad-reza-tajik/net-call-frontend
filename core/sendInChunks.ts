@@ -35,7 +35,7 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                     localPeerId: localPeerIdSignal.value,
                     transferredAmount: offset,
                     timestamp
-                }
+                };
 
                 messagesSignal.value = [
                     ...messagesSignal.value.slice(0, transferringFileMessageIndex),
@@ -54,7 +54,7 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
                 localPeerId: localPeerIdSignal.value,
                 transferredAmount: fileData.size,
                 timestamp
-            }
+            };
 
         messagesSignal.value = [
             ...messagesSignal.value.slice(0, transferringFileMessageIndex),
@@ -62,7 +62,7 @@ async function sendInChunks({fileBuffer, fileData}: { fileBuffer: ArrayBuffer, f
             ...messagesSignal.value.slice(transferringFileMessageIndex + 1)
         ];
 
-    })
+    });
 }
 
 export default sendInChunks;

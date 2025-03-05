@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {useId , type ReactNode} from "react";
 import cn from "@/lib/utils/cn";

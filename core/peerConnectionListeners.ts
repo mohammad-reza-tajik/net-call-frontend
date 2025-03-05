@@ -57,8 +57,8 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
     peerConnection.addEventListener("signalingstatechange", () => {
         signalingStateSignal.value = peerConnection.signalingState;
-        console.log(peerConnection.signalingState)
-    })
+        console.log(peerConnection.signalingState);
+    });
 
     peerConnection.addEventListener("connectionstatechange", () => {
         connectionStateSignal.value = peerConnection.connectionState;
@@ -68,7 +68,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
             showNotification({
                 title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
 
-            })
+            });
         } else if (peerConnection.connectionState === "failed") {
             if (chatChannelSignal.value) {
                 chatChannelSignal.value.close();
@@ -77,14 +77,14 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
             }
             toast.error("متاسفانه ارتباط برقرار نشد");
         }
-    })
+    });
 
     peerConnection.addEventListener("track", (event) => {
         remoteStreamSignal.value = event.streams.at(0);
         if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
             remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
         }
-    })
+    });
 
     peerConnection.addEventListener("datachannel", ({channel}) => {
         dataChannelListeners(channel);
@@ -95,7 +95,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
         } else if (channel.label === "game") {
             gameChannelListeners(channel);
         }
-    })
+    });
 
     peerConnectionSignal.value = peerConnection;
 }

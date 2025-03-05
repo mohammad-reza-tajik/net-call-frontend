@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
@@ -24,7 +24,7 @@ function DeviceSelector({devices}: IProps) {
     useSignals();
 
     if (!devices) {
-        return
+        return;
     }
 
     const changeDeviceHandler = async (value: string) => {
@@ -86,7 +86,7 @@ function DeviceSelector({devices}: IProps) {
             console.error(err);
         }
 
-    }
+    };
 
     return (
         <DropdownMenu>
@@ -103,13 +103,13 @@ function DeviceSelector({devices}: IProps) {
                                 <DropdownMenuRadioItem key={item.deviceId} value={item.deviceId}>
                                     {item.label}
                                 </DropdownMenuRadioItem>
-                            )
+                            );
                         })
                     }
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }
 
 export default DeviceSelector;

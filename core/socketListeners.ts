@@ -17,31 +17,31 @@ function socketListeners(socket: Socket) {
         // check if a request from the same remote peer exists and replace them with new one
         const requestIndex = receivedRequestsSignal.value.findIndex(receivedRequest => {
             return receivedRequest.localPeerId === request.localPeerId;
-        })
+        });
 
         if (requestIndex >= 0) {
             receivedRequestsSignal.value = [
                 ...receivedRequestsSignal.value.slice(0, requestIndex),
                 request,
                 ...receivedRequestsSignal.value.slice(requestIndex + 1)
-            ]
+            ];
         } else {
             receivedRequestsSignal.value = [
                 ...receivedRequestsSignal.value,
                 request
-            ]
+            ];
         }
 
         let statusText: string | undefined;
 
         if (request.status === "screen:send") {
-            statusText = "اشتراک گذاری صفحه"
+            statusText = "اشتراک گذاری صفحه";
         } else if (request.status === "video:send") {
-            statusText = "تماس تصویری"
+            statusText = "تماس تصویری";
         } else if (request.status === "audio:send") {
-            statusText = "تماس صوتی"
+            statusText = "تماس صوتی";
         } else if (request.status === "game:send") {
-            statusText = "بازی"
+            statusText = "بازی";
         }
 
         showNotification({
@@ -54,7 +54,7 @@ function socketListeners(socket: Socket) {
         if (!isRequestsDrawerOpenSignal.value) {
             haveNewRequestSignal.value = true;
         }
-    })
+    });
 
     socket.on("responseToPeer", async (response: IResponse) => {
         try {
@@ -70,16 +70,16 @@ function socketListeners(socket: Socket) {
             await peerConnectionSignal.value?.setRemoteDescription(response.answer);
             response.iceCandidates.forEach(item => {
                 peerConnectionSignal.value?.addIceCandidate(item);
-            })
+            });
 
         } catch (err) {
             console.error(err);
         }
-    })
+    });
 
     socket.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
         connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
-    })
+    });
 
     socket.on("remotePeerNotConnected", () => {
         toast.error("این کاربر آنلاین نیست");
@@ -89,7 +89,7 @@ function socketListeners(socket: Socket) {
             hangup();
         }
 
-    })
+    });
 
     socket.on("hangupToPeer", () => {
         if (peerConnectionSignal.value?.signalingState !== "stable") {
@@ -100,7 +100,7 @@ function socketListeners(socket: Socket) {
             }
 
         }
-    })
+    });
 
     socket.on("rejectToPeer", () => {
         toast.error("درخواست شما رد شد");
@@ -118,7 +118,7 @@ function socketListeners(socket: Socket) {
             }
             
         }
-    })
+    });
 }
 
 export default socketListeners;

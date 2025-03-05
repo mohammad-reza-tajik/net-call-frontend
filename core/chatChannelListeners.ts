@@ -10,8 +10,8 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
     dataChannel.addEventListener("message", ({data}) => {
         if (data === "seen") {
             messagesSignal.value = messagesSignal.value.map((message)=> {
-                return {...message , seen : true}
-            })
+                return {...message , seen : true};
+            });
         }
         else {
             const newMessage = JSON.parse(data) as ITextMessage;
@@ -28,7 +28,7 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
                 haveNewMessageSignal.value = true;
             }
         }
-    })
+    });
 
     chatChannelSignal.value = dataChannel;
 
