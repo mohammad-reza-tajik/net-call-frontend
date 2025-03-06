@@ -5,8 +5,11 @@ import ActionButton from "@/components/connectPage/ActionButton";
 import cn from "@/lib/utils/cn";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import {batch} from "@preact/signals-react";
+import {useSignals} from "@preact/signals-react/runtime";
 
 function RequestDrawerButton() {
+
+    useSignals();
 
     const openDrawerHandler = () => {
         batch(() => {

@@ -1,7 +1,7 @@
 "use client";
 
 import {Button} from "@/components/ui/button";
-import {Plus} from "@/components/shared/Icons";
+import {Download,DiceFive} from "@/components/shared/Icons";
 import randomInt from "@/lib/utils/randomInt";
 import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
 import {toast} from "react-hot-toast";
@@ -86,13 +86,15 @@ function PigGame() {
                         <p>
                             بازی تمام شد
                         </p>
-                        <Button onClick={restartGameHandler}>شروع مجدد</Button>
+                        <Button onClick={restartGameHandler}>
+                            شروع مجدد
+                        </Button>
                     </div>
                 )
             }
 
             <div className={"bg-destructive flex justify-center items-center p-5 rounded w-full"}>
-                {opponentScoreSignal.value}
+                {opponentScoreSignal}
             </div>
 
 
@@ -101,24 +103,25 @@ function PigGame() {
             </p>
 
             <div className={"border rounded size-12 flex justify-center items-center text-xl"}>
-                {temporaryScoreSignal.value}
+                {temporaryScoreSignal}
             </div>
 
             <div className={"flex items-center justify-center gap-5"}>
-                <Button className={"gap-2"} onClick={rollDiceHandler} disabled={!isYourTurnSignal.value}>
-                    <span className={"text-2xl"}>
-                        {diceFaces[4]}
-                    </span>
-                    انداختن تاس
+
+                <Button size={"icon"}
+                        onClick={rollDiceHandler}
+                        disabled={!isYourTurnSignal.value}
+                >
+                    <DiceFive className={"size-8"} />
                 </Button>
-                <Button className={"gap-2"} onClick={addScoreHandler} disabled={!isYourTurnSignal.value}>
-                    <Plus className={"size-5"}/>
-                    دریافت
+                <Button size={"icon"} aria-label={"hold score"} onClick={addScoreHandler}
+                        disabled={!isYourTurnSignal.value}>
+                    <Download className={"size-7"}/>
                 </Button>
             </div>
 
             <div className={"bg-primary flex justify-center items-center p-5 rounded w-full"}>
-                {myScoreSignal.value}
+                {myScoreSignal}
             </div>
 
         </section>
