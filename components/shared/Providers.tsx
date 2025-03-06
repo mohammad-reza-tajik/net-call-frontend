@@ -13,7 +13,7 @@ function Providers({children}: { children: React.ReactNode }) {
                 position: "bottom-center",
                 icon: <Info className={"size-5"}/>,
                 success: {icon: <CheckCircle className={"size-5"}/>},
-                error: {icon: <Warning className={"size-5 fill-destructive"}/>}
+                error: {icon: <Warning className={"size-5"}/>}
             }}>
                 {(t) => (
                     <ToastBar toast={t} style={{
