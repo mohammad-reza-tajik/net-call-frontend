@@ -1,7 +1,7 @@
 "use client";
 
 import {Button} from "@/components/ui/button";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 import {toast} from "react-hot-toast";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import {useSignals} from "@preact/signals-react/runtime";
@@ -17,7 +17,6 @@ function PeerId() {
     };
 
     return (
-        <TooltipProvider>
             <div className={"flex items-center justify-center gap-2 text-sm max-md:hidden"}>
                 <p>
                     آیدی شما :
@@ -37,7 +36,6 @@ function PeerId() {
                         </Tooltip>
                 }
             </div>
-        </TooltipProvider>
     );
 }
 

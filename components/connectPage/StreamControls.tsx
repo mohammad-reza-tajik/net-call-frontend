@@ -1,17 +1,18 @@
 "use client";
-import {TooltipProvider} from "@/components/ui/tooltip";
 import {
+    Camera,
+    CameraOff,
+    Chat,
     Microphone,
     MicrophoneOff,
-    CameraOff,
-    Camera,
+    Monitor,
+    MonitorOff,
+    Phone,
     Speaker,
-    SpeakerOff,
-    Phone, Chat, Monitor, MonitorOff
+    SpeakerOff
 } from "@/components/shared/Icons";
 import DeviceSelector from "@/components/connectPage/DeviceSelector";
 import ActionButton from "@/components/connectPage/ActionButton";
-import remoteStreamSignal from "@/signals/remoteStream";
 import statusSignal from "@/signals/peer/status";
 import iODevicesSignal from "@/signals/iODevices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
@@ -23,6 +24,7 @@ import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import cn from "@/lib/utils/cn";
 import {Separator} from "@/components/ui/separator";
+import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 
 function StreamControls() {
 
@@ -80,11 +82,10 @@ function StreamControls() {
 
     return (
         <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
-            <TooltipProvider>
                 <ActionButton
-                              icon={<Phone className={"size-7 rotate-[135deg]"}/>}
-                              tooltipContent={"قطع تماس"}
-                              handler={hangupHandler}/>
+                    icon={<Phone className={"size-7 rotate-[135deg]"}/>}
+                    tooltipContent={"قطع تماس"}
+                    handler={hangupHandler}/>
 
                 <div className={"flex items-center rounded overflow-hidden"}>
                     <ActionButton
@@ -118,16 +119,18 @@ function StreamControls() {
                 {
                     statusSignal.value === "screen:send" &&
                     <ActionButton
-                        icon={isVideoMuteSignal.value ? <MonitorOff className={"size-7"}/> : <Monitor className={"size-7"}/>}
+                        icon={isVideoMuteSignal.value ? <MonitorOff className={"size-7"}/> :
+                            <Monitor className={"size-7"}/>}
                         tooltipContent={"قطع / وصل صفحه"}
                         handler={muteVideoHandler}/>
                 }
 
                 <div className={"flex items-center rounded overflow-hidden"}>
                     <ActionButton className={"rounded-none"}
-                        icon={isSoundMuteSignal.value ? <SpeakerOff className={"size-7"}/> : <Speaker className={"size-7"}/>}
-                        tooltipContent={"قطع / وصل صدا"}
-                        handler={muteSoundHandler}/>
+                                  icon={isSoundMuteSignal.value ? <SpeakerOff className={"size-7"}/> :
+                                      <Speaker className={"size-7"}/>}
+                                  tooltipContent={"قطع / وصل صدا"}
+                                  handler={muteSoundHandler}/>
 
                     <Separator orientation={"vertical"}/>
 
@@ -139,7 +142,6 @@ function StreamControls() {
                               tooltipContent={"چت"}
                               handler={openChatHandler}/>
 
-            </TooltipProvider>
         </div>
     );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import {TooltipProvider} from "@/components/ui/tooltip";
 import features from "@/constants/features";
 import ActionButton from "@/components/connectPage/ActionButton";
 import statusSignal from "@/signals/peer/status";
@@ -14,7 +13,6 @@ function Features() {
 
     return (
         <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
-            <TooltipProvider>
                 {
                     features.map((item , index)=>{
                         if (getDeviceType() === "mobile" && item.name === "screen-share") return;
@@ -23,7 +21,6 @@ function Features() {
                         );
                     })
                 }
-            </TooltipProvider>
         </div>
     );
 }

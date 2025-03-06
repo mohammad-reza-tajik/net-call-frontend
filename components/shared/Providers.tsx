@@ -1,7 +1,8 @@
 "use client";
 import {Button} from "@/components/ui/button";
 import {CheckCircle, Close, Info, Warning} from "@/components/shared/Icons";
-import {Toaster, ToastBar, toast} from "react-hot-toast";
+import {toast, ToastBar, Toaster} from "react-hot-toast";
+import {TooltipProvider} from "@/components/ui/tooltip";
 
 function Providers({children}: { children: React.ReactNode }) {
 
@@ -37,7 +38,9 @@ function Providers({children}: { children: React.ReactNode }) {
                     </ToastBar>
                 )}
             </Toaster>
-            {children}
+            <TooltipProvider>
+                {children}
+            </TooltipProvider>
         </>
     );
 }

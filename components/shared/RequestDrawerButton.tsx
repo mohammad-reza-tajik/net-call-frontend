@@ -1,7 +1,6 @@
 "use client";
 import {Envelope} from "@/components/shared/Icons";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
-import {TooltipProvider} from "@/components/ui/tooltip";
 import ActionButton from "@/components/connectPage/ActionButton";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import RequestItem from "@/components/shared/RequestItem";
@@ -19,7 +18,7 @@ function RequestDrawerButton() {
     };
 
     return (
-        <TooltipProvider>
+        <>
             <ActionButton className={cn({"animate-bounce": haveNewRequestSignal.value})}
                           icon={<Envelope className={"size-7"}/>}
                           tooltipContent={"درخواست های دریافت شده"}
@@ -39,7 +38,7 @@ function RequestDrawerButton() {
                     })
                 }
             </Drawer>
-        </TooltipProvider>
+        </>
     );
 }
 
