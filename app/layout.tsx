@@ -2,7 +2,7 @@ import type {Metadata, Viewport} from "next";
 import "@/styles/globals.css";
 import Providers from "@/components/shared/Providers";
 import Header from "@/components/shared/Header";
-import Initialize from "@/components/shared/Initialize";
+import Initializer from "@/components/shared/Initializer";
 
 export const metadata: Metadata = {
     title: "Net Call",
@@ -33,10 +33,10 @@ function RootLayout({children}: { children: React.ReactNode; }) {
         <body className={"bg-background text-foreground fill-foreground relative"}>
         <div className={"h-[100dvh] w-screen contained overflow-hidden flex flex-col"}>
             <Providers>
-                <Initialize>
+                <Initializer>
                     <Header/>
                     {children}
-                </Initialize>
+                </Initializer>
             </Providers>
         </div>
         </body>

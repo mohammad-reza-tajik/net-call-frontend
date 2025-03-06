@@ -17,11 +17,11 @@ import { type Toast, toast} from "react-hot-toast";
 import {Button} from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
 
-interface IProps {
+interface IInitializerProps {
     children: React.ReactNode;
 }
 
-function Initialize({children}: IProps) {
+function Initializer({children}: IInitializerProps) {
 
     routerSignal.value = useRouter();
 
@@ -98,4 +98,4 @@ function Initialize({children}: IProps) {
     );
 }
 
-export default Initialize;
+export default Initializer;
