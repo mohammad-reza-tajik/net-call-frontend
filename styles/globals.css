@@ -1,6 +1,9 @@
 @import "./fonts.css" layer(base);
 @import "tailwindcss";
 
+@plugin "tailwindcss-animate";
+
+
 :root {
     --background: oklch(14.31% 0.0546 270.74);
     --foreground: oklch(1 0 0);
