@@ -10,6 +10,10 @@ export interface IConnectedPeer {
     visibility: "visible" | "hidden";
 }
 
+export interface IFriend extends IConnectedPeer {
+    alias : string;
+}
+
 export interface IRequest {
     offer: RTCSessionDescriptionInit;
     localPeerId: string;

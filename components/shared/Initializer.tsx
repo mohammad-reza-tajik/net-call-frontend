@@ -13,7 +13,7 @@ import routerSignal from "@/signals/router";
 import {batch} from "@preact/signals-react";
 import connectToSocket from "@/core/connectToSocket";
 import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
-import { type Toast, toast} from "react-hot-toast";
+import {type Toast, toast} from "react-hot-toast";
 import {Button} from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
 import visibilitySignal from "@/signals/peer/visibility";
@@ -31,7 +31,7 @@ function Initializer({children}: IInitializerProps) {
         (async () => {
             try {
                 if (typeof navigator.serviceWorker !== "undefined") {
-                    // await navigator.serviceWorker.register("/sw.js");
+                    await navigator.serviceWorker.register("/sw.js");
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data === "activated") {
                             routerSignal.value?.refresh();
@@ -39,24 +39,24 @@ function Initializer({children}: IInitializerProps) {
                     });
                 }
 
-                const localStream = await navigator.mediaDevices.getUserMedia({audio: true});
+                const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
 
                 // this is because we need to request notification permission on a user gesture
                 if (Notification.permission !== "granted") {
                     toast((t: Toast) => (
                         <div className={"flex items-center gap-2"}>
-                        <p>دسترسی به اعلان مورد نیاز است</p>
-                        <Button size={"sm"} className={"text-xs"} onClick={async () => {
-                            const permission = await Notification.requestPermission();
-                            if (permission !== "granted") {
-                                throw new Error("دسترسی به اعلان مورد نیاز است");
-                            }
-                            toast.dismiss(t.id);
-                        }}>
-                            دادن مجوز
-                        </Button>
+                            <p>دسترسی به اعلان مورد نیاز است</p>
+                            <Button size={"sm"} className={"text-xs"} onClick={async () => {
+                                const permission = await Notification.requestPermission();
+                                if (permission !== "granted") {
+                                    throw new Error("دسترسی به اعلان مورد نیاز است");
+                                }
+                                toast.dismiss(t.id);
+                            }}>
+                                دادن مجوز
+                            </Button>
                         </div>
-                    ) , {id : "notification-permission" , duration : Infinity});
+                    ), {id: "notification-permission", duration: Infinity});
 
                 }
 
@@ -68,7 +68,7 @@ function Initializer({children}: IInitializerProps) {
                 }
                 const deviceType = getDeviceType();
                 const devices = await getIODevices();
-                const socket = connectToSocket({localPeerId , deviceType , visibility});
+                const socket = connectToSocket({localPeerId, deviceType, visibility});
 
                 batch(() => {
                     localPeerIdSignal.value = localPeerId;
@@ -89,8 +89,8 @@ function Initializer({children}: IInitializerProps) {
     useSignalEffect(() => {
         if (!socketSignal.value && localPeerIdSignal.value) {
             const newSocket = connectToSocket({
-                localPeerId : localPeerIdSignal.value,
-                visibility:  visibilitySignal.value,
+                localPeerId: localPeerIdSignal.value,
+                visibility: visibilitySignal.peek(),
                 deviceType: getDeviceType()
             });
             socketSignal.value = newSocket;
