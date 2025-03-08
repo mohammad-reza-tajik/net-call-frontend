@@ -15,7 +15,8 @@ const persianLabels: Record<keyof IConnectedPeer, string> = {
 
     localPeerId: "آیدی",
     deviceType: "نوع دستگاه",
-    socketId: " "
+    socketId: " ",
+    visibility : " ",
 };
 
 function PeerList() {
@@ -39,17 +40,16 @@ function PeerList() {
     function headersToShowHandler() {
         const keys = Object.keys(currentItems[0]) as Array<keyof IConnectedPeer>;
         const headers = keys.map((item) => {
-            if (item !== "socketId") {
-                return {isSortable: true, label: item, alias: persianLabels[item]};
-            } else {
-                return undefined;
-            }
+            if (item === "socketId" || item === "visibility") return ;
+
+            return {isSortable: true, label: item, alias: persianLabels[item]};
+
         });
         return [...headers, {label : "--connectButtons"}];
     }
 
     function renderCellHandler(header: Header, data: string, dataItem : Record<keyof IConnectedPeer, unknown>) {
-        if (header.label.startsWith("--")) {
+        if (header.label === "--connectButtons") {
             return <Button asChild>
                 <Link href={`/connect?remotePeerId=${dataItem.localPeerId}`}>
                     اتصال
