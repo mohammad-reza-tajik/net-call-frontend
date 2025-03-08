@@ -7,6 +7,7 @@ export interface IConnectedPeer {
     socketId : string;
     localPeerId : string;
     deviceType: TDeviceType;
+    visibility: "visible" | "hidden";
 }
 
 export interface IRequest {
