@@ -28,7 +28,7 @@ function VisibilitySwitch() {
             </label>
             <Switch id={"visibility"} onCheckedChange={changeVisibilityHandler} checked={visibilitySignal.value === "hidden"} className={"[direction:ltr]"} />
         </>
-    )
+    );
 }
 
 export default VisibilitySwitch;

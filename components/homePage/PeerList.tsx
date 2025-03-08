@@ -8,6 +8,8 @@ import {useSignals} from "@preact/signals-react/runtime";
 import type {IConnectedPeer} from "@/types";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {UserPlus} from "@/components/shared/Icons";
+import ActionButton from "@/components/connectPage/ActionButton";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -16,7 +18,7 @@ const persianLabels: Record<keyof IConnectedPeer, string> = {
     localPeerId: "آیدی",
     deviceType: "نوع دستگاه",
     socketId: " ",
-    visibility : " ",
+    visibility: " ",
 };
 
 function PeerList() {
@@ -40,21 +42,31 @@ function PeerList() {
     function headersToShowHandler() {
         const keys = Object.keys(currentItems[0]) as Array<keyof IConnectedPeer>;
         const headers = keys.map((item) => {
-            if (item === "socketId" || item === "visibility") return ;
+            if (item === "socketId" || item === "visibility") return;
 
             return {isSortable: true, label: item, alias: persianLabels[item]};
 
         });
-        return [...headers, {label : "--connectButtons"}];
+        return [...headers, {label: "--actionButtons"}];
     }
 
-    function renderCellHandler(header: Header, data: string, dataItem : Record<keyof IConnectedPeer, unknown>) {
-        if (header.label === "--connectButtons") {
-            return <Button asChild>
-                <Link href={`/connect?remotePeerId=${dataItem.localPeerId}`}>
-                    اتصال
-                </Link>
-            </Button>;
+    function renderCellHandler(header: Header, data: string, dataItem: Record<keyof IConnectedPeer, unknown>) {
+        if (header.label === "--actionButtons") {
+            return (
+                <div className={"flex items-center gap-2 justify-end"}>
+                    <Button asChild>
+                        <Link href={`/connect?remotePeerId=${dataItem.localPeerId}`}>
+                            اتصال
+                        </Link>
+                    </Button>
+
+                    <ActionButton icon={<UserPlus className={"size-5"}/>} tooltipContent={"افزودن به دوستان"}
+                                  handler={() => {
+                                      console.log("add to friend");
+                                  }}/>
+
+                </div>
+            );
         }
         return data;
     }
