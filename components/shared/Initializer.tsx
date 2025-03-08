@@ -16,6 +16,8 @@ import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
 import { type Toast, toast} from "react-hot-toast";
 import {Button} from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
+import visibilitySignal from "@/signals/peer/visibility";
+import type {IConnectedPeer} from "@/types";
 
 interface IInitializerProps {
     children: React.ReactNode;
@@ -29,7 +31,7 @@ function Initializer({children}: IInitializerProps) {
         (async () => {
             try {
                 if (typeof navigator.serviceWorker !== "undefined") {
-                    await navigator.serviceWorker.register("/sw.js");
+                    // await navigator.serviceWorker.register("/sw.js");
                     navigator.serviceWorker.addEventListener("message", (event) => {
                         if (event.data === "activated") {
                             routerSignal.value?.refresh();
@@ -37,7 +39,7 @@ function Initializer({children}: IInitializerProps) {
                     });
                 }
 
-                const localStream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+                const localStream = await navigator.mediaDevices.getUserMedia({audio: true});
 
                 // this is because we need to request notification permission on a user gesture
                 if (Notification.permission !== "granted") {
@@ -58,6 +60,7 @@ function Initializer({children}: IInitializerProps) {
 
                 }
 
+                const visibility = (localStorage.getItem("visibility") || "visible") as IConnectedPeer["visibility"];
                 let localPeerId = localStorage.getItem("localPeerId");
                 if (!localPeerId) {
                     localPeerId = localStream.id;
@@ -65,13 +68,14 @@ function Initializer({children}: IInitializerProps) {
                 }
                 const deviceType = getDeviceType();
                 const devices = await getIODevices();
-                const socket = connectToSocket({localPeerId , deviceType});
+                const socket = connectToSocket({localPeerId , deviceType , visibility});
 
                 batch(() => {
                     localPeerIdSignal.value = localPeerId;
                     localStreamSignal.value = localStream;
                     iODevicesSignal.value = devices;
                     socketSignal.value = socket;
+                    visibilitySignal.value = visibility;
                 });
             } catch (err) {
                 if (err instanceof Error) {
@@ -81,6 +85,17 @@ function Initializer({children}: IInitializerProps) {
             }
         })();
     }, []);
+
+    useSignalEffect(() => {
+        if (!socketSignal.value && localPeerIdSignal.value) {
+            const newSocket = connectToSocket({
+                localPeerId : localPeerIdSignal.value,
+                visibility:  visibilitySignal.value,
+                deviceType: getDeviceType()
+            });
+            socketSignal.value = newSocket;
+        }
+    });
 
     useSignalEffect(() => {
         if (!peerConnectionSignal.value) {
