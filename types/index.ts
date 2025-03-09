@@ -10,8 +10,10 @@ export interface IConnectedPeer {
     visibility: "visible" | "hidden";
 }
 
-export interface IFriend extends IConnectedPeer {
-    alias : string;
+export interface IFriend {
+    name : string;
+    localPeerId : string;
+    isOnline : boolean;
 }
 
 export interface IRequest {
