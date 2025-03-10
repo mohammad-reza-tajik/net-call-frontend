@@ -8,7 +8,7 @@ import { Devices, UsersThree } from "../shared/Icons";
 function StartScreen() {
 
     return (
-        <section className={"flex flex-col gap-5 flex-1 border border-t-0 rounded overflow-y-auto overflow-x-hidden"}>
+        <section className={"flex flex-col gap-5 flex-1 overflow-y-auto overflow-x-hidden"}>
             <Tabs defaultValue={"friends"} className={"w-full [direction:rtl]"}>
                 <TabsList className={"w-full rounded-none"}>
                     <TabsTrigger value={"friends"}>
