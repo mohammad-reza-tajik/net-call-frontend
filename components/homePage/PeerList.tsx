@@ -82,7 +82,7 @@ function PeerList() {
     const renderCellHandler = (header: Header, data: string, dataItem: Record<keyof IConnectedPeer, any>) => {
         if (header.label === "--actionButtons") {
             return (
-                <div className={"flex items-center gap-2 justify-end"}>
+                <div className={"flex items-center gap-2 justify-end p-1"}>
                     <Button onClick={() => routerSignal.value?.push(`/connect?remotePeerId=${dataItem.localPeerId}`)}>
                         اتصال
                     </Button>
@@ -94,11 +94,11 @@ function PeerList() {
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
-                            <DialogHeader className={"text-center text-xs md:text-sm"}>
-                                <DialogTitle>
+                            <DialogHeader>
+                                <DialogTitle className={"text-center text-xs md:text-sm"}>
                                     انتخاب نام
                                 </DialogTitle>
-                                <DialogDescription>
+                                <DialogDescription className={"text-center text-xs"}>
                                     برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید
                                 </DialogDescription>
                             </DialogHeader>

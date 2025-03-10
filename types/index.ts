@@ -2,12 +2,14 @@
 export type TStatus = `${"screen" | "video" | "audio" | "game"}:${"send"|"receive"}`;
 
 export type TDeviceType = "desktop" | "mobile";
+export type TVisibility = "visible" | "hidden";
+
 
 export interface IConnectedPeer {
     socketId : string;
     localPeerId : string;
     deviceType: TDeviceType;
-    visibility: "visible" | "hidden";
+    visibility: TVisibility;
     name? : string;
     isOnline? : boolean;
 }

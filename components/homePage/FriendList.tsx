@@ -62,7 +62,7 @@ function FriendList() {
     const renderCellHandler = (header: Header, data: string, dataItem: Record<keyof IConnectedPeer, any>) => {
         if (header.label === "--actionButtons") {
             return (
-                <div className={"flex items-center gap-2 justify-end"}>
+                <div className={"flex items-center gap-2 justify-end p-1"}>
                     <Button disabled={!dataItem.isOnline} onClick={() => {
                         routerSignal.value?.push(`/connect?remotePeerId=${dataItem.localPeerId}`);
                     }}>
