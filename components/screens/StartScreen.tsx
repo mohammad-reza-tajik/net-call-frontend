@@ -1,24 +1,36 @@
-import {Pencil, Devices} from "@/components/shared/Icons";
 import PeerList from "@/components/homePage/PeerList";
-import PeerForm from "@/components/homePage/PeerForm";
 import {Suspense} from "react";
+import FriendList from "@/components/homePage/FriendList";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import { Devices, UsersThree } from "../shared/Icons";
+
 
 function StartScreen() {
 
     return (
         <section className={"flex flex-col gap-5 flex-1 px-2"}>
-            <h2 className={"flex items-center gap-3 py-1 md:py-3 text-sm md:text-lg"}>
-                <Devices className={"size-5 md:size-7"}/>
-                دستگاه های متصل
-            </h2>
-            <Suspense>
-                <PeerList/>
-            </Suspense>
-            <h2 className={"flex items-center gap-3 py-1 md:py-3 text-sm md:text-lg"}>
-                <Pencil className={"size-5 md:size-7"}/>
-                وارد کردن آیدی دستگاه مقابل
-            </h2>
-            <PeerForm/>
+            <Tabs defaultValue={"friends"} className={"w-full [direction:rtl]"}>
+                <TabsList className={"w-full"}>
+                    <TabsTrigger value={"friends"}>
+                        <UsersThree className={"size-5"} />
+                        دوستان
+                        </TabsTrigger>
+                    <TabsTrigger value={"others"}>
+                        <Devices className={"size-5"} />
+                        دستگاه های متصل
+                        </TabsTrigger>
+                </TabsList>
+                <TabsContent value={"friends"}>
+                    <Suspense>
+                        <FriendList/>
+                    </Suspense>
+                </TabsContent>
+                <TabsContent value={"others"}>
+                    <Suspense>
+                        <PeerList/>
+                    </Suspense>
+                </TabsContent>
+            </Tabs>
         </section>
     );
 }
