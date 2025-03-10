@@ -69,11 +69,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
 
             });
         } else if (peerConnection.connectionState === "failed") {
-            if (chatChannelSignal.value) {
-                chatChannelSignal.value.close();
-            } else {
-                hangup();
-            }
+            peerConnectionSignal.value?.close();
             toast.error("متاسفانه ارتباط برقرار نشد");
         }
     });
