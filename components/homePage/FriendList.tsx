@@ -30,7 +30,6 @@ function FriendList() {
     const currentPage = useSearchParams().get("page") || 1;
 
     const currentItems = friendsSignal.value.slice((+currentPage - 1) * ITEMS_PER_PAGE, +currentPage * ITEMS_PER_PAGE);
-    console.log(friendsSignal.value);
 
     const sortByHeaderHandler = (header: string) => {
         friendsSignal.value = friendsSignal.value.toSorted((a, b) => {

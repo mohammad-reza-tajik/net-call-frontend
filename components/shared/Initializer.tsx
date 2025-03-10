@@ -6,7 +6,7 @@ import iODevicesSignal from "@/signals/iODevices";
 import getIODevices from "@/core/getIODevices";
 import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
-import {useSignalEffect} from "@preact/signals-react/runtime";
+import {useSignal, useSignalEffect} from "@preact/signals-react/runtime";
 import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import {useRouter} from "next/navigation";
 import routerSignal from "@/signals/router";
@@ -18,6 +18,7 @@ import {Button} from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
 import visibilitySignal from "@/signals/peer/visibility";
 import type {IConnectedPeer} from "@/types";
+import friendsSignal from "@/signals/peer/friends";
 
 interface IInitializerProps {
     children: React.ReactNode;
@@ -26,6 +27,13 @@ interface IInitializerProps {
 function Initializer({children}: IInitializerProps) {
 
     routerSignal.value = useRouter();
+
+    /*
+    Boolean signal to track completion of initial setup, including localStorage loading.
+    Ensures useSignalEffect hooks only save to localStorage after data is fully loaded,
+     preventing overwrite with default or empty values on mount.
+     */
+    const isLoaded = useSignal(false);
 
     useEffect(() => {
         (async () => {
@@ -61,6 +69,15 @@ function Initializer({children}: IInitializerProps) {
                 }
 
                 const visibility = (localStorage.getItem("visibility") || "visible") as IConnectedPeer["visibility"];
+
+                const storedFriends = localStorage.getItem("friends");
+
+                let friends: IConnectedPeer[] = [];
+
+                if (storedFriends) {
+                    friends = JSON.parse(storedFriends);
+                }
+
                 let localPeerId = localStorage.getItem("localPeerId");
                 if (!localPeerId) {
                     localPeerId = localStream.id;
@@ -76,6 +93,9 @@ function Initializer({children}: IInitializerProps) {
                     iODevicesSignal.value = devices;
                     socketSignal.value = socket;
                     visibilitySignal.value = visibility;
+                    friendsSignal.value = friends;
+                    isLoaded.value = true;
+
                 });
             } catch (err) {
                 if (err instanceof Error) {
@@ -100,6 +120,12 @@ function Initializer({children}: IInitializerProps) {
     useSignalEffect(() => {
         if (!peerConnectionSignal.value) {
             createConnection();
+        }
+    });
+
+    useSignalEffect(() => {
+        if (isLoaded.value) {
+            localStorage.setItem("friends", JSON.stringify(friendsSignal.value));
         }
     });
 

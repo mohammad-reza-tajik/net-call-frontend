@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button";
 import {UserPlus} from "@/components/shared/Icons";
 import friendsSignal from "@/signals/peer/friends";
 import routerSignal from "@/signals/router";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import toast from "react-hot-toast";
 
@@ -94,10 +94,13 @@ function PeerList() {
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle className={"text-center text-xs md:text-sm"}>
-                                    لطفا نامی برای این دوست انتخاب کنید
+                            <DialogHeader className={"text-center text-xs md:text-sm"}>
+                                <DialogTitle>
+                                    انتخاب نام
                                 </DialogTitle>
+                                <DialogDescription>
+                                    برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید
+                                </DialogDescription>
                             </DialogHeader>
                             <Input value={nameInputSignal.value}
                                    onChange={ev => nameInputSignal.value = ev.target.value}/>
