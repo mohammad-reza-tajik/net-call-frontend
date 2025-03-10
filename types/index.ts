@@ -8,13 +8,10 @@ export interface IConnectedPeer {
     localPeerId : string;
     deviceType: TDeviceType;
     visibility: "visible" | "hidden";
+    name? : string;
+    isOnline? : boolean;
 }
 
-export interface IFriend {
-    name : string;
-    localPeerId : string;
-    isOnline : boolean;
-}
 
 export interface IRequest {
     offer: RTCSessionDescriptionInit;

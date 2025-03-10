@@ -15,7 +15,7 @@ function PeerForm() {
     useSignals();
     const remotePeerIdRef = useRef<HTMLInputElement>(null);
 
-    function submitRemotePeerIdHandler() {
+    const submitRemotePeerIdHandler = () => {
         if (!remotePeerIdRef.current?.value) {
             return;
         }
@@ -35,7 +35,7 @@ function PeerForm() {
         remotePeerIdSignal.value = remotePeerIdRef.current.value;
         remotePeerIdRef.current.value = "";
         routerSignal.value!.push(peerURL);
-    }
+    };
 
     return (
         <div className={"flex flex-col justify-center items-center py-5 md:py-10 gap-5 border rounded"}>

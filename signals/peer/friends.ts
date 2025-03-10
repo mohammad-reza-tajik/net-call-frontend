@@ -1,6 +1,6 @@
 import {signal} from "@preact/signals-react";
-import type {IFriend} from "@/types";
+import type {IConnectedPeer} from "@/types";
 
-const friendsSignal = signal<IFriend[]>([]);
+const friendsSignal = signal<IConnectedPeer[]>([]);
 
 export default friendsSignal;

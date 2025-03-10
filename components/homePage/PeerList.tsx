@@ -14,7 +14,6 @@ import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,} from "
 import {Input} from "@/components/ui/input";
 import toast from "react-hot-toast";
 
-
 const ITEMS_PER_PAGE = 5;
 
 const persianLabels: Record<keyof IConnectedPeer, string> = {
@@ -23,6 +22,8 @@ const persianLabels: Record<keyof IConnectedPeer, string> = {
     deviceType: "نوع دستگاه",
     socketId: " ",
     visibility: " ",
+    name : "",
+    isOnline : ""
 };
 
 function PeerList() {
@@ -48,7 +49,7 @@ function PeerList() {
     const headersToShowHandler = () => {
         const keys = Object.keys(currentItems[0]) as Array<keyof IConnectedPeer>;
         const headers = keys.map((item) => {
-            if (item === "socketId" || item === "visibility") return;
+            if (item === "socketId" || item === "visibility" || item === "name" || item === "isOnline") return;
 
             return {isSortable: true, label: item, alias: persianLabels[item]};
 
@@ -67,12 +68,13 @@ function PeerList() {
         }
 
         friendsSignal.value = [...friendsSignal.value, {
+            ...dataItem,
             name: nameInputSignal.value,
             isOnline: true,
-            localPeerId: dataItem.localPeerId
         }];
         
         connectedPeersSignal.value = connectedPeersSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
+
         nameInputSignal.value = "";
         toast("به دوستان افزوده شد");
     };
