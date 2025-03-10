@@ -9,6 +9,7 @@ import type {Socket} from "socket.io-client";
 import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
+import friendsSignal from "@/signals/peer/friends";
 
 function socketListeners(socket: Socket) {
 
@@ -77,7 +78,33 @@ function socketListeners(socket: Socket) {
     });
 
     socket.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
-        connectedPeersSignal.value = connectedPeers.filter(item => item.localPeerId !== localPeerIdSignal.value);
+
+        if (connectedPeersSignal.value.length === 0) {
+            friendsSignal.value = friendsSignal.value.map(friend => {
+                    return {...friend , isOnline : false};
+            });
+        }
+
+        const connectedFriends = connectedPeers.filter(item => {
+            return friendsSignal.value.some(friend => friend.localPeerId === item.localPeerId);
+        });
+
+        connectedFriends.forEach(connectedFriend => {
+           friendsSignal.value = friendsSignal.value.map(friend => {
+               if (connectedFriend.localPeerId === friend.localPeerId) {
+                   return {...friend , isOnline : true};
+               } else {
+                   return {...friend , isOnline : false};
+               }
+           });
+        });
+
+        const nonFriends = connectedPeers.filter(item => {
+            return !friendsSignal.value.some(friend => friend.localPeerId === item.localPeerId);
+        });
+
+        connectedPeersSignal.value = nonFriends.filter(item => item.localPeerId !== localPeerIdSignal.value);
+
     });
 
     socket.on("remotePeerNotConnected", () => {
