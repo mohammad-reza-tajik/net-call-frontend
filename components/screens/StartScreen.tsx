@@ -2,7 +2,7 @@ import PeerList from "@/components/homePage/PeerList";
 import {Suspense} from "react";
 import FriendList from "@/components/homePage/FriendList";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import { Devices, UsersThree } from "../shared/Icons";
+import { Devices, UsersThree } from "@/components/shared/Icons";
 
 
 function StartScreen() {

@@ -4,7 +4,7 @@ import Pagination from "@/components/shared/Pagination";
 import {useSearchParams} from "next/navigation";
 import Table, {type Header} from "@/components/shared/Table";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
-import {useSignals} from "@preact/signals-react/runtime";
+import {useSignal, useSignals} from "@preact/signals-react/runtime";
 import type {IConnectedPeer} from "@/types";
 import {Button} from "@/components/ui/button";
 import {UserPlus} from "@/components/shared/Icons";
@@ -14,8 +14,9 @@ import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Dia
 import {Input} from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { useRef } from "react";
+import localPeerIdSignal from "@/signals/peer/localPeerId";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const persianLabels: Record<keyof IConnectedPeer, string> = {
 
@@ -31,14 +32,20 @@ function PeerList() {
 
     useSignals();
 
+    const peersToShowSignal = useSignal<IConnectedPeer[]>([]);
+
     const currentPage = useSearchParams().get("page") || 1;
 
     const nameInputRef = useRef<HTMLInputElement>(null);
+
+    peersToShowSignal.value = connectedPeersSignal.value.filter((peer) => {
+        return peer.localPeerId !== localPeerIdSignal.value && !friendsSignal.value.some(friend => friend.localPeerId === peer.localPeerId);
+    });
     
-    const currentItems = connectedPeersSignal.value.slice((+currentPage - 1) * ITEMS_PER_PAGE, +currentPage * ITEMS_PER_PAGE);
+    const currentItems = peersToShowSignal.value.slice((+currentPage - 1) * ITEMS_PER_PAGE, +currentPage * ITEMS_PER_PAGE);
 
     const sortByHeaderHandler = (header: string) => {
-        connectedPeersSignal.value = connectedPeersSignal.value.toSorted((a, b) => {
+        connectedPeersSignal.value = peersToShowSignal.value.toSorted((a, b) => {
             // @ts-expect-error since headers are of type any
             if (a[header] < b[header]) return -1;
             // @ts-expect-error  since headers are of type any
@@ -76,7 +83,7 @@ function PeerList() {
             isOnline: true,
         }];
         
-        connectedPeersSignal.value = connectedPeersSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
+        peersToShowSignal.value = peersToShowSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
 
         nameInputRef.current!.value = "";
         toast("به دوستان افزوده شد");
@@ -121,14 +128,14 @@ function PeerList() {
     return (
         <>
             {
-                connectedPeersSignal.value.length === 0 ?
+                peersToShowSignal.value.length === 0 ?
                     <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
                         هیچ دستگاه متصل دیگری موجود نیست
                     </p> :
                     <>
                         <Table headers={headersToShowHandler()} data={currentItems} onSortByHeader={sortByHeaderHandler}
                                renderCell={renderCellHandler}/>
-                        <Pagination totalCount={connectedPeersSignal.value.length} itemsPerPage={ITEMS_PER_PAGE}
+                        <Pagination totalCount={peersToShowSignal.value.length} itemsPerPage={ITEMS_PER_PAGE}
                                     siblingCount={0}/>
                     </>
             }

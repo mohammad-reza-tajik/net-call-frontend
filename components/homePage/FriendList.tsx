@@ -9,10 +9,8 @@ import friendsSignal from "@/signals/peer/friends";
 import Pagination from "@/components/shared/Pagination";
 import {useSignals} from "@preact/signals-react/runtime";
 import routerSignal from "@/signals/router";
-import {batch} from "@preact/signals-react";
-import connectedPeersSignal from "@/signals/peer/connectedPeers";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 20;
 
 const persianLabels: Record<keyof IConnectedPeer, string> = {
     deviceType: "",
@@ -53,10 +51,7 @@ function FriendList() {
     };
 
     const removeFriendHandler = (dataItem: Record<keyof IConnectedPeer, any>) => {
-        batch(() => {
             friendsSignal.value = friendsSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
-            connectedPeersSignal.value = [...connectedPeersSignal.value, dataItem];
-        });
     };
 
     const renderCellHandler = (header: Header, data: string, dataItem: Record<keyof IConnectedPeer, any>) => {

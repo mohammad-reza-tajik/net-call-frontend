@@ -99,12 +99,7 @@ function socketListeners(socket: Socket) {
            });
         });
 
-        const nonFriends = connectedPeers.filter(item => {
-            return !friendsSignal.value.some(friend => friend.localPeerId === item.localPeerId);
-        });
-
-        connectedPeersSignal.value = nonFriends.filter(item => item.localPeerId !== localPeerIdSignal.value);
-
+        connectedPeersSignal.value = connectedPeers;
     });
 
     socket.on("remotePeerNotConnected", () => {
