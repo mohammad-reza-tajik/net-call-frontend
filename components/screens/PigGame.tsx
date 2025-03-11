@@ -1,10 +1,10 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
-import {Download,DiceFive} from "@/components/shared/Icons";
+import { Button } from "@/components/ui/button";
+import { Download, DiceFive } from "@/components/shared/Icons";
 import randomInt from "@/lib/utils/randomInt";
-import {useSignalEffect, useSignals} from "@preact/signals-react/runtime";
-import {toast} from "react-hot-toast";
+import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
+import { toast } from "react-hot-toast";
 import {
     diceSignal,
     gameChannelSignal,
@@ -12,19 +12,17 @@ import {
     isYourTurnSignal,
     myScoreSignal,
     opponentScoreSignal,
-    temporaryScoreSignal
+    temporaryScoreSignal,
 } from "@/signals/games/pigGame";
-import {batch} from "@preact/signals-react";
-
+import { batch } from "@preact/signals-react";
+import { peerConnectionSignal } from "@/signals/peer/peerConnection";
 
 const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]; // Unicode dice symbols
 
 function PigGame() {
-
     useSignals();
 
     useSignalEffect(() => {
-
         if (isGameOverSignal.value) return;
 
         if (myScoreSignal.value >= 100) {
@@ -44,28 +42,29 @@ function PigGame() {
         if (dice !== 1) {
             temporaryScoreSignal.value += dice;
         } else {
-            batch(() =>{
+            batch(() => {
                 temporaryScoreSignal.value = 0;
                 isYourTurnSignal.value = false;
             });
-            gameChannelSignal.value?.send(JSON.stringify({type: "changeTurn"}));
+            gameChannelSignal.value?.send(JSON.stringify({ type: "changeTurn" }));
         }
-        gameChannelSignal.value?.send(JSON.stringify({
-            type: "rollDice",
-            dice,
-            temporaryScore: temporaryScoreSignal.value
-        }));
-
+        gameChannelSignal.value?.send(
+            JSON.stringify({
+                type: "rollDice",
+                dice,
+                temporaryScore: temporaryScoreSignal.value,
+            }),
+        );
     };
 
     const addScoreHandler = () => {
         if (temporaryScoreSignal.value === 0) return;
-        batch(() =>{
+        batch(() => {
             isYourTurnSignal.value = false;
             myScoreSignal.value += temporaryScoreSignal.value;
             temporaryScoreSignal.value = 0;
         });
-        gameChannelSignal.value?.send(JSON.stringify({type: "addScore", score: myScoreSignal.value}));
+        gameChannelSignal.value?.send(JSON.stringify({ type: "addScore", score: myScoreSignal.value }));
     };
 
     const restartGameHandler = () => {
@@ -77,57 +76,67 @@ function PigGame() {
             myScoreSignal.value = 0;
             isGameOverSignal.value = false;
         });
-        gameChannelSignal.value?.send(JSON.stringify({type: "restartGame"}));
+        gameChannelSignal.value?.send(JSON.stringify({ type: "restartGame" }));
     };
 
     return (
         <section className={"flex flex-col justify-between items-center gap-5 size-full relative"}>
-
-            {
-                isGameOverSignal.value && (
-                    <div
-                        className={"bg-background opacity-90 z-50 absolute inset-0 flex justify-center items-center flex-col gap-5"}>
-                        <p>
-                            بازی تمام شد
-                        </p>
-                        <Button onClick={restartGameHandler}>
-                            شروع مجدد
+            {isGameOverSignal.value && (
+                <div
+                    className={
+                        "bg-background opacity-90 z-50 absolute inset-0 flex justify-center items-center flex-col gap-5"
+                    }
+                >
+                    <p>بازی تمام شد</p>
+                    <div className={"flex items-center gap-2"}>
+                        <Button onClick={restartGameHandler}>شروع مجدد</Button>
+                        <Button
+                            onClick={() => {
+                                peerConnectionSignal.value?.close();
+                            }}
+                        >
+                            خروج
                         </Button>
                     </div>
-                )
-            }
+                </div>
+            )}
 
-            <div className={"bg-destructive flex justify-center items-center p-5 rounded w-full"}>
-                {opponentScoreSignal}
+            <div className={"flex items-center w-full"}>
+                <p className={"bg-muted flex justify-center items-center p-5 flex-1"}>
+                    شما : &nbsp;
+                    {myScoreSignal}
+                </p>
+                <p className={"bg-destructive flex justify-center items-center p-5 flex-1"}>
+                    حریف : &nbsp;
+                    {opponentScoreSignal}
+                </p>
             </div>
 
-
-            <p className={"text-9xl"}>
-                {diceFaces[diceSignal.value - 1]}
-            </p>
+            <p className={"text-9xl"}>{diceFaces[diceSignal.value - 1]}</p>
 
             <div className={"border rounded size-12 flex justify-center items-center text-xl"}>
                 {temporaryScoreSignal}
             </div>
 
             <div className={"flex items-center justify-center gap-5"}>
-
-                <Button size={"icon"}
-                        onClick={rollDiceHandler}
-                        disabled={!isYourTurnSignal.value} className={"size-14"}
+                <Button
+                    size={"icon"}
+                    onClick={rollDiceHandler}
+                    disabled={!isYourTurnSignal.value}
+                    className={"size-14"}
                 >
                     <DiceFive className={"size-8"} />
                 </Button>
-                <Button size={"icon"} aria-label={"hold score"} onClick={addScoreHandler}
-                        disabled={!isYourTurnSignal.value} className={"size-14"}>
-                    <Download className={"size-7"}/>
+                <Button
+                    size={"icon"}
+                    aria-label={"hold score"}
+                    onClick={addScoreHandler}
+                    disabled={!isYourTurnSignal.value}
+                    className={"size-14"}
+                >
+                    <Download className={"size-7"} />
                 </Button>
             </div>
-
-            <div className={"bg-primary text-primary-foreground flex justify-center items-center p-5 rounded w-full"}>
-                {myScoreSignal}
-            </div>
-
         </section>
     );
 }
