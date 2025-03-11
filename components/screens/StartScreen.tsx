@@ -9,7 +9,7 @@ function StartScreen() {
 
     return (
         <section className={"flex flex-col gap-5 flex-1 overflow-y-auto overflow-x-hidden"}>
-            <Tabs defaultValue={"friends"} className={"w-full [direction:rtl]"}>
+            <Tabs defaultValue={"friends"} className={"w-full [direction:rtl] flex-1"}>
                 <TabsList className={"w-full rounded-none"}>
                     <TabsTrigger value={"friends"}>
                         <UsersThree className={"size-5"} />

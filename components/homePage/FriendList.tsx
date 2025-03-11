@@ -88,7 +88,7 @@ function FriendList() {
         <>
             {
                 friendsSignal.value.length === 0 ?
-                    <p className={"text-center p-5 text-xs md:text-sm"}>
+                    <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
                         هیچ دوستی ندارید !
                     </p> :
                     <>

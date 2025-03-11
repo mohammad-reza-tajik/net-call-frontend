@@ -62,7 +62,9 @@ function Providers({children}: IProvidersProps) {
                 >
                     {
                         receivedRequestsSignal.value.length === 0 ?
-                            <p className={"text-center text-sm p-2"}>هیچ درخواستی وجود ندارد</p> :
+                            <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
+                                هیچ درخواستی وجود ندارد
+                            </p> :
                             receivedRequestsSignal.value.map((request, index) => {
                                 return <RequestItem request={request} key={index}/>;
                             })

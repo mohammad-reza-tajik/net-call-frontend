@@ -2,8 +2,8 @@
 export type TStatus = `${"screen" | "video" | "audio" | "game"}:${"send"|"receive"}`;
 
 export type TDeviceType = "desktop" | "mobile";
-export type TVisibility = "visible" | "hidden";
 
+export type TVisibility = "visible" | "hidden";
 
 export interface IConnectedPeer {
     socketId : string;

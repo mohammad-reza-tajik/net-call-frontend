@@ -4,15 +4,16 @@ import Pagination from "@/components/shared/Pagination";
 import {useSearchParams} from "next/navigation";
 import Table, {type Header} from "@/components/shared/Table";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
-import {useSignal, useSignals} from "@preact/signals-react/runtime";
+import {useSignals} from "@preact/signals-react/runtime";
 import type {IConnectedPeer} from "@/types";
 import {Button} from "@/components/ui/button";
 import {UserPlus} from "@/components/shared/Icons";
 import friendsSignal from "@/signals/peer/friends";
 import routerSignal from "@/signals/router";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
+import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import toast from "react-hot-toast";
+import { useRef } from "react";
 
 const ITEMS_PER_PAGE = 5;
 
@@ -32,8 +33,8 @@ function PeerList() {
 
     const currentPage = useSearchParams().get("page") || 1;
 
-    const nameInputSignal = useSignal("");
-
+    const nameInputRef = useRef<HTMLInputElement>(null);
+    
     const currentItems = connectedPeersSignal.value.slice((+currentPage - 1) * ITEMS_PER_PAGE, +currentPage * ITEMS_PER_PAGE);
 
     const sortByHeaderHandler = (header: string) => {
@@ -59,23 +60,25 @@ function PeerList() {
 
     const addToFriendsHandler = (dataItem: Record<keyof IConnectedPeer, any>) => {
 
-        if(nameInputSignal.value.trim() === "") {
-            return toast.error("نام نمیتواند خالی باشد");
+        if(nameInputRef.current?.value.trim() === "") {
+            toast.error("نام نمیتواند خالی باشد");
+            return;
         }
 
-        if (friendsSignal.value.find((item) => item.name === nameInputSignal.value)) {
-            return toast.error("دوستی با این نام از قبل وجود دارد");
+        if (friendsSignal.value.find((item) => item.name === nameInputRef.current!.value)) {
+            toast.error("دوستی با این نام از قبل وجود دارد");
+            return;
         }
 
         friendsSignal.value = [...friendsSignal.value, {
             ...dataItem,
-            name: nameInputSignal.value,
+            name: nameInputRef.current!.value,
             isOnline: true,
         }];
         
         connectedPeersSignal.value = connectedPeersSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
 
-        nameInputSignal.value = "";
+        nameInputRef.current!.value = "";
         toast("به دوستان افزوده شد");
     };
 
@@ -102,8 +105,7 @@ function PeerList() {
                                     برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید
                                 </DialogDescription>
                             </DialogHeader>
-                            <Input value={nameInputSignal.value}
-                                   onChange={ev => nameInputSignal.value = ev.target.value}/>
+                            <Input ref={nameInputRef} />
                             <Button onClick={() => addToFriendsHandler(dataItem)}
                                     className={"max-w-max mx-auto"}>
                                 ذخیره
@@ -120,7 +122,9 @@ function PeerList() {
         <>
             {
                 connectedPeersSignal.value.length === 0 ?
-                    <p className={"text-center p-5 text-xs md:text-sm"}>هیچ دستگاه متصل دیگری موجود نیست</p> :
+                    <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
+                        هیچ دستگاه متصل دیگری موجود نیست
+                    </p> :
                     <>
                         <Table headers={headersToShowHandler()} data={currentItems} onSortByHeader={sortByHeaderHandler}
                                renderCell={renderCellHandler}/>
