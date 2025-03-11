@@ -38,14 +38,16 @@ function PigGame() {
         }
     });
 
-    function rollDiceHandler() {
+    const rollDiceHandler = () => {
         const dice = randomInt(1, 6);
         diceSignal.value = dice;
         if (dice !== 1) {
             temporaryScoreSignal.value += dice;
         } else {
-            temporaryScoreSignal.value = 0;
-            isYourTurnSignal.value = false;
+            batch(() =>{
+                temporaryScoreSignal.value = 0;
+                isYourTurnSignal.value = false;
+            });
             gameChannelSignal.value?.send(JSON.stringify({type: "changeTurn"}));
         }
         gameChannelSignal.value?.send(JSON.stringify({
@@ -54,17 +56,19 @@ function PigGame() {
             temporaryScore: temporaryScoreSignal.value
         }));
 
-    }
+    };
 
-    function addScoreHandler() {
+    const addScoreHandler = () => {
         if (temporaryScoreSignal.value === 0) return;
-        isYourTurnSignal.value = false;
-        myScoreSignal.value += temporaryScoreSignal.value;
+        batch(() =>{
+            isYourTurnSignal.value = false;
+            myScoreSignal.value += temporaryScoreSignal.value;
+            temporaryScoreSignal.value = 0;
+        });
         gameChannelSignal.value?.send(JSON.stringify({type: "addScore", score: myScoreSignal.value}));
-        temporaryScoreSignal.value = 0;
-    }
+    };
 
-    function restartGameHandler() {
+    const restartGameHandler = () => {
         batch(() => {
             isYourTurnSignal.value = true;
             diceSignal.value = 1;
@@ -74,7 +78,7 @@ function PigGame() {
             isGameOverSignal.value = false;
         });
         gameChannelSignal.value?.send(JSON.stringify({type: "restartGame"}));
-    }
+    };
 
     return (
         <section className={"flex flex-col justify-between items-center gap-5 size-full relative"}>
@@ -110,17 +114,17 @@ function PigGame() {
 
                 <Button size={"icon"}
                         onClick={rollDiceHandler}
-                        disabled={!isYourTurnSignal.value}
+                        disabled={!isYourTurnSignal.value} className={"size-14"}
                 >
                     <DiceFive className={"size-8"} />
                 </Button>
                 <Button size={"icon"} aria-label={"hold score"} onClick={addScoreHandler}
-                        disabled={!isYourTurnSignal.value}>
+                        disabled={!isYourTurnSignal.value} className={"size-14"}>
                     <Download className={"size-7"}/>
                 </Button>
             </div>
 
-            <div className={"bg-primary flex justify-center items-center p-5 rounded w-full"}>
+            <div className={"bg-primary text-primary-foreground flex justify-center items-center p-5 rounded w-full"}>
                 {myScoreSignal}
             </div>
 
