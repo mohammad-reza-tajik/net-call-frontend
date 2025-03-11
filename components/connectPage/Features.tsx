@@ -15,6 +15,7 @@ function Features() {
         <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
                 {
                     features.map((item , index)=>{
+                        // hide screen share button on mobile devices
                         if (getDeviceType() === "mobile" && item.name === "screen-share") return;
                         return (
                             <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />

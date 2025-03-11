@@ -44,7 +44,7 @@ function Table({ headers, data, onSortByHeader, renderCell, className }: ITableP
             <tr>
                 {headers.map((header) => (
                     header && (
-                        <th key={header.label} className={"py-3 text-center first:rounded-s last:rounded-e bg-primary"}>
+                        <th key={header.label} className={"py-3 text-center first:rounded-s last:rounded-e border-b"}>
                             {
                                 !header.label.startsWith("--") && (
                                     header.isSortable && onSortByHeader ?

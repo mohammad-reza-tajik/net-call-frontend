@@ -86,7 +86,7 @@ function Chat() {
                 }
             </div>
             <div className={"flex items-center gap-2 p-5 border-t"}>
-                <Button size={"icon"} onClick={sendMessageHandler}>
+                <Button size={"icon"} onClick={sendMessageHandler} variant={"outline"}>
                     <PaperPlane className={"size-7"}/>
                 </Button>
                 {
@@ -109,13 +109,12 @@ function Chat() {
                     onChange={filePickerHandler}
                 />
 
-                <Button size={"icon"} className={cn({"hidden": fileSignal.value})}>
+                <Button size={"icon"} className={cn({"hidden": fileSignal.value})} variant={"outline"}>
                     <label htmlFor="file-upload">
                         <Paperclip className={"size-7"}/>
                     </label>
                 </Button>
             </div>
-
         </>
     );
 }

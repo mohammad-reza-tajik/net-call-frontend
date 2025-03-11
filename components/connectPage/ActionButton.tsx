@@ -13,7 +13,7 @@ function ActionButton({ icon, tooltipContent, handler, className }: IActionButto
     return (
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button size={"icon"} onClick={handler} className={className} aria-label={tooltipContent}>
+                    <Button size={"icon"} variant={"outline"} onClick={handler} className={className} aria-label={tooltipContent}>
                         {icon}
                     </Button>
                 </TooltipTrigger>

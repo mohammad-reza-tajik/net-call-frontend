@@ -99,7 +99,7 @@ function Drawer({
                         headerClassName
                     )}
                 >
-                    <Button size={"icon"} onClick={onClose} aria-label={"بستن منو"} disabled={!isOpen}>
+                    <Button size={"icon"} onClick={onClose} aria-label={"بستن منو"} disabled={!isOpen} variant={"outline"}>
                         <Close/>
                     </Button>
                     <h2 className={"flex-1 text-center"} id={titleId}>

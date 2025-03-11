@@ -91,7 +91,7 @@ function DeviceSelector({devices}: IProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button size={"icon"} className={"rounded-none"}>
+                <Button size={"icon"} className={"rounded-none"} variant={"outline"}>
                     <Caret className={"-rotate-90"}/>
                 </Button>
             </DropdownMenuTrigger>

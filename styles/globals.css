@@ -5,14 +5,14 @@
 
 
 :root {
-    --background: oklch(14.31% 0.0546 270.74);
-    --foreground: oklch(1 0 0);
+    --background: oklch(14.08% 0.0044 285.82);
+    --foreground: oklch(89.45% 0 0);
     --card: oklch(1 0 0);
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(0 0 0);
     --popover-foreground: oklch(1 0 0);
-    --primary: oklch(53.22% 0.1851 271.14);
-    --primary-foreground: oklch(1 0 0);
+    --primary: oklch(94.61% 0 0);
+    --primary-foreground: oklch(14.08% 0.0044 285.82);
     --secondary: oklch(0.97 0 0);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(28% 0.0369 259.97);
@@ -168,3 +168,74 @@
         @apply cursor-pointer;
     }
 }
+
+
+.ripple-container::before {
+    content: "";
+    position: absolute;
+    top: 0%;
+    right: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 999px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    animation: ripple .7s linear infinite;
+}
+
+@keyframes ripple {
+    0% {
+        width: 0;
+        height: 0;
+        opacity: 1;
+    }
+    100% {
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+    }
+}
+
+/*// Glow Border Animation //*/
+
+.animated-border-box{
+    @apply size-full absolute overflow-hidden z-0 rounded max-w-[200px] max-h-[250px];
+
+}
+
+.animated-border-box:before {
+    content: "";
+    z-index: -2;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+    position: absolute;
+    width: 99999px;
+    height: 99999px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    /*border color, change middle color*/
+    background-image: conic-gradient(rgba(0,0,0,0), #DCDCDCFF, rgba(0,0,0,0) 25%);
+    /* change speed here */
+    animation: rotate 2s linear infinite;
+}
+
+.animated-border-box:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    /* border width */
+    left: 5px;
+    top: 5px;
+
+    @apply bg-background size-[calc(100%-10px)];
+    border-radius: 7px;
+}
+
+@keyframes rotate {
+    100% {
+        transform: translate(-50%, -50%) rotate(1turn);
+    }
+}
+
+/*// Border Animation END//*/
