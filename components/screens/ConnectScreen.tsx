@@ -25,8 +25,8 @@ function ConnectScreen() {
 
     useSignals();
 
-    const localVideoRef = useRef<HTMLVideoElement | null>(null);
-    const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+    const localVideoRef = useRef<HTMLVideoElement>(null);
+    const remoteVideoRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
         remoteVideoRefSignal.value = remoteVideoRef;
@@ -43,16 +43,20 @@ function ConnectScreen() {
 
     function renderScreen() {
         if (!statusSignal.value) {
-             return <p className={"flex justify-center items-center text-sm md:text-xl size-full"}>
-                 برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
-             </p>;
-        } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
-                <p>
-                    در انتظار پاسخ ...
+            return (
+                <p className={"flex justify-center items-center text-sm md:text-xl size-full"}>
+                    برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
                 </p>
-                <Button onClick={hangup}>انصراف</Button>
-            </div>;
+            );
+        } else if (signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting") {
+            return (
+                <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
+                    <p>
+                        در انتظار پاسخ ...
+                    </p>
+                    <Button onClick={hangup}>انصراف</Button>
+                </div>
+            );
         } else if (statusSignal.value === "screen:send") {
             return <ScreenSend/>;
         } else if (statusSignal.value.startsWith("audio:") && connectionStateSignal.value === "connected") {
@@ -62,10 +66,12 @@ function ConnectScreen() {
         } else if (statusSignal.value?.startsWith("game")) {
             return <PigGame/>;
         } else {
-            return <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
-                <p>در حال اتصال ...</p>
-                <Loader className={"size-8 md:size-10"}/>
-            </div>;
+            return (
+                <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
+                    <p>در حال اتصال ...</p>
+                    <Loader className={"size-8 md:size-10"}/>
+                </div>
+            );
         }
     }
 
@@ -73,15 +79,15 @@ function ConnectScreen() {
         isChatDrawerOpenSignal.value = false;
     };
 
-        return (
+    return (
         <>
             <Suspense>
-                <RemotePeerIdUpdater />
+                <RemotePeerIdUpdater/>
             </Suspense>
             <Drawer isOpen={isChatDrawerOpenSignal.value} onClose={closeDrawerHandler} direction={"left"} title={"چت"}>
                 <Chat/>
             </Drawer>
-            <section className={"@container relative overflow-hidden h-[calc(100dvh-146px)]"}>
+            <section className={"@container relative overflow-hidden h-[calc(100dvh-110px)]"}>
                 {renderScreen()}
 
                 <div

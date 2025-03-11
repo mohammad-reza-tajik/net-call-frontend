@@ -12,7 +12,7 @@ function Features() {
     }
 
     return (
-        <div className={"flex justify-center items-center gap-3 p-5 border-t"}>
+        <div className={"flex justify-center items-center gap-3 p-2 border-t"}>
                 {
                     features.map((item , index)=>{
                         // hide screen share button on mobile devices

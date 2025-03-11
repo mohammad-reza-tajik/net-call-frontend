@@ -51,7 +51,7 @@ function FriendList() {
     };
 
     const removeFriendHandler = (dataItem: Record<keyof IConnectedPeer, any>) => {
-            friendsSignal.value = friendsSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
+        friendsSignal.value = friendsSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
     };
 
     const renderCellHandler = (header: Header, data: string, dataItem: Record<keyof IConnectedPeer, any>) => {
