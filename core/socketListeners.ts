@@ -1,21 +1,19 @@
-import type {IConnectedPeer, IRequest, IResponse} from "@/types";
+import type { IConnectedPeer, IRequest, IResponse } from "@/types";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import currentResponseSignal from "@/signals/peer/currentResponse";
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
+import { peerConnectionSignal } from "@/signals/peer/peerConnection";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
-import localPeerIdSignal from "@/signals/peer/localPeerId";
-import type {Socket} from "socket.io-client";
-import {isRequestsDrawerOpenSignal} from "@/signals/drawer";
+import type { Socket } from "socket.io-client";
+import { isRequestsDrawerOpenSignal } from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
 
 function socketListeners(socket: Socket) {
-
     socket.on("requestToPeer", (request: IRequest) => {
         // check if a request from the same remote peer exists and replace them with new one
-        const requestIndex = receivedRequestsSignal.value.findIndex(receivedRequest => {
+        const requestIndex = receivedRequestsSignal.value.findIndex((receivedRequest) => {
             return receivedRequest.localPeerId === request.localPeerId;
         });
 
@@ -23,13 +21,10 @@ function socketListeners(socket: Socket) {
             receivedRequestsSignal.value = [
                 ...receivedRequestsSignal.value.slice(0, requestIndex),
                 request,
-                ...receivedRequestsSignal.value.slice(requestIndex + 1)
+                ...receivedRequestsSignal.value.slice(requestIndex + 1),
             ];
         } else {
-            receivedRequestsSignal.value = [
-                ...receivedRequestsSignal.value,
-                request
-            ];
+            receivedRequestsSignal.value = [...receivedRequestsSignal.value, request];
         }
 
         let statusText: string | undefined;
@@ -68,35 +63,24 @@ function socketListeners(socket: Socket) {
 
             currentResponseSignal.value = response;
             await peerConnectionSignal.value?.setRemoteDescription(response.answer);
-            response.iceCandidates.forEach(item => {
+            response.iceCandidates.forEach((item) => {
                 peerConnectionSignal.value?.addIceCandidate(item);
             });
-
         } catch (err) {
             console.error(err);
         }
     });
 
-    socket.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
+    socket.on("connectedPeers", ({ connectedPeers }: { connectedPeers: IConnectedPeer[] }) => {
+        // Create a set of connected peer IDs for quick lookup
+        const connectedPeerIds = new Set(connectedPeers.map((peer) => peer.localPeerId));
 
-        if (connectedPeers.length === 0) {
-            friendsSignal.value = friendsSignal.value.map(friend => {
-                    return {...friend , isOnline : false};
-            });
-        }
-
-        const connectedFriends = connectedPeers.filter(item => {
-            return friendsSignal.value.some(friend => friend.localPeerId === item.localPeerId);
-        });
-
-        connectedFriends.forEach(connectedFriend => {
-           friendsSignal.value = friendsSignal.value.map(friend => {
-               if (connectedFriend.localPeerId === friend.localPeerId) {
-                   return {...friend , isOnline : true};
-               } else {
-                   return {...friend , isOnline : false};
-               }
-           });
+        // Update the online status of each friend
+        friendsSignal.value = friendsSignal.value.map((friend) => {
+            return {
+                ...friend,
+                isOnline: connectedPeerIds.has(friend.localPeerId),
+            };
         });
 
         connectedPeersSignal.value = connectedPeers;
