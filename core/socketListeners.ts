@@ -79,7 +79,7 @@ function socketListeners(socket: Socket) {
 
     socket.on("connectedPeers", ({connectedPeers}: { connectedPeers: IConnectedPeer[] }) => {
 
-        if (connectedPeersSignal.value.length === 0) {
+        if (connectedPeers.length === 0) {
             friendsSignal.value = friendsSignal.value.map(friend => {
                     return {...friend , isOnline : false};
             });
