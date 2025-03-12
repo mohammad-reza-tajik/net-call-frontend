@@ -102,11 +102,11 @@ function PigGame() {
             )}
 
             <div className={"flex items-center w-full"}>
-                <p className={"bg-muted flex justify-center items-center p-5 flex-1"}>
+                <p className={"bg-destructive flex justify-center items-center p-5 flex-1"}>
                     شما : &nbsp;
                     {myScoreSignal}
                 </p>
-                <p className={"bg-destructive flex justify-center items-center p-5 flex-1"}>
+                <p className={"bg-muted flex justify-center items-center p-5 flex-1"}>
                     حریف : &nbsp;
                     {opponentScoreSignal}
                 </p>
@@ -126,7 +126,7 @@ function PigGame() {
                     aria-label={"roll dice"}
                     className={"size-14"}
                 >
-                    <DiceFive className={"size-8"} />
+                    <DiceFive className={"size-10"} />
                 </Button>
                 <Button
                     size={"icon"}
@@ -135,7 +135,7 @@ function PigGame() {
                     disabled={!isYourTurnSignal.value}
                     className={"size-14"}
                 >
-                    <Download className={"size-7"} />
+                    <Download className={"size-10"} />
                 </Button>
             </div>
         </section>
