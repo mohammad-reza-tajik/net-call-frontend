@@ -54,7 +54,7 @@ function RequestItem({ request }: IRequestItemProps) {
     };
 
     const rejectRequestHandler = () => {
-        socketSignal.value?.emit("rejectToServer", { request });
+        socketSignal.value?.emit("rejectToServer", { requestLocalPeerId: request.localPeerId });
         receivedRequestsSignal.value = receivedRequestsSignal.value.filter((item) => {
             return item.localPeerId !== request.localPeerId && item.status !== request.status;
         });
