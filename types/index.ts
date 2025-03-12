@@ -1,4 +1,3 @@
-
 export type TStatus = `${"screen" | "video" | "audio" | "game"}:${"send"|"receive"}`;
 
 export type TDeviceType = "desktop" | "mobile";
@@ -10,10 +9,13 @@ export interface IConnectedPeer {
     localPeerId : string;
     deviceType: TDeviceType;
     visibility: TVisibility;
-    name? : string;
-    isOnline? : boolean;
 }
 
+export interface IFriend {
+    name : string;
+    localPeerId : string;
+    isOnline : boolean;
+}
 
 export interface IRequest {
     offer: RTCSessionDescriptionInit;

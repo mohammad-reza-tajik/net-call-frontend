@@ -1,17 +1,24 @@
 "use client";
 
 import Pagination from "@/components/shared/Pagination";
-import {useSearchParams} from "next/navigation";
-import Table, {type Header} from "@/components/shared/Table";
+import { useSearchParams } from "next/navigation";
+import Table, { type Header } from "@/components/shared/Table";
 import connectedPeersSignal from "@/signals/peer/connectedPeers";
-import {useSignal, useSignals} from "@preact/signals-react/runtime";
-import type {IConnectedPeer} from "@/types";
-import {Button} from "@/components/ui/button";
-import {UserPlus} from "@/components/shared/Icons";
+import { useSignal, useSignals } from "@preact/signals-react/runtime";
+import type { IConnectedPeer } from "@/types";
+import { Button } from "@/components/ui/button";
+import { UserPlus } from "@/components/shared/Icons";
 import friendsSignal from "@/signals/peer/friends";
 import routerSignal from "@/signals/router";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { useRef } from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
@@ -19,17 +26,13 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 const ITEMS_PER_PAGE = 20;
 
 const persianLabels: Record<keyof IConnectedPeer, string> = {
-
     localPeerId: "آیدی",
     deviceType: "نوع دستگاه",
     socketId: " ",
     visibility: " ",
-    name : "",
-    isOnline : ""
 };
 
 function PeerList() {
-
     useSignals();
 
     const peersToShowSignal = useSignal<IConnectedPeer[]>([]);
@@ -39,10 +42,16 @@ function PeerList() {
     const nameInputRef = useRef<HTMLInputElement>(null);
 
     peersToShowSignal.value = connectedPeersSignal.value.filter((peer) => {
-        return peer.localPeerId !== localPeerIdSignal.value && !friendsSignal.value.some(friend => friend.localPeerId === peer.localPeerId);
+        return (
+            peer.localPeerId !== localPeerIdSignal.value &&
+            !friendsSignal.value.some((friend) => friend.localPeerId === peer.localPeerId)
+        );
     });
-    
-    const currentItems = peersToShowSignal.value.slice((+currentPage - 1) * ITEMS_PER_PAGE, +currentPage * ITEMS_PER_PAGE);
+
+    const currentItems = peersToShowSignal.value.slice(
+        (+currentPage - 1) * ITEMS_PER_PAGE,
+        +currentPage * ITEMS_PER_PAGE,
+    );
 
     const sortByHeaderHandler = (header: string) => {
         connectedPeersSignal.value = peersToShowSignal.value.toSorted((a, b) => {
@@ -57,17 +66,15 @@ function PeerList() {
     const headersToShowHandler = () => {
         const keys = Object.keys(currentItems[0]) as Array<keyof IConnectedPeer>;
         const headers = keys.map((item) => {
-            if (item === "socketId" || item === "visibility" || item === "name" || item === "isOnline") return;
+            if (item === "socketId" || item === "visibility") return;
 
-            return {isSortable: true, label: item, alias: persianLabels[item]};
-
+            return { isSortable: true, label: item, alias: persianLabels[item] };
         });
-        return [...headers, {label: "--actionButtons"}];
+        return [...headers, { label: "--actionButtons" }];
     };
 
     const addToFriendsHandler = (dataItem: Record<keyof IConnectedPeer, any>) => {
-
-        if(nameInputRef.current?.value.trim() === "") {
+        if (nameInputRef.current?.value.trim() === "") {
             toast.error("نام نمیتواند خالی باشد");
             return;
         }
@@ -77,12 +84,15 @@ function PeerList() {
             return;
         }
 
-        friendsSignal.value = [...friendsSignal.value, {
-            ...dataItem,
-            name: nameInputRef.current!.value,
-            isOnline: true,
-        }];
-        
+        friendsSignal.value = [
+            ...friendsSignal.value,
+            {
+                localPeerId: dataItem.localPeerId,
+                name: nameInputRef.current!.value,
+                isOnline: true,
+            },
+        ];
+
         peersToShowSignal.value = peersToShowSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
 
         nameInputRef.current!.value = "";
@@ -100,21 +110,18 @@ function PeerList() {
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button size={"icon"} variant={"outline"}>
-                                <UserPlus className={"size-5"} aria-label={"افزودن به دوستان"}/>
+                                <UserPlus className={"size-5"} aria-label={"افزودن به دوستان"} />
                             </Button>
                         </DialogTrigger>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle className={"text-center text-xs md:text-sm"}>
-                                    انتخاب نام
-                                </DialogTitle>
+                                <DialogTitle className={"text-center text-xs md:text-sm"}>انتخاب نام</DialogTitle>
                                 <DialogDescription className={"text-center text-xs"}>
                                     برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید
                                 </DialogDescription>
                             </DialogHeader>
                             <Input ref={nameInputRef} />
-                            <Button onClick={() => addToFriendsHandler(dataItem)}
-                                    className={"max-w-max mx-auto"}>
+                            <Button onClick={() => addToFriendsHandler(dataItem)} className={"max-w-max mx-auto"}>
                                 ذخیره
                             </Button>
                         </DialogContent>
@@ -127,18 +134,25 @@ function PeerList() {
 
     return (
         <>
-            {
-                peersToShowSignal.value.length === 0 ?
-                    <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
-                        هیچ دستگاه متصل دیگری موجود نیست
-                    </p> :
-                    <>
-                        <Table headers={headersToShowHandler()} data={currentItems} onSortByHeader={sortByHeaderHandler}
-                               renderCell={renderCellHandler}/>
-                        <Pagination totalCount={peersToShowSignal.value.length} itemsPerPage={ITEMS_PER_PAGE}
-                                    siblingCount={0}/>
-                    </>
-            }
+            {peersToShowSignal.value.length === 0 ? (
+                <p className={"text-xs md:text-sm flex justify-center items-center h-full"}>
+                    هیچ دستگاه متصل دیگری موجود نیست
+                </p>
+            ) : (
+                <>
+                    <Table
+                        headers={headersToShowHandler()}
+                        data={currentItems}
+                        onSortByHeader={sortByHeaderHandler}
+                        renderCell={renderCellHandler}
+                    />
+                    <Pagination
+                        totalCount={peersToShowSignal.value.length}
+                        itemsPerPage={ITEMS_PER_PAGE}
+                        siblingCount={0}
+                    />
+                </>
+            )}
         </>
     );
 }

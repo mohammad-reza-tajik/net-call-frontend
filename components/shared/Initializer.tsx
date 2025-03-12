@@ -17,7 +17,7 @@ import { type Toast, toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import getDeviceType from "@/core/getDeviceType";
 import visibilitySignal from "@/signals/peer/visibility";
-import type { IConnectedPeer, TVisibility } from "@/types";
+import type { IFriend, TVisibility } from "@/types";
 import friendsSignal from "@/signals/peer/friends";
 import isValidUUID from "@/lib/utils/isValidUUID";
 
@@ -82,7 +82,7 @@ function Initializer({ children }: IInitializerProps) {
 
                 const storedFriends = localStorage.getItem("friends");
 
-                let friends: IConnectedPeer[] = [];
+                let friends: IFriend[] = [];
 
                 if (storedFriends) {
                     friends = JSON.parse(storedFriends);

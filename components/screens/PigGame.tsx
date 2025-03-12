@@ -123,6 +123,7 @@ function PigGame() {
                     size={"icon"}
                     onClick={rollDiceHandler}
                     disabled={!isYourTurnSignal.value}
+                    aria-label={"roll dice"}
                     className={"size-14"}
                 >
                     <DiceFive className={"size-8"} />
