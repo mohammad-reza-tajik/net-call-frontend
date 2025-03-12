@@ -110,7 +110,7 @@ function ConnectScreen() {
             >
                 <Chat />
             </Drawer>
-            <section className={"@container relative overflow-hidden h-[calc(100dvh-110px)]"}>
+            <section className={"@container relative overflow-hidden h-[calc(100dvh-114px)]"}>
                 {renderScreen()}
 
                 <div
@@ -133,7 +133,7 @@ function ConnectScreen() {
                     <video
                         ref={remoteVideoRef}
                         autoPlay
-                        className={cn("size-full object-contain ", {
+                        className={cn("size-full object-contain", {
                             hidden:
                                 (!statusSignal.value?.startsWith("video:") &&
                                     statusSignal.value !== "screen:receive") ||
