@@ -2,8 +2,8 @@
   "name": "Net Call",
   "short_name": "Net Call",
   "description": "peer to peer video/audio call and share screen",
-  "theme_color": "#DCDCDC",
-  "background_color": "#09090B",
+  "theme_color": "#dcdcdc",
+  "background_color": "#09090b",
   "display": "standalone",
   "display_override": [
     "window-controls-overlay",
