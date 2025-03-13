@@ -1,5 +1,10 @@
 import { z } from "zod";
 
-type Json = { [key: string]: Json } | Json[];
-
-export const jsonSchema: z.ZodType<Json> = z.lazy(() => z.union([z.array(jsonSchema), z.record(jsonSchema)]));
+export const jsonSchema = z.string().refine((str) => {
+    try {
+        JSON.parse(str);
+        return true;
+    } catch {
+        return false;
+    }
+}, "Invalid JSON string");
