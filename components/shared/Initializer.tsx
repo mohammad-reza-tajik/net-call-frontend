@@ -19,7 +19,10 @@ import getDeviceType from "@/core/getDeviceType";
 import visibilitySignal from "@/signals/peer/visibility";
 import type { IFriend, TVisibility } from "@/types";
 import friendsSignal from "@/signals/peer/friends";
-import isValidUUID from "@/lib/utils/isValidUUID";
+import { z } from "zod";
+import { friendSchema, visibilitySchema, jsonSchema } from "@/schemas";
+import { friendSchema } from "@/schemas";
+import { jsonSchema } from "@/schemas/json";
 
 interface IInitializerProps {
     children: React.ReactNode;
@@ -76,20 +79,36 @@ function Initializer({ children }: IInitializerProps) {
 
                 let visibility = localStorage.getItem("visibility") as TVisibility;
 
-                if (visibility !== "visible" && visibility !== "hidden") {
+                const validatedVisibility = visibilitySchema.safeParse(visibility);
+
+                if (!validatedVisibility.success) {
                     visibility = "visible";
+                    localStorage.setItem("visibility", visibility);
                 }
 
-                const storedFriends = localStorage.getItem("friends");
+                let storedFriends = localStorage.getItem("friends") || "[]";
+                const validatedStoredFriends = jsonSchema.safeParse(storedFriends);
+
+                if (!validatedStoredFriends.success) {
+                    storedFriends = "[]";
+                    localStorage.setItem("friends", storedFriends);
+                }
 
                 let friends: IFriend[] = [];
 
-                if (storedFriends) {
-                    friends = JSON.parse(storedFriends);
+                friends = JSON.parse(storedFriends);
+                const validatedFriends = z.array(friendSchema).safeParse(friends);
+                if (!validatedFriends.success) {
+                    console.log(validatedFriends);
+                    friends = [];
+                    localStorage.setItem("friends", JSON.stringify(friends));
                 }
 
-                let localPeerId = localStorage.getItem("localPeerId");
-                if (!localPeerId || !isValidUUID(localPeerId)) {
+                let localPeerId = localStorage.getItem("localPeerId") as string;
+
+                const validatedLocalPeerId = z.string().uuid().safeParse(localPeerId);
+
+                if (!validatedLocalPeerId.success) {
                     localPeerId = localStream.id;
                     localStorage.setItem("localPeerId", localPeerId);
                 }

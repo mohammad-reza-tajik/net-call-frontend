@@ -111,6 +111,12 @@ function socketListeners(socket: Socket) {
             peerConnectionSignal.value?.close();
         }
     });
+
+    socket.on("invalidRequest",({message} : {message : string})=>{
+        toast.error(message);
+        console.error(message);
+    
+    });
 }
 
 export default socketListeners;
