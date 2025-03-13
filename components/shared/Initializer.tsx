@@ -124,8 +124,11 @@ function Initializer({ children }: IInitializerProps) {
                     socketSignal.value = socket;
                     visibilitySignal.value = visibility;
                     friendsSignal.value = friends;
-                    isLoadedSignal.value = true;
                 });
+                /*
+                    had to use set it after batch because otherwise the friendsSignal-setting useSignalEffect hooks would run and overwrite the friends in local storage
+                 */
+                isLoadedSignal.value = true;
             } catch (err) {
                 if (err instanceof Error) {
                     toast.error(err.message);
