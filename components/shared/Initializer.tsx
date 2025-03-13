@@ -6,7 +6,7 @@ import iODevicesSignal from "@/signals/iODevices";
 import getIODevices from "@/core/getIODevices";
 import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
-import { useSignal, useSignalEffect } from "@preact/signals-react/runtime";
+import { useSignalEffect } from "@preact/signals-react/runtime";
 import { answerSignal, offerSignal, peerConnectionSignal } from "@/signals/peer/peerConnection";
 import { useRouter } from "next/navigation";
 import routerSignal from "@/signals/router";
@@ -24,6 +24,7 @@ import { friendSchema, jsonSchema, visibilitySchema } from "@/schemas";
 import statusSignal from "@/signals/peer/status";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import iceCandidatesSignal from "@/signals/peer/iceCandidates";
+import isLoadedSignal from "@/signals/isLoaded";
 
 interface IInitializerProps {
     children: React.ReactNode;
@@ -37,7 +38,6 @@ function Initializer({ children }: IInitializerProps) {
         Ensures useSignalEffect hooks only save to localStorage after data is fully loaded,
         preventing overwrite with default or empty values on mount.
      */
-    const isLoadedSignal = useSignal(false);
 
     useEffect(() => {
         (async () => {
