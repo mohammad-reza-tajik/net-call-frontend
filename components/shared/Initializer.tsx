@@ -7,7 +7,7 @@ import getIODevices from "@/core/getIODevices";
 import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import { useSignal, useSignalEffect } from "@preact/signals-react/runtime";
-import { peerConnectionSignal } from "@/signals/peer/peerConnection";
+import { answerSignal, offerSignal, peerConnectionSignal } from "@/signals/peer/peerConnection";
 import { useRouter } from "next/navigation";
 import routerSignal from "@/signals/router";
 import { batch } from "@preact/signals-react";
@@ -20,7 +20,10 @@ import visibilitySignal from "@/signals/peer/visibility";
 import type { IFriend, TVisibility } from "@/types";
 import friendsSignal from "@/signals/peer/friends";
 import { z } from "zod";
-import { friendSchema, visibilitySchema, jsonSchema } from "@/schemas";
+import { friendSchema, jsonSchema, visibilitySchema } from "@/schemas";
+import statusSignal from "@/signals/peer/status";
+import remotePeerIdSignal from "@/signals/peer/remotePeerId";
+import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 
 interface IInitializerProps {
     children: React.ReactNode;
@@ -152,6 +155,30 @@ function Initializer({ children }: IInitializerProps) {
     useSignalEffect(() => {
         if (isLoadedSignal.value) {
             localStorage.setItem("friends", JSON.stringify(friendsSignal.value));
+        }
+    });
+
+    useSignalEffect(() => {
+        if (iceCandidatesSignal.value.length === 0) return;
+
+        if (offerSignal.value && statusSignal.value?.endsWith(":send")) {
+            socketSignal.value?.emit("requestToServer", {
+                iceCandidates: iceCandidatesSignal.value,
+                offer: offerSignal.value,
+                localPeerId: localPeerIdSignal.value,
+                remotePeerId: remotePeerIdSignal.value,
+                status: statusSignal.value,
+                socketId: socketSignal.value?.id,
+            });
+        } else if (answerSignal.value && statusSignal.value?.endsWith(":receive")) {
+            socketSignal.value?.emit("responseToServer", {
+                iceCandidates: iceCandidatesSignal.value,
+                answer: answerSignal.value,
+                localPeerId: localPeerIdSignal.value,
+                remotePeerId: remotePeerIdSignal.value,
+                status: statusSignal.value,
+                socketId: socketSignal.value?.id,
+            });
         }
     });
 

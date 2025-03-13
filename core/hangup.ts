@@ -1,15 +1,17 @@
 import {
-    answerSignal, chatChannelSignal,
-    connectionStateSignal, fileChannelSignal,
+    answerSignal,
+    chatChannelSignal,
+    connectionStateSignal,
+    fileChannelSignal,
     offerSignal,
     peerConnectionSignal,
-    signalingStateSignal
+    signalingStateSignal,
 } from "@/signals/peer/peerConnection";
 import statusSignal from "@/signals/peer/status";
 import routerSignal from "@/signals/router";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import messagesSignal from "@/signals/peer/messages";
-import {batch} from "@preact/signals-react";
+import { batch } from "@preact/signals-react";
 import currentResponseSignal from "@/signals/peer/currentResponse";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import remoteStreamSignal from "@/signals/remoteStream";
@@ -18,20 +20,23 @@ import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import {
     diceSignal,
-    gameChannelSignal, isGameOverSignal, isYourTurnSignal,
+    gameChannelSignal,
+    isGameOverSignal,
+    isYourTurnSignal,
     myScoreSignal,
     opponentScoreSignal,
-    temporaryScoreSignal
+    temporaryScoreSignal,
 } from "@/signals/games/pigGame";
-import {isChatDrawerOpenSignal} from "@/signals/drawer";
+import { isChatDrawerOpenSignal } from "@/signals/drawer";
+import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 
 function hangup() {
-
     batch(() => {
         statusSignal.value = undefined;
         currentRequestSignal.value = undefined;
         isChatDrawerOpenSignal.value = false;
         messagesSignal.value = [];
+        iceCandidatesSignal.value = [];
         offerSignal.value = undefined;
         answerSignal.value = undefined;
         currentResponseSignal.value = undefined;
