@@ -112,10 +112,14 @@ function socketListeners(socket: Socket) {
         }
     });
 
-    socket.on("invalidRequest",({message} : {message : string})=>{
+    socket.on("invalidRequest", ({ message }: { message: string }) => {
         toast.error(message);
         console.error(message);
-    
+    });
+
+    socket.on("serverError", ({ message }: { message: string }) => {
+        toast.error(message);
+        console.error(message);
     });
 }
 

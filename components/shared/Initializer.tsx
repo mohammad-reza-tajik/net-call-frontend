@@ -21,8 +21,6 @@ import type { IFriend, TVisibility } from "@/types";
 import friendsSignal from "@/signals/peer/friends";
 import { z } from "zod";
 import { friendSchema, visibilitySchema, jsonSchema } from "@/schemas";
-import { friendSchema } from "@/schemas";
-import { jsonSchema } from "@/schemas/json";
 
 interface IInitializerProps {
     children: React.ReactNode;
