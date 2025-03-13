@@ -11,7 +11,7 @@ import showNotification from "@/lib/utils/showNotification";
 import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
-    const iceCandidates: RTCIceCandidate[] = [];
+    let iceCandidates: RTCIceCandidate[] = [];
 
     peerConnection.addEventListener("icecandidate", (event) => {
         if (event.candidate !== null) {
@@ -24,6 +24,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
             }
 
             iceCandidatesSignal.value = iceCandidates;
+            iceCandidates = [];
         }
     });
 
