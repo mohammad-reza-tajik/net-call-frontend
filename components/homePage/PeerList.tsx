@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import toast from "react-hot-toast";
 import { useRef } from "react";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
+import Loader from "@/components/shared/Loader";
+import isLoadedSignal from "@/signals/isLoaded";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -131,6 +133,14 @@ function PeerList() {
         }
         return data;
     };
+
+    if (!isLoadedSignal.value) {
+        return (
+            <div className={"flex justify-center items-center h-full"}>
+                <Loader className={"size-10 md:size-12"} />
+            </div>
+        );
+    }
 
     return (
         <>

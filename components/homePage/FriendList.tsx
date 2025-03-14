@@ -9,6 +9,8 @@ import friendsSignal from "@/signals/peer/friends";
 import Pagination from "@/components/shared/Pagination";
 import { useSignals } from "@preact/signals-react/runtime";
 import routerSignal from "@/signals/router";
+import isLoadedSignal from "@/signals/isLoaded";
+import Loader from "@/components/shared/Loader";
 
 const ITEMS_PER_PAGE = 20;
 
@@ -75,6 +77,14 @@ function FriendList() {
 
         return data;
     };
+
+    if (!isLoadedSignal.value) {
+        return (
+            <div className={"flex justify-center items-center h-full"}>
+                <Loader className={"size-10 md:size-12"} />
+            </div>
+        );
+    }
 
     return (
         <>

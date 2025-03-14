@@ -1,12 +1,13 @@
 "use client";
-import {Switch} from "@/components/ui/switch";
+import { Switch } from "@/components/ui/switch";
 import visibilitySignal from "@/signals/peer/visibility";
-import {useSignals} from "@preact/signals-react/runtime";
+import { useSignals } from "@preact/signals-react/runtime";
 import socketSignal from "@/signals/socket";
 import statusSignal from "@/signals/peer/status";
+import { Skeleton } from "@/components/ui/skeleton";
+import isLoadedSignal from "@/signals/isLoaded";
 
 function VisibilitySwitch() {
-
     useSignals();
 
     const changeVisibilityHandler = () => {
@@ -23,10 +24,21 @@ function VisibilitySwitch() {
 
     return (
         <>
-            <label className={"text-xs"} htmlFor={"visibility"}>
-                خصوصی
-            </label>
-            <Switch id={"visibility"} onCheckedChange={changeVisibilityHandler} checked={visibilitySignal.value === "hidden"} className={"[direction:ltr]"} />
+            {isLoadedSignal.value ? (
+                <>
+                    <label className={"text-xs"} htmlFor={"visibility"}>
+                        خصوصی
+                    </label>
+                    <Switch
+                        id={"visibility"}
+                        onCheckedChange={changeVisibilityHandler}
+                        checked={visibilitySignal.value === "hidden"}
+                        className={"[direction:ltr]"}
+                    />
+                </>
+            ) : (
+                <Skeleton className={"w-20 h-8"} />
+            )}
         </>
     );
 }
