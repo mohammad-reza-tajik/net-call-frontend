@@ -9,6 +9,7 @@ import { isRequestsDrawerOpenSignal } from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
+import { jsonSchema } from "@/schemas";
 
 function socketListeners(socket: Socket) {
     socket.on("requestToPeer", (request: IRequest) => {
@@ -112,14 +113,20 @@ function socketListeners(socket: Socket) {
         }
     });
 
-    socket.on("invalidRequest", ({ message }: { message: string }) => {
-        toast.error(message);
-        console.error(message);
+    socket.on("invalidRequest", ({ error }: { error: string }) => {
+        try {            
+            const validatedError = jsonSchema.parse(error);
+            const {message} = JSON.parse(validatedError)[0];
+            toast.error(message);            
+        } catch (err) {
+            toast.error("خطایی رخ داد");
+            console.error(err);
+        }
     });
 
-    socket.on("serverError", ({ message }: { message: string }) => {
-        toast.error(message);
-        console.error(message);
+    socket.on("serverError", ({ error }: { error: string }) => {
+        toast.error("خطایی در سمت سرور رخ داد");
+        console.error(error);
     });
 }
 
