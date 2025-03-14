@@ -13,10 +13,10 @@ function TextMessage({message}: ITextMessageProps) {
     return (
         <div
             className={cn("flex flex-col gap-2 border py-3 px-5 rounded max-w-3/4",
-                {"bg-primary text-primary-foreground fill-primary-foreground self-start": message.localPeerId === localPeerIdSignal.value},
+                {"bg-primary text-primary-foreground self-start": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value}
             )}>
-            <p className={"text-sm leading-loose text-wrap"}>{message.text}</p>
+            <p className={"text-sm leading-loose text-wrap break-words"}>{message.text}</p>
             <div className={"flex items-center gap-2"}>
                 {
                     message.localPeerId === localPeerIdSignal.value ?

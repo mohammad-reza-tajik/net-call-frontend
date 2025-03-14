@@ -24,7 +24,7 @@ function FileMessage({message}: IFileMessageProps) {
                 {"bg-primary text-primary-foreground fill-primary-foreground": message.localPeerId === localPeerIdSignal.value},
                 {"self-end": message.localPeerId !== localPeerIdSignal.value})}>
             <FileIcon className={"size-7"}/>
-            <p className={"text-xs [direction:ltr] text-wrap text-center"}>
+            <p className={"text-xs [direction:ltr] text-wrap text-center break-words"}>
                 {message.file.name}
             </p>
             <p className={"text-xs [direction:ltr] text-wrap"}>
