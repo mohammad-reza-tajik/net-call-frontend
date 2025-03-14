@@ -1,13 +1,13 @@
-import type {IRequest, TStatus} from "@/types";
-import {answerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import type { IRequest, TStatus } from "@/types";
+import { answerSignal, peerConnectionSignal } from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 import statusSignal from "@/signals/peer/status";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import localVideoRefSignal from "@/signals/localVideoRef";
-import {batch} from "@preact/signals-react";
+import { batch } from "@preact/signals-react";
+import toast from "react-hot-toast";
 
-async function createAnswer({request}: { request: IRequest }) {
-
+async function createAnswer({ request }: { request: IRequest }) {
     try {
         const answerStatus = request.status.split(":").at(0)!.concat(":receive") as TStatus;
 
@@ -19,7 +19,7 @@ async function createAnswer({request}: { request: IRequest }) {
             const [audioTrack] = localStreamSignal.value.getAudioTracks();
             peerConnectionSignal.value.addTrack(audioTrack, localStreamSignal.value);
         } else if (request.status === "video:send") {
-            localStreamSignal.value.getTracks().forEach(track => {
+            localStreamSignal.value.getTracks().forEach((track) => {
                 peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
             });
         }
@@ -28,14 +28,16 @@ async function createAnswer({request}: { request: IRequest }) {
         const answer = await peerConnectionSignal.value.createAnswer();
         await peerConnectionSignal.value.setLocalDescription(answer);
 
-        request.iceCandidates.forEach(item => {
+        request.iceCandidates.forEach((item) => {
             peerConnectionSignal.value!.addIceCandidate(item);
         });
 
         batch(() => {
             statusSignal.value = answerStatus;
             answerSignal.value = answer;
-            receivedRequestsSignal.value = receivedRequestsSignal.value.filter(item => item.localPeerId !== request.localPeerId);
+            receivedRequestsSignal.value = receivedRequestsSignal.value.filter(
+                (item) => item.localPeerId !== request.localPeerId,
+            );
         });
 
         if (localVideoRefSignal.value?.current && request.status === "video:send") {
@@ -49,7 +51,10 @@ async function createAnswer({request}: { request: IRequest }) {
             localVideoRefSignal.value.current.srcObject = localStream;
         }
     } catch (err) {
-        console.log(err);
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
     }
 }
 

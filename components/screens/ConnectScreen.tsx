@@ -20,7 +20,6 @@ import { Button } from "@/components/ui/button";
 import hangup from "@/core/hangup";
 import PigGame from "@/components/screens/PigGame";
 import RemotePeerIdUpdater from "@/components/connectPage/RemotePeerIdUpdater";
-import toast from "react-hot-toast";
 
 function ConnectScreen() {
     useSignals();
@@ -34,16 +33,9 @@ function ConnectScreen() {
     }, []);
 
     useSignalEffect(() => {
-        (async () => {
-            if (currentRequestSignal.value && peerConnectionSignal.value) {
-                try {
-                    await createAnswer({ request: currentRequestSignal.value });
-                } catch (err) {
-                    console.error("Error creating answer:", err);
-                    toast.error("Failed to create answer");
-                }
-            }
-        })();
+        if (currentRequestSignal.value && peerConnectionSignal.value) {
+            createAnswer({ request: currentRequestSignal.value });
+        }
     });
 
     function renderScreen() {
@@ -60,24 +52,20 @@ function ConnectScreen() {
         } else {
             return (
                 <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
-                    {!statusSignal.value && (
-                        <>
-                            برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید
-                        </>
-                    )}
+                    {!statusSignal.value && <>برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید</>}
                     {connectionStateSignal.value === "connecting" && (
                         <>
                             <p>در حال اتصال ...</p>
                             <Loader className={"size-10 md:size-12"} />
                         </>
                     )}
-                    {signalingStateSignal.value === "have-local-offer" && (
-                        <>
-                            <p>در انتظار پاسخ ...</p>
-                            <Button onClick={hangup}>انصراف</Button>
-                        </>
-                    )}
-                    {signalingStateSignal.value === "have-remote-offer" && <p>پاسخ دریافت شد</p>}
+                    {signalingStateSignal.value === "have-local-offer" &&
+                        connectionStateSignal.value !== "connecting" && (
+                            <>
+                                <p>در انتظار پاسخ ...</p>
+                                <Button onClick={hangup}>انصراف</Button>
+                            </>
+                        )}
                 </div>
             );
         }
