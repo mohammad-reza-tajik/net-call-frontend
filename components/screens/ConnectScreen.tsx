@@ -38,7 +38,7 @@ function ConnectScreen() {
         }
     });
 
-    function renderScreen() {
+    const renderScreen = () => {
         if (connectionStateSignal.value === "connected") {
             if (statusSignal.value === "screen:send") {
                 return <ScreenSend />;
@@ -69,7 +69,7 @@ function ConnectScreen() {
                 </div>
             );
         }
-    }
+    };
 
     const closeDrawerHandler = () => {
         isChatDrawerOpenSignal.value = false;

@@ -9,46 +9,59 @@ import { isRequestsDrawerOpenSignal } from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
-import { jsonSchema } from "@/schemas";
+import { jsonSchema, requestSchema, responseSchema } from "@/schemas";
 
 function socketListeners(socket: Socket) {
     socket.on("requestToPeer", (request: IRequest) => {
-        // check if a request from the same remote peer exists and replace them with new one
-        const requestIndex = receivedRequestsSignal.value.findIndex((receivedRequest) => {
-            return receivedRequest.localPeerId === request.localPeerId;
-        });
+        try {
+            const validatedRequest = requestSchema.parse(request);
 
-        if (requestIndex >= 0) {
-            receivedRequestsSignal.value = [
-                ...receivedRequestsSignal.value.slice(0, requestIndex),
-                request,
-                ...receivedRequestsSignal.value.slice(requestIndex + 1),
-            ];
-        } else {
-            receivedRequestsSignal.value = [...receivedRequestsSignal.value, request];
-        }
+            const iceCandidates = validatedRequest.iceCandidates.map((item) => {
+                return new RTCIceCandidate(item);
+            });
 
-        let statusText: string | undefined;
+            // check if a request from the same remote peer exists and replace them with new one
+            const requestIndex = receivedRequestsSignal.value.findIndex((receivedRequest) => {
+                return receivedRequest.localPeerId === request.localPeerId;
+            });
 
-        if (request.status === "screen:send") {
-            statusText = "اشتراک گذاری صفحه";
-        } else if (request.status === "video:send") {
-            statusText = "تماس تصویری";
-        } else if (request.status === "audio:send") {
-            statusText = "تماس صوتی";
-        } else if (request.status === "game:send") {
-            statusText = "بازی";
-        }
+            if (requestIndex >= 0) {
+                receivedRequestsSignal.value = [
+                    ...receivedRequestsSignal.value.slice(0, requestIndex),
+                    {...request,iceCandidates},
+                    ...receivedRequestsSignal.value.slice(requestIndex + 1),
+                ];
+            } else {
+                receivedRequestsSignal.value = [...receivedRequestsSignal.value, {...request,iceCandidates}];
+            }
 
-        showNotification({
-            title: "یک درخواست دریافت شد",
-            body: `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
-        });
+            let statusText: string | undefined;
 
-        toast("یک درخواست دریافت شد");
+            if (request.status === "screen:send") {
+                statusText = "اشتراک گذاری صفحه";
+            } else if (request.status === "video:send") {
+                statusText = "تماس تصویری";
+            } else if (request.status === "audio:send") {
+                statusText = "تماس صوتی";
+            } else if (request.status === "game:send") {
+                statusText = "بازی";
+            }
 
-        if (!isRequestsDrawerOpenSignal.value) {
-            haveNewRequestSignal.value = true;
+            showNotification({
+                title: "یک درخواست دریافت شد",
+                body: `${request.localPeerId} شما را به  ${statusText} دعوت کرد `,
+            });
+
+            toast("یک درخواست دریافت شد");
+
+            if (!isRequestsDrawerOpenSignal.value) {
+                haveNewRequestSignal.value = true;
+            }
+        } catch (err) {
+            if (err instanceof Error) {
+                toast.error(err.message);
+                console.error(err);
+            }
         }
     });
 
@@ -62,29 +75,50 @@ function socketListeners(socket: Socket) {
                 return;
             }
 
-            currentResponseSignal.value = response;
-            await peerConnectionSignal.value?.setRemoteDescription(response.answer);
+            const validatedResponse = responseSchema.parse(response);
+
+            // Transform iceCandidates into RTCIceCandidate objects
+            const iceCandidates = validatedResponse.iceCandidates.map((item) => {
+                return new RTCIceCandidate(item);
+            });
+
+            currentResponseSignal.value = {
+                ...validatedResponse,
+                iceCandidates, // Replace with transformed candidates
+            };
+
+            await peerConnectionSignal.value?.setRemoteDescription(validatedResponse.answer);
             response.iceCandidates.forEach((item) => {
                 peerConnectionSignal.value?.addIceCandidate(item);
             });
         } catch (err) {
-            console.error(err);
+            if (err instanceof Error) {
+                toast.error(err.message);
+                console.error(err);
+            }
         }
     });
 
     socket.on("connectedPeers", ({ connectedPeers }: { connectedPeers: IConnectedPeer[] }) => {
-        // Create a set of connected peer IDs for quick lookup
-        const connectedPeerIds = new Set(connectedPeers.map((peer) => peer.localPeerId));
+        try {
+            // Create a set of connected peer IDs for quick lookup
+            const connectedPeerIds = new Set(connectedPeers.map((peer) => peer.localPeerId));
 
-        // Update the online status of each friend
-        friendsSignal.value = friendsSignal.value.map((friend) => {
-            return {
-                ...friend,
-                isOnline: connectedPeerIds.has(friend.localPeerId),
-            };
-        });
+            // Update the online status of each friend
+            friendsSignal.value = friendsSignal.value.map((friend) => {
+                return {
+                    ...friend,
+                    isOnline: connectedPeerIds.has(friend.localPeerId),
+                };
+            });
 
-        connectedPeersSignal.value = connectedPeers;
+            connectedPeersSignal.value = connectedPeers;
+        } catch (err) {
+            if (err instanceof Error) {
+                toast.error(err.message);
+                console.error(err);
+            }
+        }
     });
 
     socket.on("remotePeerNotConnected", () => {
@@ -114,13 +148,15 @@ function socketListeners(socket: Socket) {
     });
 
     socket.on("invalidRequest", ({ error }: { error: string }) => {
-        try {            
+        try {
             const validatedError = jsonSchema.parse(error);
-            const {message} = JSON.parse(validatedError)[0];
-            toast.error(message);            
+            const { message } = JSON.parse(validatedError)[0];
+            toast.error(message);
         } catch (err) {
-            toast.error("خطایی رخ داد");
-            console.error(err);
+            if (err instanceof Error) {
+                toast.error(err.message);
+                console.error(err);
+            }
         }
     });
 
