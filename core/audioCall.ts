@@ -1,12 +1,12 @@
 import localStreamSignal from "@/signals/localStream";
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import addToConnection from "@/core/addToConnection";
+import toast from "react-hot-toast";
 
 async function audioCall() {
     try {
 
-        if (!localStreamSignal.value || !peerConnectionSignal.value) {
-            throw new Error("no peer connection or local stream");
+        if (!localStreamSignal.value) {
+            throw new Error("no local stream");
         }
 
         const [audioTrack] = localStreamSignal.value.getAudioTracks();
@@ -14,7 +14,10 @@ async function audioCall() {
         await addToConnection("audio:send",audioTrack);
 
     } catch (err) {
-        console.log(err);
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
     }
 
 }

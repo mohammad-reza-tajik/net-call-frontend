@@ -1,6 +1,4 @@
 import peerConnectionListeners from "@/core/peerConnectionListeners";
-import dataChannelListeners from "@/core/dataChannelListeners";
-import chatChannelListeners from "@/core/chatChannelListeners";
 
 function createConnection() {
 
@@ -8,16 +6,8 @@ function createConnection() {
     const peerConnection =  new RTCPeerConnection(peerConfig);
 
     peerConnectionListeners(peerConnection);
-
-    // we create chat channel beforehand cause it is needed for any type of connection
-    const chatChannel = peerConnection.createDataChannel("chat",{
-        negotiated : true,
-        id : 1
-    });
-
-    dataChannelListeners(chatChannel);
-    chatChannelListeners(chatChannel);
-
+    
+    return peerConnection;
 }
 
 export default createConnection;

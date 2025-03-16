@@ -4,9 +4,14 @@ import dataChannelListeners from "@/core/dataChannelListeners";
 import {isYourTurnSignal} from "@/signals/games/pigGame";
 import {batch} from "@preact/signals-react";
 import statusSignal from "@/signals/peer/status";
+import toast from "react-hot-toast";
+import createConnection from "@/core/createConnection";
 
 async function inviteToGame() {
     try {
+
+        peerConnectionSignal.value = createConnection();
+
 
         if (!peerConnectionSignal.value) {
             throw new Error("no peer connection");
@@ -28,8 +33,10 @@ async function inviteToGame() {
 
 
     } catch (err) {
-        console.log(err);
-    }
-}
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
+    }}
 
 export default inviteToGame;

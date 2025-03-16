@@ -1,14 +1,14 @@
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
 import addToConnection from "@/core/addToConnection";
+import toast from "react-hot-toast";
 
 async function shareScreen() {
     try {
 
         const screenStream = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
 
-        if (!peerConnectionSignal.value || !localStreamSignal.value) {
-            throw new Error("no peer connection or local stream");
+        if (!localStreamSignal.value) {
+            throw new Error("no local stream");
         }
 
         const [audioTrack] = localStreamSignal.value.getAudioTracks();
@@ -20,7 +20,10 @@ async function shareScreen() {
         await addToConnection("screen:send", ...screenStream.getTracks());
 
     } catch (err) {
-        console.log(err);
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
     }
 
 }

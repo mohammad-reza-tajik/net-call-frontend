@@ -6,10 +6,12 @@ import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import localVideoRefSignal from "@/signals/localVideoRef";
 import { batch } from "@preact/signals-react";
 import toast from "react-hot-toast";
+import createConnection from "@/core/createConnection";
 
 async function createAnswer({ request }: { request: IRequest }) {
     try {
         const answerStatus = request.status.split(":").at(0)!.concat(":receive") as TStatus;
+        peerConnectionSignal.value = createConnection();
 
         if (!peerConnectionSignal.value || !localStreamSignal.value) {
             throw new Error("no peer connection or local stream");

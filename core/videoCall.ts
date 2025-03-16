@@ -1,13 +1,13 @@
 import localStreamSignal from "@/signals/localStream";
-import {peerConnectionSignal} from "@/signals/peer/peerConnection";
 import localVideoRefSignal from "@/signals/localVideoRef";
 import addToConnection from "@/core/addToConnection";
+import toast from "react-hot-toast";
 
 async function videoCall() {
     try {
 
-        if (!peerConnectionSignal.value || !localStreamSignal.value) {
-            throw new Error("no peer connection or local stream");
+        if (!localStreamSignal.value) {
+            throw new Error("no local stream");
         }
 
         await addToConnection("video:send",...localStreamSignal.value.getTracks());
@@ -24,7 +24,10 @@ async function videoCall() {
         }
 
     } catch (err) {
-        console.log(err);
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
     }
 
 }

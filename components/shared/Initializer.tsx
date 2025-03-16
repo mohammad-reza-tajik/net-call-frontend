@@ -4,10 +4,9 @@ import localPeerIdSignal from "@/signals/peer/localPeerId";
 import localStreamSignal from "@/signals/localStream";
 import iODevicesSignal from "@/signals/iODevices";
 import getIODevices from "@/core/getIODevices";
-import createConnection from "@/core/createConnection";
 import socketSignal from "@/signals/socket";
 import { useSignalEffect } from "@preact/signals-react/runtime";
-import { answerSignal, offerSignal, peerConnectionSignal } from "@/signals/peer/peerConnection";
+import { answerSignal, offerSignal } from "@/signals/peer/peerConnection";
 import { useRouter } from "next/navigation";
 import routerSignal from "@/signals/router";
 import { batch } from "@preact/signals-react";
@@ -146,12 +145,6 @@ function Initializer({ children }: IInitializerProps) {
                 deviceType: getDeviceType(),
             });
             socketSignal.value = newSocket;
-        }
-    });
-
-    useSignalEffect(() => {
-        if (!peerConnectionSignal.value) {
-            createConnection();
         }
     });
 

@@ -1,8 +1,12 @@
-import {offerSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
+import { offerSignal, peerConnectionSignal } from "@/signals/peer/peerConnection";
 import localStreamSignal from "@/signals/localStream";
-import {batch} from "@preact/signals-react";
+import { batch } from "@preact/signals-react";
 import statusSignal from "@/signals/peer/status";
-import type {TStatus} from "@/types";
+import type { TStatus } from "@/types";
+import toast from "react-hot-toast";
+import createConnection from "@/core/createConnection";
+import dataChannelListeners from "@/core/dataChannelListeners";
+import chatChannelListeners from "@/core/chatChannelListeners";
 
 /**
  this function gets the status and tracks that we want to add to the peer connection
@@ -10,6 +14,11 @@ import type {TStatus} from "@/types";
  */
 async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
     try {
+        peerConnectionSignal.value = createConnection();
+
+        const chatChannel = peerConnectionSignal.value!.createDataChannel("chat");
+        dataChannelListeners(chatChannel);
+        chatChannelListeners(chatChannel);
 
         tracks.forEach((track) => {
             peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
@@ -22,11 +31,12 @@ async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
             statusSignal.value = status;
             offerSignal.value = offer;
         });
-
     } catch (err) {
-        console.error(err);
+        if (err instanceof Error) {
+            toast.error(err.message);
+            console.error(err);
+        }
     }
-
 }
 
 export default addToConnection;

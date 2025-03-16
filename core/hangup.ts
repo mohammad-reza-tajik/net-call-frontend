@@ -33,14 +33,14 @@ import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 function hangup() {
     batch(() => {
         statusSignal.value = undefined;
+        peerConnectionSignal.value = undefined;
         currentRequestSignal.value = undefined;
+        currentResponseSignal.value = undefined;
         isChatDrawerOpenSignal.value = false;
         messagesSignal.value = [];
         iceCandidatesSignal.value = [];
         offerSignal.value = undefined;
         answerSignal.value = undefined;
-        currentResponseSignal.value = undefined;
-        peerConnectionSignal.value = undefined;
         remotePeerIdSignal.value = "";
         remoteStreamSignal.value = undefined;
         signalingStateSignal.value = undefined;

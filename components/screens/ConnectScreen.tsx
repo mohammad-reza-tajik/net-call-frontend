@@ -7,7 +7,7 @@ import ActionBar from "@/components/connectPage/ActionBar";
 import { Suspense, useEffect, useRef } from "react";
 import createAnswer from "@/core/createAnswer";
 import statusSignal from "@/signals/peer/status";
-import { connectionStateSignal, peerConnectionSignal, signalingStateSignal } from "@/signals/peer/peerConnection";
+import { connectionStateSignal, signalingStateSignal } from "@/signals/peer/peerConnection";
 import currentRequestSignal from "@/signals/peer/currentRequest";
 import { useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
@@ -33,7 +33,7 @@ function ConnectScreen() {
     }, []);
 
     useSignalEffect(() => {
-        if (currentRequestSignal.value && peerConnectionSignal.value) {
+        if (currentRequestSignal.value) {
             createAnswer({ request: currentRequestSignal.value });
         }
     });
