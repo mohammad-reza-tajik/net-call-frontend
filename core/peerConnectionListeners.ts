@@ -41,7 +41,13 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
                 title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
             });
         } else if (peerConnection.connectionState === "failed") {
-            if (peerConnectionSignal.value?.signalingState !== "stable") {
+            /*
+            when we close a connection on one side the other side wont get notified immediately 
+            and then finally this causes a connection failure even if we are on a new connection
+            this is because the old connection is still somewhere out there and doesn't get closed
+            so we check if we are on the same connection or not if so we close the connection else we ignore
+            */
+            if (peerConnection === peerConnectionSignal.value) {
                 peerConnectionSignal.value?.close();
                 toast.error("متاسفانه ارتباط برقرار نشد");
             }
