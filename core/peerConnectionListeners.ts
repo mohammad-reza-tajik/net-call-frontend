@@ -41,8 +41,10 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
                 title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
             });
         } else if (peerConnection.connectionState === "failed") {
-            peerConnectionSignal.value?.close();
-            toast.error("متاسفانه ارتباط برقرار نشد");
+            if (peerConnectionSignal.value?.signalingState !== "stable") {
+                peerConnectionSignal.value?.close();
+                toast.error("متاسفانه ارتباط برقرار نشد");
+            }
         }
     });
 

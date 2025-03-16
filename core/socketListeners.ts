@@ -9,17 +9,11 @@ import { isRequestsDrawerOpenSignal } from "@/signals/drawer";
 import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
-import { jsonSchema, requestSchema, responseSchema } from "@/schemas";
+import { jsonSchema } from "@/schemas";
 
 function socketListeners(socket: Socket) {
     socket.on("requestToPeer", (request: IRequest) => {
         try {
-            const validatedRequest = requestSchema.parse(request);
-
-            const iceCandidates = validatedRequest.iceCandidates.map((item) => {
-                return new RTCIceCandidate(item);
-            });
-
             // check if a request from the same remote peer exists and replace them with new one
             const requestIndex = receivedRequestsSignal.value.findIndex((receivedRequest) => {
                 return receivedRequest.localPeerId === request.localPeerId;
@@ -28,11 +22,11 @@ function socketListeners(socket: Socket) {
             if (requestIndex >= 0) {
                 receivedRequestsSignal.value = [
                     ...receivedRequestsSignal.value.slice(0, requestIndex),
-                    {...request,iceCandidates},
+                    request,
                     ...receivedRequestsSignal.value.slice(requestIndex + 1),
                 ];
             } else {
-                receivedRequestsSignal.value = [...receivedRequestsSignal.value, {...request,iceCandidates}];
+                receivedRequestsSignal.value = [...receivedRequestsSignal.value, request];
             }
 
             let statusText: string | undefined;
@@ -75,19 +69,8 @@ function socketListeners(socket: Socket) {
                 return;
             }
 
-            const validatedResponse = responseSchema.parse(response);
-
-            // Transform iceCandidates into RTCIceCandidate objects
-            const iceCandidates = validatedResponse.iceCandidates.map((item) => {
-                return new RTCIceCandidate(item);
-            });
-
-            currentResponseSignal.value = {
-                ...validatedResponse,
-                iceCandidates, // Replace with transformed candidates
-            };
-
-            await peerConnectionSignal.value?.setRemoteDescription(validatedResponse.answer);
+            currentResponseSignal.value = response;
+            await peerConnectionSignal.value?.setRemoteDescription(response.answer);
             response.iceCandidates.forEach((item) => {
                 peerConnectionSignal.value?.addIceCandidate(item);
             });
