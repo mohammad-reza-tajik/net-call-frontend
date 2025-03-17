@@ -17,14 +17,14 @@ import statusSignal from "@/signals/peer/status";
 import iODevicesSignal from "@/signals/iODevices";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import {chatChannelSignal, connectionStateSignal, peerConnectionSignal} from "@/signals/peer/peerConnection";
-import socketSignal from "@/signals/socket";
-import localPeerIdSignal from "@/signals/peer/localPeerId";
 import {useSignal} from "@preact/signals-react";
 import {useSignals} from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import cn from "@/lib/utils/cn";
 import {Separator} from "@/components/ui/separator";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
+import routerSignal from "@/signals/router";
+import hangup from "@/core/hangup";
 
 function StreamControls() {
 
@@ -70,8 +70,8 @@ function StreamControls() {
     };
 
     const hangupHandler = () => {
-        socketSignal.value?.emit("hangupToServer", {localPeerId: localPeerIdSignal.value});
-        peerConnectionSignal.value?.close();
+        hangup();
+        routerSignal.value?.push("/");
     };
 
     const openChatHandler = () => {

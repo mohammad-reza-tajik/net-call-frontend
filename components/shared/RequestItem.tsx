@@ -8,11 +8,10 @@ import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import receivedRequestsSignal from "@/signals/peer/receivedRequests";
 import routerSignal from "@/signals/router";
 import socketSignal from "@/signals/socket";
-import hangup from "@/core/hangup";
 import { batch } from "@preact/signals-react";
 import { isRequestsDrawerOpenSignal } from "@/signals/drawer";
-import { peerConnectionSignal } from "@/signals/peer/peerConnection";
 import friendsSignal from "@/signals/peer/friends";
+import hangup from "@/core/hangup";
 
 interface IRequestItemProps {
     request: IRequest;
@@ -33,12 +32,7 @@ function RequestItem({ request }: IRequestItemProps) {
     }
 
     const answerRequestHandler = () => {
-        if (peerConnectionSignal.value?.connectionState === "connected") {
-            peerConnectionSignal.value.close();
-        } else {
-            hangup();
-        }
-
+        hangup();
         batch(() => {
             currentRequestSignal.value = request;
             remotePeerIdSignal.value = localPeerId;

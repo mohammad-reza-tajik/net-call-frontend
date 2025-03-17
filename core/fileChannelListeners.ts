@@ -1,7 +1,7 @@
 import type {IFileData, IFileMessage} from "@/types";
 import remotePeerId from "@/signals/peer/remotePeerId";
 import messagesSignal from "@/signals/peer/messages";
-import {chatChannelSignal, fileChannelSignal} from "@/signals/peer/peerConnection";
+import {chatChannelSignal} from "@/signals/peer/peerConnection";
 import {isChatDrawerOpenSignal} from "@/signals/drawer";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import showNotification from "@/lib/utils/showNotification";
@@ -81,8 +81,6 @@ function fileChannelListeners(dataChannel: RTCDataChannel) {
             receivedChunks = [];
         }
     });
-
-    fileChannelSignal.value = dataChannel;
 }
 
 export default fileChannelListeners;

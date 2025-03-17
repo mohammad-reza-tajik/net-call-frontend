@@ -15,7 +15,7 @@ import {
     temporaryScoreSignal,
 } from "@/signals/games/pigGame";
 import { batch } from "@preact/signals-react";
-import { peerConnectionSignal } from "@/signals/peer/peerConnection";
+import hangup from "@/core/hangup";
 
 const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"]; // Unicode dice symbols
 
@@ -91,9 +91,7 @@ function PigGame() {
                     <div className={"flex items-center gap-2"}>
                         <Button onClick={restartGameHandler}>شروع مجدد</Button>
                         <Button
-                            onClick={() => {
-                                peerConnectionSignal.value?.close();
-                            }}
+                            onClick={hangup}
                         >
                             خروج
                         </Button>

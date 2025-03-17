@@ -1,4 +1,4 @@
-import { connectionStateSignal, peerConnectionSignal, signalingStateSignal } from "@/signals/peer/peerConnection";
+import { connectionStateSignal, signalingStateSignal } from "@/signals/peer/peerConnection";
 import { toast } from "react-hot-toast";
 import remoteStreamSignal from "@/signals/remoteStream";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
@@ -9,70 +9,89 @@ import fileChannelListeners from "@/core/fileChannelListeners";
 import gameChannelListeners from "@/core/gameChannelListeners";
 import showNotification from "@/lib/utils/showNotification";
 import iceCandidatesSignal from "@/signals/peer/iceCandidates";
+import hangup from "@/core/hangup";
 
 function peerConnectionListeners(peerConnection: RTCPeerConnection) {
-    let iceCandidates: RTCIceCandidate[] = [];
+  let iceCandidates: RTCIceCandidate[] = [];
 
-    peerConnection.addEventListener("icecandidate", (event) => {
-        if (event.candidate !== null) {
-            iceCandidates.push(event.candidate);
-        } else {
-            // when event.candidate is null it means that all candidates have been gathered
-            if (iceCandidates.length === 0) {
-                toast.error("no candidates found");
-                throw new Error("No candidates found");
-            }
+  /*
+    using abort controller to control the event listeners and easily remove them later
+    */
+  const abortController = new AbortController();
+  const signal = abortController.signal;
 
-            iceCandidatesSignal.value = iceCandidates;
-            iceCandidates = [];
+  peerConnection.addEventListener(
+    "icecandidate",
+    (event) => {
+      if (event.candidate !== null) {
+        iceCandidates.push(event.candidate);
+      } else {
+        // when event.candidate is null it means that all candidates have been gathered
+        if (iceCandidates.length === 0) {
+          toast.error("no candidates found");
+          throw new Error("No candidates found");
         }
-    });
 
-    peerConnection.addEventListener("signalingstatechange", () => {
-        signalingStateSignal.value = peerConnection.signalingState;
-    });
+        iceCandidatesSignal.value = iceCandidates;
+        iceCandidates = [];
+      }
+    },
+    { signal },
+  );
 
-    peerConnection.addEventListener("connectionstatechange", () => {
-        connectionStateSignal.value = peerConnection.connectionState;
+  peerConnection.addEventListener(
+    "signalingstatechange",
+    () => {
+      signalingStateSignal.value = peerConnection.signalingState;
+    },
+    { signal },
+  );
 
-        if (peerConnection.connectionState === "connected") {
-            toast.success("متصل شدید");
-            showNotification({
-                title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
-            });
-        } else if (peerConnection.connectionState === "failed") {
-            /*
-            when we close a connection on one side the other side wont get notified immediately 
-            and then finally this causes a connection failure even if we are on a new connection
-            this is because the old connection is still somewhere out there and doesn't get closed
-            so we check if we are on the same connection or not if so we close the connection else we ignore
-            */
-            if (peerConnection === peerConnectionSignal.value) {
-                peerConnectionSignal.value?.close();
-                toast.error("متاسفانه ارتباط برقرار نشد");
-            }
-        }
-    });
+  peerConnection.addEventListener(
+    "connectionstatechange",
+    () => {
+      connectionStateSignal.value = peerConnection.connectionState;
 
-    peerConnection.addEventListener("track", (event) => {
-        remoteStreamSignal.value = event.streams.at(0);
-        if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
-            remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
-        }
-    });
+      if (peerConnection.connectionState === "connected") {
+        toast.success("متصل شدید");
+        showNotification({
+          title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
+        });
+      } else if (peerConnection.connectionState === "failed") {
+        hangup();
+        toast.error("متاسفانه ارتباط برقرار نشد");
+      }
+    },
+    { signal },
+  );
 
-    peerConnection.addEventListener("datachannel", ({ channel }) => {
-        dataChannelListeners(channel);
-        if (channel.label === "chat") {
-            chatChannelListeners(channel);
-        } else if (channel.label.startsWith("file")) {
-            fileChannelListeners(channel);
-        } else if (channel.label === "game") {
-            gameChannelListeners(channel);
-        }
-    });
+  peerConnection.addEventListener(
+    "track",
+    (event) => {
+      remoteStreamSignal.value = event.streams.at(0);
+      if (remoteVideoRefSignal.value?.current && remoteStreamSignal.value) {
+        remoteVideoRefSignal.value.current.srcObject = remoteStreamSignal.value;
+      }
+    },
+    { signal },
+  );
 
-    peerConnectionSignal.value = peerConnection;
+  peerConnection.addEventListener(
+    "datachannel",
+    ({ channel }) => {
+      dataChannelListeners(channel);
+      if (channel.label === "chat") {
+        chatChannelListeners(channel);
+      } else if (channel.label.startsWith("file")) {
+        fileChannelListeners(channel);
+      } else if (channel.label === "game") {
+        gameChannelListeners(channel);
+      }
+    },
+    { signal },
+  );
+
+  return abortController;
 }
 
 export default peerConnectionListeners;

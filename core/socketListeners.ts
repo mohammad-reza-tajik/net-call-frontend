@@ -10,6 +10,7 @@ import haveNewRequestSignal from "@/signals/haveNewRequest";
 import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
 import { jsonSchema } from "@/schemas";
+import hangup from "@/core/hangup";
 
 function socketListeners(socket: Socket) {
     socket.on("requestToPeer", (request: IRequest) => {
@@ -106,12 +107,12 @@ function socketListeners(socket: Socket) {
 
     socket.on("remotePeerNotConnected", () => {
         toast.error("این کاربر آنلاین نیست");
-        peerConnectionSignal.value?.close();
+        hangup();
     });
 
     socket.on("hangupToPeer", () => {
         if (peerConnectionSignal.value?.signalingState !== "stable") {
-            peerConnectionSignal.value?.close();
+            hangup();
         }
     });
 
@@ -126,7 +127,7 @@ function socketListeners(socket: Socket) {
             connection with another peer just ignore
         */
         if (peerConnectionSignal.value?.connectionState !== "connected") {
-            peerConnectionSignal.value?.close();
+            hangup();
         }
     });
 

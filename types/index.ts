@@ -59,3 +59,7 @@ export interface IFileMessage extends IMessage{
     transferredAmount : number;
 }
 
+export interface ManagedPeerConnection extends RTCPeerConnection {
+    abortController?: AbortController;
+  }
+  
