@@ -21,6 +21,10 @@ async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
         chatChannelListeners(chatChannel);
 
         tracks.forEach((track) => {
+            if (!track.enabled || track.readyState === "ended") {
+                throw new Error(`Track ${track.kind} is invalid or ended`);
+              }
+        
             peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
         });
 

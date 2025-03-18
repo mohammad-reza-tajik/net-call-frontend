@@ -50,8 +50,8 @@ async function createAnswer({ request }: { request: IRequest }) {
             const localStream = new MediaStream();
             const [videoTrack] = localStreamSignal.value.getVideoTracks();
             localStream.addTrack(videoTrack);
-            localStreamSignal.value = localStream;
-            localVideoRefSignal.value.current.srcObject = localStreamSignal.value;
+            localVideoRefSignal.value.current.srcObject = localStream;
+
         }
     } catch (err) {
         if (err instanceof Error) {

@@ -10,7 +10,14 @@ async function videoCall() {
             throw new Error("no local stream");
         }
 
-        await addToConnection("video:send",...localStreamSignal.value.getTracks());
+
+        const tracks = localStreamSignal.value.getTracks();
+
+        if (tracks.length < 2) {
+            throw new Error("Video call requires both audio and video tracks");
+          }
+
+        await addToConnection("video:send",...tracks);
 
         if (localVideoRefSignal.value?.current) {
             /*
