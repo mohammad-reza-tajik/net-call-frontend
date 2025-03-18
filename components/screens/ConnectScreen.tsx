@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import hangup from "@/core/hangup";
 import PigGame from "@/components/screens/PigGame";
 import RemotePeerIdUpdater from "@/components/connectPage/RemotePeerIdUpdater";
+import remoteStreamSignal from "@/signals/remoteStream";
 
 function ConnectScreen() {
     useSignals();
@@ -33,7 +34,7 @@ function ConnectScreen() {
     }, []);
 
     useSignalEffect(() => {
-        if (currentRequestSignal.value) {
+        if (currentRequestSignal.value && remoteStreamSignal.value) {
             createAnswer({ request: currentRequestSignal.value });
         }
     });

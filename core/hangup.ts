@@ -36,7 +36,6 @@ function hangup() {
   if (socketSignal.value && localPeerIdSignal.value && remotePeerIdSignal.value) {
     socketSignal.value.emit("hangupToServer", {
       localPeerId: localPeerIdSignal.value,
-      remotePeerId: remotePeerIdSignal.value,
     });
   }
 
