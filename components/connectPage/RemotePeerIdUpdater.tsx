@@ -1,6 +1,7 @@
 import {useSearchParams} from "next/navigation";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import { useSignalEffect } from "@preact/signals-react";
+import { useEffect } from "react";
 
 /**
  * RemotePeerIdUpdater is a component responsible for retrieving the remote peer ID
@@ -14,6 +15,12 @@ function RemotePeerIdUpdater() {
     const searchParams = useSearchParams();
 
     const remotePeerIdQuery = searchParams.get("remotePeerId");
+
+    useEffect(() => {
+        if (!remotePeerIdSignal.value && remotePeerIdQuery) {
+            remotePeerIdSignal.value = remotePeerIdQuery;
+        }
+    }, [remotePeerIdQuery]);
 
     useSignalEffect(() =>{
         if (!remotePeerIdSignal.value && remotePeerIdQuery) {

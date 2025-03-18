@@ -33,7 +33,7 @@ import removeConnection from "./removeConnection";
 
 function hangup() {
   // Notify server
-  if (socketSignal.value && localPeerIdSignal.value && remotePeerIdSignal.value) {
+  if (socketSignal.value && localPeerIdSignal.value) {
     socketSignal.value.emit("hangupToServer", {
       localPeerId: localPeerIdSignal.value,
     });
