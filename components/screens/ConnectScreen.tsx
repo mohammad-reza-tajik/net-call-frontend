@@ -63,7 +63,7 @@ function ConnectScreen() {
                         connectionStateSignal.value !== "connecting" && (
                             <>
                                 <p>در انتظار پاسخ ...</p>
-                                <Button onClick={hangup}>انصراف</Button>
+                                <Button onClick={() => hangup(true)}>انصراف</Button>
                             </>
                         )}
                 </div>

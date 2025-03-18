@@ -58,7 +58,7 @@ function peerConnectionListeners(peerConnection: RTCPeerConnection) {
           title: `با موفقیت به ${remotePeerIdSignal.value} متصل شدید `,
         });
       } else if (peerConnection.connectionState === "failed") {
-        hangup();
+        hangup(true);
         toast.error("متاسفانه ارتباط برقرار نشد");
       }
     },

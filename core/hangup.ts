@@ -29,15 +29,16 @@ import { isChatDrawerOpenSignal } from "@/signals/drawer";
 import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
-import removeConnection from "./removeConnection";
+import removeConnection from "@/core/removeConnection";
 
-function hangup() {
-  // Notify server
-  if (socketSignal.value && localPeerIdSignal.value) {
-    socketSignal.value.emit("hangupToServer", {
-      localPeerId: localPeerIdSignal.value,
-    });
-  }
+function hangup(emitToServer: boolean = false) {
+
+  if (emitToServer) {
+      socketSignal.value?.emit("hangupToServer", {
+        localPeerId: localPeerIdSignal.value,
+        remotePeerId : remotePeerIdSignal.value
+      });
+    }
 
   removeConnection(peerConnectionSignal.value);
 

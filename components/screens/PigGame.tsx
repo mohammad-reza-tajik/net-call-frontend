@@ -90,9 +90,7 @@ function PigGame() {
                     <p>بازی تمام شد</p>
                     <div className={"flex items-center gap-2"}>
                         <Button onClick={restartGameHandler}>شروع مجدد</Button>
-                        <Button
-                            onClick={hangup}
-                        >
+                        <Button onClick={()=>hangup(true)}>
                             خروج
                         </Button>
                     </div>

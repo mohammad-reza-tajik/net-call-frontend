@@ -70,7 +70,7 @@ function StreamControls() {
     };
 
     const hangupHandler = () => {
-        hangup();
+        hangup(true);
         routerSignal.value?.push("/");
     };
 
