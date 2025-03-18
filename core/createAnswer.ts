@@ -11,7 +11,13 @@ import createConnection from "@/core/createConnection";
 async function createAnswer({ request }: { request: IRequest }) {
     try {
         const answerStatus = request.status.split(":").at(0)!.concat(":receive") as TStatus;
+        
         peerConnectionSignal.value = createConnection();
+
+        localStreamSignal.value = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        });
 
         if (!peerConnectionSignal.value || !localStreamSignal.value) {
             throw new Error("no peer connection or local stream");

@@ -6,6 +6,11 @@ import toast from "react-hot-toast";
 async function videoCall() {
     try {
 
+        localStreamSignal.value = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        });
+        
         if (!localStreamSignal.value) {
             throw new Error("no local stream");
         }

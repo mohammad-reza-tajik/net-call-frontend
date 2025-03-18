@@ -6,6 +6,10 @@ async function shareScreen() {
     try {
 
         const screenStream = await navigator.mediaDevices.getDisplayMedia({audio: true, video: true});
+        localStreamSignal.value = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: true,
+        });
 
         if (!localStreamSignal.value) {
             throw new Error("no local stream");
