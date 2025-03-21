@@ -17,8 +17,7 @@ export interface IFriend {
     isOnline : boolean;
 }
 
-export interface IRequest {
-    offer: RTCSessionDescriptionInit;
+export interface IConnectionPayload {
     localPeerId: string;
     remotePeerId: string;
     socketId: string;
@@ -26,13 +25,13 @@ export interface IRequest {
     iceCandidates: RTCIceCandidate[];
 }
 
-export interface IResponse {
+export interface IRequest extends IConnectionPayload {
+    offer: RTCSessionDescriptionInit;
+    
+}
+
+export interface IResponse extends IConnectionPayload {
     answer: RTCSessionDescriptionInit;
-    localPeerId: string;
-    remotePeerId: string;
-    socketId: string;
-    status: TStatus;
-    iceCandidates: RTCIceCandidate[];
 }
 
 export interface IMessage {
