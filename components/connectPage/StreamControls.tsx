@@ -137,7 +137,7 @@ function StreamControls() {
                     <DeviceSelector devices={iODevicesSignal.value?.audioOutputs}/>
                 </div>
 
-                <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value})}
+                <ActionButton className={cn({"animate-bounce": haveNewMessageSignal.value && !isChatDrawerOpenSignal.value})}
                               icon={<Chat className={"size-7"}/>}
                               tooltipContent={"چت"}
                               handler={openChatHandler}/>

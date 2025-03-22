@@ -22,10 +22,11 @@ function chatChannelListeners(dataChannel: RTCDataChannel) {
             });
 
             messagesSignal.value = [...messagesSignal.value, newMessage];
+
+            haveNewMessageSignal.value = true;
+            
             if (isChatDrawerOpenSignal.value) {
                 chatChannelSignal.value?.send("seen");
-            } else {
-                haveNewMessageSignal.value = true;
             }
         }
     });
