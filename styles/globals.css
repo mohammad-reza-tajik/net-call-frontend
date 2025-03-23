@@ -130,6 +130,14 @@
         @apply border-border;
     }
 
+    video::-webkit-media-controls { 
+        @apply hidden;
+    } 
+                         
+    video::-webkit-media-controls-enclosure { 
+        @apply hidden;       
+    } 
+
     ::-webkit-scrollbar {
         @apply w-1;
     }

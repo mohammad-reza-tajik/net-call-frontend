@@ -367,11 +367,3 @@ export function Fullscreen(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
-
-export function FullscreenExit(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}>
-      <path fill="currentColor" d="M14 14h5v2h-3v3h-2zm-9 0h5v5H8v-3H5zm3-9h2v5H5V8h3zm11 3v2h-5V5h2v3z"></path>
-    </svg>
-  );
-}

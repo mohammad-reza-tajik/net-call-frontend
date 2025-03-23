@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import hangup from "@/core/hangup";
 import PigGame from "@/components/screens/PigGame";
 import RemotePeerIdUpdater from "@/components/connectPage/RemotePeerIdUpdater";
-import { Fullscreen, FullscreenExit } from "@/components/shared/Icons";
+import { Fullscreen } from "@/components/shared/Icons";
 
 const HIDE_DELAY = 3000; // 3 seconds
 function ConnectScreen() {
@@ -148,11 +148,7 @@ function ConnectScreen() {
             )}
           >
             <Button size="icon" onClick={() => toggleFullscreen("local")}>
-              {document.fullscreenElement ? (
-                <FullscreenExit className={"size-7"} />
-              ) : (
-                <Fullscreen className={"size-7"} />
-              )}
+              <Fullscreen className={"size-7"} />
             </Button>
           </div>
         </div>
@@ -176,11 +172,7 @@ function ConnectScreen() {
             )}
           >
             <Button size="icon" onClick={() => toggleFullscreen("remote")}>
-              {document.fullscreenElement ? (
-                <FullscreenExit className={"size-7"} />
-              ) : (
-                <Fullscreen className={"size-7"} />
-              )}
+              <Fullscreen className={"size-7"} />
             </Button>
           </div>
         </div>
