@@ -1,86 +1,89 @@
-import type {IFileData, IFileMessage} from "@/types";
+import type { IFileData, IFileMessage } from "@/types";
 import remotePeerId from "@/signals/peer/remotePeerId";
 import messagesSignal from "@/signals/peer/messages";
-import {chatChannelSignal} from "@/signals/peer/peerConnection";
-import {isChatDrawerOpenSignal} from "@/signals/drawer";
+import { chatChannelSignal } from "@/signals/peer/peerConnection";
+import { isChatDrawerOpenSignal } from "@/signals/drawer";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import showNotification from "@/lib/utils/showNotification";
 
 const CHUNK_SIZE = 1024 * 256;
 
 function fileChannelListeners(dataChannel: RTCDataChannel) {
+  let fileData: IFileData | undefined = undefined;
+  let receivedChunks: ArrayBuffer[] = [];
 
-    let fileData: IFileData | undefined = undefined;
-    let receivedChunks: ArrayBuffer[] = [];
+  /**
+   transferringFileMessageIndex variable is the index of the file-message we're going to send . we know that
+   it's going to be placed after the last element in the array so the index will be
+   the last-index + 1 and it's equal to array.length
+   */
+  const transferringFileMessageIndex = messagesSignal.value.length;
+
+  dataChannel.bufferedAmountLowThreshold = CHUNK_SIZE;
+
+  dataChannel.addEventListener("message", ({ data }) => {
+    if (typeof data === "string") {
+      fileData = JSON.parse(data);
+    } else {
+      receivedChunks.push(data);
+    }
+
+    if (!fileData) return;
 
     /**
-     transferringFileMessageIndex variable is the index of the file-message we're going to send . we know that
-     it's going to be placed after the last element in the array so the index will be
-     the last-index + 1 and it's equal to array.length
+     show a temporary message that indicates that a file is being received
+     and with every chunk received it updates the transferredAmount
      */
-    const transferringFileMessageIndex = messagesSignal.value.length;
 
-    dataChannel.bufferedAmountLowThreshold = CHUNK_SIZE;
+    const tempFileMessage: IFileMessage = {
+      file: fileData,
+      type: "file",
+      localPeerId: remotePeerId.value,
+      transferredAmount: receivedChunks.length * CHUNK_SIZE,
+      timestamp: fileData.timestamp,
+    };
 
-    dataChannel.addEventListener("message", ({data}) => {
+    messagesSignal.value = [
+      ...messagesSignal.value.slice(0, transferringFileMessageIndex),
+      tempFileMessage,
+      ...messagesSignal.value.slice(transferringFileMessageIndex + 1),
+    ];
 
-        if (typeof data === "string") {
-            fileData = JSON.parse(data);
-        } else {
-            receivedChunks.push(data);
-        }
+    if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
+      showNotification({
+        title: "پیام جدید",
+        body: fileData.name,
+        tag: `newMessage-${remotePeerId.value}`,
+      });
 
-        if (!fileData) return;
+      haveNewMessageSignal.value = true;
 
-        /**
-         show a temporary message that indicates that a file is being received
-         and with every chunk received it updates the transferredAmount
-         */
+      if (isChatDrawerOpenSignal.value) {
+        chatChannelSignal.value?.send("seen");
+      }
 
-        const tempFileMessage: IFileMessage = {
-            file: fileData,
-            type: "file",
-            localPeerId: remotePeerId.value,
-            transferredAmount: receivedChunks.length * CHUNK_SIZE,
-            timestamp :fileData.timestamp
-        };
+      dataChannel.close();
 
-        messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), tempFileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
+      const file = new File(receivedChunks, fileData.name, { type: fileData.mimeType });
 
-        if (receivedChunks.length * CHUNK_SIZE >= fileData.size) {
+      const fileMessage: IFileMessage = {
+        file,
+        type: "file",
+        localPeerId: remotePeerId.value,
+        transferredAmount: file.size,
+        timestamp: fileData.timestamp,
+      };
 
-            console.log("file received");
+      messagesSignal.value = [
+        ...messagesSignal.value.slice(0, transferringFileMessageIndex),
+        fileMessage,
+        ...messagesSignal.value.slice(transferringFileMessageIndex + 1),
+      ];
 
-            showNotification({
-                title : "پیام جدید",
-                body : fileData.name,
-                tag : `newMessage-${remotePeerId.value}`
-            });
-
-            if (isChatDrawerOpenSignal.value) {
-                chatChannelSignal.value?.send("seen");
-            } else {
-                haveNewMessageSignal.value = true;
-            }
-
-            dataChannel.close();
-
-            const file = new File(receivedChunks, fileData.name, {type: fileData.mimeType});
-
-            const fileMessage: IFileMessage = {
-                file,
-                type: "file",
-                localPeerId: remotePeerId.value,
-                transferredAmount: file.size,
-                timestamp : fileData.timestamp
-            };
-
-            messagesSignal.value = [...messagesSignal.value.slice(0, transferringFileMessageIndex), fileMessage, ...messagesSignal.value.slice(transferringFileMessageIndex + 1)];
-
-            fileData = undefined;
-            receivedChunks = [];
-        }
-    });
+      fileData = undefined;
+      receivedChunks = [];
+    }
+  });
 }
 
 export default fileChannelListeners;
