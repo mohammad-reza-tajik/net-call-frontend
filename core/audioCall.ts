@@ -3,28 +3,20 @@ import addToConnection from "@/core/addToConnection";
 import toast from "react-hot-toast";
 
 async function audioCall() {
-    try {
-
-        localStreamSignal.value = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: true,
-        });
-
-        if (!localStreamSignal.value) {
-            throw new Error("no local stream");
-        }
-
-        const [audioTrack] = localStreamSignal.value.getAudioTracks();
-
-        await addToConnection("audio:send",audioTrack);
-
-    } catch (err) {
-        if (err instanceof Error) {
-            toast.error(err.message);
-            console.error(err);
-        }
+  try {
+    if (!localStreamSignal.value) {
+      throw new Error("no local stream");
     }
 
+    const [audioTrack] = localStreamSignal.value.getAudioTracks();
+
+    await addToConnection("audio:send", audioTrack);
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(err.message);
+      console.error(err);
+    }
+  }
 }
 
 export default audioCall;
