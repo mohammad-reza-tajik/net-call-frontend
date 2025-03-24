@@ -138,17 +138,6 @@ function Initializer({ children }: IInitializerProps) {
   }, []);
 
   useSignalEffect(() => {
-    if (!socketSignal.value && localPeerIdSignal.value) {
-      const newSocket = connectToSocket({
-        localPeerId: localPeerIdSignal.value,
-        visibility: visibilitySignal.peek(),
-        deviceType: getDeviceType(),
-      });
-      socketSignal.value = newSocket;
-    }
-  });
-
-  useSignalEffect(() => {
     if (isLoadedSignal.value) {
       localStorage.setItem("friends", JSON.stringify(friendsSignal.value));
     }
