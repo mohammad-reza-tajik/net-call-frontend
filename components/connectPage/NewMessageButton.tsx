@@ -5,6 +5,7 @@ import { Caret } from "@/components/shared/Icons";
 import { Button } from "@/components/ui/button";
 import { useSignal, useSignalEffect, useSignals } from "@preact/signals-react/runtime";
 import messagesSignal from "@/signals/peer/messages";
+import { isChatDrawerOpenSignal } from "@/signals/drawer";
 
 interface INewMessageButtonProps {
   chatContainerRef: React.RefObject<HTMLDivElement | null>; // No need for null here since useRef initializes with null
@@ -38,7 +39,7 @@ function NewMessageButton({ chatContainerRef }: INewMessageButtonProps) {
       const isVisible = entries[0].isIntersecting;
       isLastMessageInView.value = isVisible;
       // If the last message is in view, reset the new message signal
-      if (isVisible) {
+      if (isVisible && isChatDrawerOpenSignal.value) {
         haveNewMessageSignal.value = false;
       }
     };
@@ -65,7 +66,7 @@ function NewMessageButton({ chatContainerRef }: INewMessageButtonProps) {
         "fixed bottom-31 right-0 w-full flex items-center justify-center pointer-events-none", // Position at bottom, prevent blocking chat
         {
           hidden: !haveNewMessageSignal.value || isLastMessageInView.value,
-        }
+        },
       )}
     >
       <Button
