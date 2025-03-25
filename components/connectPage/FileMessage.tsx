@@ -23,7 +23,7 @@ function FileMessage({ message }: IFileMessageProps) {
       className={cn(
         "flex flex-col gap-3 border rounded items-center justify-center py-3 px-5 max-w-3/4",
         {
-          "muted self-start": message.localPeerId === localPeerIdSignal.value,
+          "bg-muted self-start": message.localPeerId === localPeerIdSignal.value,
         },
         { "self-end": message.localPeerId !== localPeerIdSignal.value },
       )}
@@ -39,7 +39,7 @@ function FileMessage({ message }: IFileMessageProps) {
         <Button variant={"outline"} className={"gap-2"} asChild>
           <a href={createDownloadLink(message.file as File)} download={message.file.name}>
             <Download className={"size-5"} />
-            دریافت
+            بارگیری
           </a>
         </Button>
       ) : null}

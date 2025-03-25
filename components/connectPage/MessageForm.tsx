@@ -11,6 +11,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useSignals } from "@preact/signals-react/runtime";
+import Loader from "@/components/shared/Loader";
 
 function MessageForm() {
   useSignals();
@@ -18,6 +19,7 @@ function MessageForm() {
   const textMessageRef = useRef<HTMLTextAreaElement>(null);
   const fileSignal = useSignal<File | undefined>(undefined);
   const fileBufferSignal = useSignal<ArrayBuffer | undefined>(undefined);
+  const isReadingFileSignal = useSignal(false);
 
   const sendMessageHandler = async () => {
     try {
@@ -56,6 +58,7 @@ function MessageForm() {
   };
 
   const filePickerHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    isReadingFileSignal.value = true;
     const chosenFile = event.target.files?.[0];
     if (chosenFile) {
       fileSignal.value = chosenFile;
@@ -63,6 +66,7 @@ function MessageForm() {
       reader.addEventListener("load", (event) => {
         if (!event.target?.result || typeof event.target.result === "string") return;
         fileBufferSignal.value = event.target.result;
+        isReadingFileSignal.value = false;
       });
       reader.readAsArrayBuffer(chosenFile);
     }
@@ -74,7 +78,12 @@ function MessageForm() {
         <Button size={"icon"} onClick={sendMessageHandler} variant={"outline"}>
           <PaperPlane className={"size-7"} />
         </Button>
-        {!fileSignal.value ? (
+
+        {isReadingFileSignal.value ? (
+          <div className={"flex items-center justify-center p-3 h-20 flex-1"}>
+            <Loader className={"size-10"} />
+          </div>
+        ) : !fileSignal.value ? (
           <Textarea ref={textMessageRef} className={"flex-1"} />
         ) : (
           <div className={"flex items-center justify-between p-3 h-20 flex-1 border rounded overflow-hidden"}>
