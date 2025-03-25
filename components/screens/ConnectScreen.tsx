@@ -95,12 +95,19 @@ function ConnectScreen() {
       }
     } else {
       return (
-        <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full"}>
+        <div className={"flex flex-col gap-5 justify-center items-center text-sm md:text-xl size-full relative"}>
+          <Loader
+            className={cn(
+              "size-60 lg:size-80 absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 pointer-events-none",
+              {
+                hidden: !statusSignal.value,
+              },
+            )}
+          />
           {!statusSignal.value && <>برای شروع ارتباط یک از گزینه های زیر را انتخاب کنید</>}
           {connectionStateSignal.value === "connecting" && (
             <>
               <p>در حال اتصال ...</p>
-              <Loader className={"size-10 md:size-12"} />
             </>
           )}
           {signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting" && (
