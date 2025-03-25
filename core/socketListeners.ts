@@ -11,8 +11,17 @@ import showNotification from "@/lib/utils/showNotification";
 import friendsSignal from "@/signals/peer/friends";
 import { jsonSchema } from "@/schemas";
 import hangup from "@/core/hangup";
+import socketSignal from "@/signals/socket";
 
 function socketListeners(socket: Socket) {
+  socket.on("connect", () => {
+    socketSignal.value = socket;
+  });
+
+  socket.on("disconnect", () => {
+    socketSignal.value = undefined;
+  });
+
   socket.on("requestToPeer", (request: IRequest) => {
     try {
       // check if a request from the same remote peer exists and replace them with new one

@@ -14,7 +14,6 @@ import connectToSocket from "@/core/connectToSocket";
 import HangupOnRouteChange from "@/components/shared/HangupOnRouteChange";
 import { type Toast, toast } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
-import getDeviceType from "@/core/getDeviceType";
 import visibilitySignal from "@/signals/peer/visibility";
 import type { IFriend, TVisibility } from "@/types";
 import friendsSignal from "@/signals/peer/friends";
@@ -24,6 +23,7 @@ import statusSignal from "@/signals/peer/status";
 import remotePeerIdSignal from "@/signals/peer/remotePeerId";
 import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 import isLoadedSignal from "@/signals/isLoaded";
+import getDeviceType from "@/core/getDeviceType";
 
 interface IInitializerProps {
   children: React.ReactNode;
@@ -114,13 +114,12 @@ function Initializer({ children }: IInitializerProps) {
         }
         const deviceType = getDeviceType();
         const devices = await getIODevices();
-        const socket = connectToSocket({ localPeerId, deviceType, visibility });
+        connectToSocket({ localPeerId, deviceType, visibility });
 
         batch(() => {
           localPeerIdSignal.value = localPeerId;
           localStreamSignal.value = localStream;
           iODevicesSignal.value = devices;
-          socketSignal.value = socket;
           visibilitySignal.value = visibility;
           friendsSignal.value = friends;
         });
@@ -144,25 +143,25 @@ function Initializer({ children }: IInitializerProps) {
   });
 
   useSignalEffect(() => {
-    if (iceCandidatesSignal.value.length === 0) return;
+    if (iceCandidatesSignal.value.length === 0 && !socketSignal.value) return;
 
-    if (offerSignal.value && statusSignal.value?.endsWith(":send")) {
+    if (offerSignal.peek() && statusSignal.peek()?.endsWith(":send")) {
       socketSignal.value?.emit("requestToServer", {
         iceCandidates: iceCandidatesSignal.value,
-        offer: offerSignal.value,
-        localPeerId: localPeerIdSignal.value,
-        remotePeerId: remotePeerIdSignal.value,
-        status: statusSignal.value,
-        socketId: socketSignal.value?.id,
+        offer: offerSignal.peek(),
+        localPeerId: localPeerIdSignal.peek(),
+        remotePeerId: remotePeerIdSignal.peek(),
+        status: statusSignal.peek(),
+        socketId: socketSignal.peek()?.id,
       });
-    } else if (answerSignal.value && statusSignal.value?.endsWith(":receive")) {
-      socketSignal.value?.emit("responseToServer", {
+    } else if (answerSignal.peek() && statusSignal.peek()?.endsWith(":receive")) {
+      socketSignal.peek()?.emit("responseToServer", {
         iceCandidates: iceCandidatesSignal.value,
-        answer: answerSignal.value,
-        localPeerId: localPeerIdSignal.value,
-        remotePeerId: remotePeerIdSignal.value,
-        status: statusSignal.value,
-        socketId: socketSignal.value?.id,
+        answer: answerSignal.peek(),
+        localPeerId: localPeerIdSignal.peek(),
+        remotePeerId: remotePeerIdSignal.peek(),
+        status: statusSignal.peek(),
+        socketId: socketSignal.peek()?.id,
       });
     }
   });
