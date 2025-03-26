@@ -125,6 +125,11 @@ function socketListeners(socket: Socket) {
     }
   });
 
+  socket.on("callCancelledToPeer", () => {
+    hangup();
+    toast.error("کاربر تماس را کنسل کرد");
+  });
+
   socket.on("rejectToPeer", () => {
     toast.error("درخواست شما رد شد");
     showNotification({
