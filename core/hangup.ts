@@ -30,6 +30,7 @@ import iceCandidatesSignal from "@/signals/peer/iceCandidates";
 import socketSignal from "@/signals/socket";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import removeConnection from "@/core/removeConnection";
+import localStreamSignal from "@/signals/localStream";
 
 function hangup(emitToServer: boolean = false) {
 
@@ -65,6 +66,11 @@ function hangup(emitToServer: boolean = false) {
     temporaryScoreSignal.value = 0;
     isYourTurnSignal.value = false;
     isGameOverSignal.value = false;
+  });
+
+  // Enable tracks again in case they were disabled during the call
+  localStreamSignal.value?.getTracks().forEach((track) => {
+    track.enabled = true;
   });
 
   if (localVideoRefSignal.value?.current && remoteVideoRefSignal.value?.current) {
