@@ -33,13 +33,12 @@ import removeConnection from "@/core/removeConnection";
 import localStreamSignal from "@/signals/localStream";
 
 function hangup(emitToServer: boolean = false) {
-
   if (emitToServer) {
-      socketSignal.value?.emit("hangupToServer", {
-        localPeerId: localPeerIdSignal.value,
-        remotePeerId : remotePeerIdSignal.value
-      });
-    }
+    socketSignal.value?.emit("hangupToServer", {
+      localPeerId: localPeerIdSignal.value,
+      remotePeerId: remotePeerIdSignal.value,
+    });
+  }
 
   removeConnection(peerConnectionSignal.value);
 

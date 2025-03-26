@@ -21,7 +21,6 @@ import { useSignal } from "@preact/signals-react";
 import { useSignals } from "@preact/signals-react/runtime";
 import haveNewMessageSignal from "@/signals/haveNewMessage";
 import cn from "@/lib/utils/cn";
-import { Separator } from "@/components/ui/separator";
 import remoteVideoRefSignal from "@/signals/remoteVideoRef";
 import routerSignal from "@/signals/router";
 import hangup from "@/core/hangup";
