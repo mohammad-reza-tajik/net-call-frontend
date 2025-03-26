@@ -21,6 +21,7 @@ import hangup from "@/core/hangup";
 import PigGame from "@/components/screens/PigGame";
 import RemotePeerIdUpdater from "@/components/connectPage/RemotePeerIdUpdater";
 import { Fullscreen } from "@/components/shared/Icons";
+import { toast } from "react-hot-toast";
 
 const HIDE_DELAY = 3000; // 3 seconds
 function ConnectScreen() {
@@ -32,6 +33,9 @@ function ConnectScreen() {
   const localHiderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const remoteHiderTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const connectionCounterSignal = useSignal(0);
+  const connectionInterval = useRef<NodeJS.Timeout | null>(null);
+
   const showOverlayLocalSignal = useSignal(false);
   const showOverlayRemoteSignal = useSignal(false);
 
@@ -39,6 +43,39 @@ function ConnectScreen() {
     remoteVideoRefSignal.value = remoteVideoRef;
     localVideoRefSignal.value = localVideoRef;
   }, []);
+
+  useSignalEffect(() => {
+    // Only start interval when we have an offer and interval doesn't exist
+    if (
+      (signalingStateSignal.value === "have-local-offer" || signalingStateSignal.value === "have-remote-offer") &&
+      !connectionInterval.current
+    ) {
+      connectionInterval.current = setInterval(() => {
+        connectionCounterSignal.value += 1;
+      }, 1000);
+    } else {
+      clearInterval(connectionInterval.current!);
+      connectionInterval.current = null;
+      connectionCounterSignal.value = 0;
+    }
+
+    // Cleanup function
+    return () => {
+      clearInterval(connectionInterval.current!);
+      connectionInterval.current = null;
+      connectionCounterSignal.value = 0; // Reset counter on cleanup
+    };
+  });
+
+  useSignalEffect(() => {
+    if (connectionCounterSignal.value >= 50) {
+      hangup(true);
+      toast("پاسخی دریافت نشد");
+      clearInterval(connectionInterval.current!);
+      connectionInterval.current = null;
+      connectionCounterSignal.value = 0;
+    }
+  });
 
   useSignalEffect(() => {
     if (currentRequestSignal.value) {
@@ -112,6 +149,7 @@ function ConnectScreen() {
           )}
           {signalingStateSignal.value === "have-local-offer" && connectionStateSignal.value !== "connecting" && (
             <>
+              <p>{connectionCounterSignal}</p>
               <p>در انتظار پاسخ ...</p>
               <Button onClick={() => hangup(true)}>انصراف</Button>
             </>
