@@ -127,6 +127,7 @@
     *,
     *:before,
     *:after {
+        scroll-behavior: inherit;
         @apply border-border;
     }
 

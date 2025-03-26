@@ -20,9 +20,7 @@ function NewMessageButton({ chatContainerRef }: INewMessageButtonProps) {
   const goToLastMessageHandler = () => {
     if (chatContainerRef.current?.lastElementChild) {
       haveNewMessageSignal.value = false;
-      chatContainerRef.current.lastElementChild.scrollIntoView({
-        behavior: "smooth",
-      });
+      chatContainerRef.current.lastElementChild.scrollIntoView();
     }
   };
 

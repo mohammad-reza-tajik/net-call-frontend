@@ -16,7 +16,12 @@ function Features() {
         // hide screen share button on mobile devices
         if (getDeviceType() === "mobile" && item.name === "screen-share") return;
         return (
-          <ActionButton key={index} icon={item.icon} tooltipContent={item.tooltipContent} handler={item.handler} />
+          <ActionButton
+            key={index}
+            icon={item.icon}
+            tooltipContent={item.tooltipContent}
+            handler={item.handler}
+          />
         );
       })}
     </div>

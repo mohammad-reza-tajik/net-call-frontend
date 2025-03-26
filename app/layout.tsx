@@ -29,7 +29,7 @@ export const viewport: Viewport = {
 
 function RootLayout({children}: { children: React.ReactNode; }) {
     return (
-        <html lang={"fa"} dir={"rtl"} className={"font-dana-medium"}>
+        <html lang={"fa"} dir={"rtl"} className={"font-dana-medium scroll-smooth"}>
         <body className={"bg-background text-foreground fill-foreground relative"}>
         <div className={"h-[100dvh] w-screen contained overflow-hidden flex flex-col"}>
             <Providers>
