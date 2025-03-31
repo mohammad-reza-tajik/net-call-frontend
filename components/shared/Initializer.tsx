@@ -146,7 +146,7 @@ function Initializer({ children }: IInitializerProps) {
     if (iceCandidatesSignal.value.length === 0 && !socketSignal.value) return;
 
     if (offerSignal.peek() && statusSignal.peek()?.endsWith(":send")) {
-      socketSignal.value?.emit("requestToServer", {
+      socketSignal.value!.emit("requestToServer", {
         iceCandidates: iceCandidatesSignal.value,
         offer: offerSignal.peek(),
         localPeerId: localPeerIdSignal.peek(),
@@ -155,7 +155,7 @@ function Initializer({ children }: IInitializerProps) {
         socketId: socketSignal.peek()?.id,
       });
     } else if (answerSignal.peek() && statusSignal.peek()?.endsWith(":receive")) {
-      socketSignal.peek()?.emit("responseToServer", {
+      socketSignal.value!.emit("responseToServer", {
         iceCandidates: iceCandidatesSignal.value,
         answer: answerSignal.peek(),
         localPeerId: localPeerIdSignal.peek(),

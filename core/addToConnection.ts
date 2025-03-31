@@ -13,34 +13,34 @@ import chatChannelListeners from "@/core/chatChannelListeners";
  it also creates the chat channel
  */
 async function addToConnection(status: TStatus, ...tracks: MediaStreamTrack[]) {
-    try {
-        peerConnectionSignal.value = createConnection();
+  try {
+    peerConnectionSignal.value = createConnection();
 
-        const chatChannel = peerConnectionSignal.value!.createDataChannel("chat");
-        dataChannelListeners(chatChannel);
-        chatChannelListeners(chatChannel);
+    const chatChannel = peerConnectionSignal.value!.createDataChannel("chat");
+    dataChannelListeners(chatChannel);
+    chatChannelListeners(chatChannel);
 
-        tracks.forEach((track) => {
-            if (!track.enabled || track.readyState === "ended") {
-                throw new Error(`Track ${track.kind} is invalid or ended`);
-              }
-        
-            peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
-        });
+    tracks.forEach((track) => {
+      if (!track.enabled) {
+        throw new Error(`${track.kind} track ${track.label} is not enabled`);
+      }
 
-        const offer = await peerConnectionSignal.value!.createOffer();
-        await peerConnectionSignal.value!.setLocalDescription(offer);
+      peerConnectionSignal.value!.addTrack(track, localStreamSignal.value!);
+    });
 
-        batch(() => {
-            statusSignal.value = status;
-            offerSignal.value = offer;
-        });
-    } catch (err) {
-        if (err instanceof Error) {
-            toast.error(err.message);
-            console.error(err);
-        }
+    const offer = await peerConnectionSignal.value!.createOffer();
+    await peerConnectionSignal.value!.setLocalDescription(offer);
+
+    batch(() => {
+      statusSignal.value = status;
+      offerSignal.value = offer;
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      toast.error(err.message);
+      console.error(err);
     }
+  }
 }
 
 export default addToConnection;
