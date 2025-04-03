@@ -20,14 +20,12 @@ export interface IFriend {
 export interface IConnectionPayload {
     localPeerId: string;
     remotePeerId: string;
-    socketId: string;
     status: TStatus;
     iceCandidates: RTCIceCandidate[];
 }
 
 export interface IRequest extends IConnectionPayload {
     offer: RTCSessionDescriptionInit;
-    
 }
 
 export interface IResponse extends IConnectionPayload {

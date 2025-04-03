@@ -152,7 +152,6 @@ function Initializer({ children }: IInitializerProps) {
         localPeerId: localPeerIdSignal.peek(),
         remotePeerId: remotePeerIdSignal.peek(),
         status: statusSignal.peek(),
-        socketId: socketSignal.peek()?.id,
       });
     } else if (answerSignal.peek() && statusSignal.peek()?.endsWith(":receive")) {
       socketSignal.value!.emit("responseToServer", {
@@ -161,7 +160,6 @@ function Initializer({ children }: IInitializerProps) {
         localPeerId: localPeerIdSignal.peek(),
         remotePeerId: remotePeerIdSignal.peek(),
         status: statusSignal.peek(),
-        socketId: socketSignal.peek()?.id,
       });
     }
   });
