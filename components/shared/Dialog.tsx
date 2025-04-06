@@ -51,8 +51,8 @@ function Dialog({ ref }: React.ComponentProps<"div">) {
 
       <div
         ref={ref}
-        className={cn("bg-background z-50 flex flex-col rounded transition-all translate-y-10 opacity-0", {
-          "translate-y-0 opacity-100": isOpenSignal.value,
+        className={cn("bg-background z-50 flex flex-col rounded transition-all opacity-0", {
+          "opacity-100": isOpenSignal.value,
         })}
       >
         <header className={"flex items-center border-b p-2"}>

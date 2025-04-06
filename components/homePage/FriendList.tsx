@@ -4,7 +4,7 @@ import type { IFriend } from "@/types";
 import Table, { type Header } from "@/components/shared/Table";
 import { Button } from "@/components/ui/button";
 import ActionButton from "@/components/connectPage/ActionButton";
-import { UserMinus } from "@/components/shared/Icons";
+import { Check, Close, UserMinus } from "@/components/shared/Icons";
 import friendsSignal from "@/signals/peer/friends";
 import Pagination from "@/components/shared/Pagination";
 import { useSignals } from "@preact/signals-react/runtime";
@@ -57,15 +57,20 @@ function FriendList() {
           <p className={"text-sm text-center"}>{dataItem.name} &nbsp; از لیست دوستان شما حذف خواهد شد. </p>
           <div className={"flex gap-2 justify-center items-center"}>
             <Button
+              variant={"outline"}
               onClick={() => {
                 friendsSignal.value = friendsSignal.value.filter((item) => item.localPeerId !== dataItem.localPeerId);
                 toast.success("از لیست دوستان حذف شد");
                 closeDialog();
               }}
             >
-              پذیرش
+              <Check className={"size-5"} />
+              تایید
             </Button>
-            <Button onClick={() => closeDialog()}>انصراف</Button>
+            <Button variant={"outline"} onClick={closeDialog}>
+              <Close className={"size-5"} />
+              انصراف
+            </Button>
           </div>
         </div>
       ),

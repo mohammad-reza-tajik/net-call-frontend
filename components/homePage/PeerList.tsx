@@ -110,7 +110,7 @@ function PeerList() {
                 title: "برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید",
                 content: (
                   <div className={"flex flex-col gap-2"}>
-                    <Input ref={nameInputRef} />
+                    <Input ref={nameInputRef} maxLength={40} />
                     <Button onClick={() => addToFriendsHandler(dataItem)} className={"max-w-max mx-auto"}>
                       ذخیره
                     </Button>
