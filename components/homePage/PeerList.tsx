@@ -109,7 +109,7 @@ function PeerList() {
               openDialog({
                 title: "برای شناسایی و دسترسی آسانتر به این کاربر برای او نامی انتخاب کنید",
                 content: (
-                  <div className={"flex flex-col gap-2 p-5"}>
+                  <div className={"flex flex-col gap-2"}>
                     <Input ref={nameInputRef} />
                     <Button onClick={() => addToFriendsHandler(dataItem)} className={"max-w-max mx-auto"}>
                       ذخیره

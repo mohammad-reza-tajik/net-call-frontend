@@ -4,6 +4,7 @@ import { batch, signal } from "@preact/signals-react";
 import cn from "@/lib/utils/cn";
 import { Button } from "@/components/ui/button";
 import { Close } from "@/components/shared/Icons";
+import { useSignals } from "@preact/signals-react/runtime";
 
 interface IOpenDialogParams {
   title: React.ReactNode;
@@ -31,6 +32,7 @@ export const closeDialog = () => {
 };
 
 function Dialog({ ref }: React.ComponentProps<"div">) {
+  useSignals();
   return (
     <div
       className={cn("flex justify-center items-center absolute inset-0", {
@@ -38,8 +40,9 @@ function Dialog({ ref }: React.ComponentProps<"div">) {
       })}
       role={"dialog"}
       aria-labelledby={"dialog-title"}
+      aria-describedby={"dialog-description"}
     >
-      {/* Drawer overlay */}
+      {/* Dialog overlay */}
       <div
         className={"fixed inset-0 bg-foreground z-40 opacity-60"}
         onClick={closeDialog}
@@ -48,8 +51,8 @@ function Dialog({ ref }: React.ComponentProps<"div">) {
 
       <div
         ref={ref}
-        className={cn("bg-background z-50 flex flex-col rounded transition-all ease-in scale-80 opacity-0", {
-          "scale-100 opacity-100": isOpenSignal.value,
+        className={cn("bg-background z-50 flex flex-col rounded transition-all translate-y-10 opacity-0", {
+          "translate-y-0 opacity-100": isOpenSignal.value,
         })}
       >
         <header className={"flex items-center border-b p-2"}>
@@ -60,7 +63,9 @@ function Dialog({ ref }: React.ComponentProps<"div">) {
             {titleSignal}
           </div>
         </header>
-        {contentSignal}
+        <div id={"dialog-description"} className={"flex-1 p-5"}>
+          {contentSignal}
+        </div>
       </div>
     </div>
   );
