@@ -1,11 +1,11 @@
 "use client";
 import type { IFileMessage } from "@/types";
 import { Check, DoubleChecks, Download, File as FileIcon } from "@/components/shared/Icons";
-import { Button } from "@/components/ui/button";
 import localPeerIdSignal from "@/signals/peer/localPeerId";
 import cn from "@/lib/utils/cn";
 import makeHumanReadable from "@/lib/utils/makeHumanReadable";
 import getTimestamp from "@/lib/utils/getTimeStamp";
+import { AnimatedCircularProgressBar } from "@/components/magicui/animated-circular-progress-bar";
 
 interface IFileMessageProps {
   message: IFileMessage;
@@ -21,32 +21,38 @@ function FileMessage({ message }: IFileMessageProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 border rounded items-center justify-center py-3 px-5 max-w-3/4",
+        "flex gap-3 border rounded items-center p-2 w-3/4 relative",
         {
           "bg-muted self-start": message.localPeerId === localPeerIdSignal.value,
         },
         { "self-end": message.localPeerId !== localPeerIdSignal.value },
       )}
     >
-      <FileIcon className={"size-7"} />
-      <p className={"text-xs [direction:ltr] text-wrap text-center break-words w-full"}>{message.file.name}</p>
-      <p className={"text-xs [direction:ltr] text-wrap"}>
-        {message.transferredAmount < message.file.size
-          ? `${makeHumanReadable(message.transferredAmount)}/${makeHumanReadable(message.file.size)}`
-          : makeHumanReadable(message.file.size)}
-      </p>
-      {localPeerIdSignal.value !== message.localPeerId && message.transferredAmount >= message.file.size ? (
-        <Button variant={"outline"} className={"gap-2"} asChild>
-          <a href={createDownloadLink(message.file as File)} download={message.file.name}>
-            <Download className={"size-5"} />
-            بارگیری
-          </a>
-        </Button>
-      ) : null}
-      <div className={"flex items-center gap-2 self-start"}>
+      <div className={"absolute h-5 bottom-1 right-1 flex items-center gap-2 "}>
         {message.localPeerId === localPeerIdSignal.value ? message.seen ? <DoubleChecks /> : <Check /> : null}
         <span className={"text-xs"}>{getTimestamp(message.timestamp)}</span>
       </div>
+      <div className={"flex-1 flex flex-col gap-2 [direction:ltr] truncate text-xs text-wrap"}>
+        <p className={"break-words line-clamp-2 "}>{message.file.name}</p>
+        <p>{makeHumanReadable(message.file.size) + "B"}</p>
+      </div>
+      <AnimatedCircularProgressBar
+        className={"size-20 text-sm"}
+        max={message.file.size}
+        value={message.transferredAmount}
+        min={0}
+        gaugePrimaryColor={"var(--color-primary)"}
+        gaugeSecondaryColor={"var(--color-background)"}
+      >
+        {}
+        {message.transferredAmount < message.file.size ? null : localPeerIdSignal.value !== message.localPeerId ? (
+          <a href={createDownloadLink(message.file as File)} download={message.file.name}>
+            <Download className={"size-7"} />
+          </a>
+        ) : (
+          <FileIcon className={"size-7"} />
+        )}
+      </AnimatedCircularProgressBar>
     </div>
   );
 }
