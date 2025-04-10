@@ -34,7 +34,7 @@ function FileMessage({ message }: IFileMessageProps) {
       </div>
       <div className={"flex-1 flex flex-col gap-2 [direction:ltr] truncate text-xs text-wrap"}>
         <p className={"break-words line-clamp-2 "}>{message.file.name}</p>
-        <p>{makeHumanReadable(message.file.size) + "B"}</p>
+        <p>{`${makeHumanReadable(message.file.size)}B`}</p>
       </div>
       <AnimatedCircularProgressBar
         className={"size-20 text-sm"}

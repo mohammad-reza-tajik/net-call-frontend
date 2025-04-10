@@ -7,7 +7,7 @@ function Header() {
 
 
     return (
-        <header className={"flex justify-between items-center p-2 border-b"}>
+        <header className={"flex justify-between items-center p-2 border-b border-dashed"}>
             <Logo className={"size-10"}/>
             <PeerId/>
             <div className={"flex items-center gap-3"}>
