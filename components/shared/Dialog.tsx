@@ -55,7 +55,7 @@ function Dialog({ ref }: React.ComponentProps<"div">) {
           "opacity-100": isOpenSignal.value,
         })}
       >
-        <header className={"flex items-center border-b p-2"}>
+        <header className={"flex items-center border-b border-dashed p-2"}>
           <Button size={"icon"} onClick={closeDialog} aria-label={"Close"} variant={"outline"}>
             <Close />
           </Button>

@@ -1,19 +1,25 @@
 "use client";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, type DetailedHTMLProps, type CanvasHTMLAttributes } from "react";
 import cn from "@/lib/utils/cn";
 
-interface IAudioVisualizerProps {
+interface IAudioVisualizerProps extends DetailedHTMLProps<CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement> {
   stream: MediaStream | null;
   radius?: number; // Radius for the circular visualizer
-  className?: string;
   color?: string;
   fftSize?: number;
 }
 
-function AudioVisualizer({ stream, color = "#fff", radius = 100, className, fftSize = 256 }: IAudioVisualizerProps) {
+function AudioVisualizer({
+  stream,
+  color = "#fff",
+  radius = 100,
+  className,
+  fftSize = 256,
+  width = radius * 2 + 50,
+  height = radius * 2 + 50,
+}: IAudioVisualizerProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const intervalId = useRef<NodeJS.Timeout | null>(null); // Store the interval ID
-  const canvasSize = radius * 2 + 50; // Add padding for bars
 
   useEffect(() => {
     if (!stream || !canvasRef.current) return;
@@ -71,15 +77,15 @@ function AudioVisualizer({ stream, color = "#fff", radius = 100, className, fftS
       source.disconnect();
       audioContext.close();
     };
-  }, [stream, radius, color]);
+  }, [stream, radius, color, fftSize]);
 
   return (
     <canvas
       ref={canvasRef}
-      width={canvasSize}
-      height={canvasSize}
+      width={width}
+      height={height}
       className={cn("absolute top-1/2 left-1/2 z-10 -translate-1/2", className)}
-    ></canvas>
+    />
   );
 }
 

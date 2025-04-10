@@ -74,7 +74,7 @@ function MessageForm() {
 
   return (
     <>
-      <div className={"flex items-center gap-2 p-5 border-t"}>
+      <div className={"flex items-center gap-2 p-5 border-t border-dashed"}>
         <Button size={"icon"} onClick={sendMessageHandler} variant={"outline"}>
           <PaperPlane className={"size-7"} />
         </Button>

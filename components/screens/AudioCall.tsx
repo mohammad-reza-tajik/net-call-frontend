@@ -14,9 +14,18 @@ const displaySender = () => {
 function AudioCall() {
   return (
     <div className={"flex flex-col items-center size-full relative"}>
-      <p className={"flex justify-center items-center mt-10 bg-primary text-primary-foreground px-5 py-3 rounded"}>{displaySender()}</p>
-      <AudioVisualizer stream={remoteStreamSignal.value!} fftSize={128} />
-      <AudioVisualizer stream={localStreamSignal.value!} className={"rotate-180"} color={"#ffff00"} fftSize={128} />
+      <p className={"flex justify-center items-center mt-10 bg-primary text-primary-foreground px-5 py-3 rounded"}>
+        {displaySender()}
+      </p>
+      <AudioVisualizer stream={remoteStreamSignal.value!} fftSize={128} width={400} height={400} color={"#DC2626"} />
+      <AudioVisualizer
+        stream={localStreamSignal.value!}
+        className={"rotate-180"}
+        color={"#3B82F6"}
+        fftSize={128}
+        width={400}
+        height={400}
+      />
       <Phone className={"size-14 md:size-20 absolute top-1/2 left-1/2 z-10 -translate-1/2"} />
     </div>
   );
